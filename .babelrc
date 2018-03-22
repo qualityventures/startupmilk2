@@ -6,7 +6,6 @@
         [
           "css-modules-transform", {
             "preprocessCss": "./helpers/sass-loader.js",
-            "generateScopedName": "[name]__[local]--[hash:base64:5]",
             "extensions": [".scss"]
           }
         ]
@@ -17,7 +16,6 @@
         [
           "css-modules-transform", {
             "preprocessCss": "./helpers/sass-loader.js",
-            "generateScopedName": "[hash:8]",
             "extensions": [".scss"]
           }
         ]

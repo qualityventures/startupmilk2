@@ -61,8 +61,8 @@ const webpackConfig = {
           fallback: 'style-loader',
           use: (
             NODE_ENV === 'dev' ? 
-              `css-loader?modules&minimize&localIdentName=[name]__[local]--[hash:base64:5]!sass-loader?includePaths[]=${ROOT_PATH}` : 
-              `css-loader?modules&minimize&localIdentName=[hash:8]!sass-loader?includePaths[]=${ROOT_PATH}`
+              `css-loader?minimize!sass-loader?includePaths[]=${ROOT_PATH}` : 
+              `css-loader?minimize!sass-loader?includePaths[]=${ROOT_PATH}`
           ),
         }),
       },

@@ -71,7 +71,14 @@ export function renderClientHTML(clientHTML) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <link rel="alternate" hreflang="x-default" href="//startupmilk.co/" />
         <title>startupmilk</title>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="address=no">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
         ${styles}
+        <script src="/static/js/jquery.js"></script>
+        <script src="/static/js/migrate.js"></script>
+        <script src="/static/js/library.js"></script>
+        <script src="/static/js/script.js"></script>
       </head>
       <body style="padding: 0px; margin: 0px;">
         <div id="react-root">${clientHTML}</div>

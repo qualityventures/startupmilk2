@@ -40,8 +40,10 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use('/static', Express.static(path.join(__dirname, '..', 'public', 'static'), staticOptions));
+app.use('/favicon.ico', Express.static(path.join(__dirname, '..', 'public', 'static', 'favicons', 'favicon.ico'), staticOptions));
+app.use('/apple-touch-icon.png', Express.static(path.join(__dirname, '..', 'public', 'static', 'favicons', 'apple-touch-icon.png'), staticOptions));
 app.use('/assets', Express.static(path.join(__dirname, '..', 'public', 'assets'), staticOptions));
+app.use('/static', Express.static(path.join(__dirname, '..', 'public', 'static'), staticOptions));
 app.use('/api', apiRoutes);
 
 // process request

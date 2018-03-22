@@ -1,19 +1,7 @@
-@import 'styles/variables.scss';
-
 @mixin transition($values...) {
-  transition-timing-function: $transition_default_function;
-  transition-duration: $transition_default_duration;
+  transition-timing-function: ease;
+  transition-duration: 200ms;
   transition-property: $values;
-}
-
-@mixin respond_to($media) {
-  @if $media == mobile {
-    @media only screen and (max-width: $screen_mobile - 1px) { @content; }
-  }
-  
-  @else if $media == desktop {
-    @media only screen and (min-width: $screen_mobile) { @content; }
-  }
 }
 
 @function str-replace($string, $search, $replace: "") {
@@ -24,35 +12,4 @@
   }
 
   @return $string;
-}
-
-// =============================================================================
-// Font Face
-// =============================================================================
-
-@mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
-  $src: null;
-
-  $extmods: (
-    eot: "?",
-    svg: "#" + str-replace($name, " ", "_")
-  );
-
-  $formats: (
-    otf: "opentype",
-    ttf: "truetype"
-  );
-
-  @each $ext in $exts {
-    $extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
-    $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
-    $src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
-  }
-
-  @font-face {
-    font-family: quote($name);
-    font-style: $style;
-    font-weight: $weight;
-    src: $src;
-  }
 }
