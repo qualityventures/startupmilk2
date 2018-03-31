@@ -110,7 +110,7 @@ export function renderHTML(content, state = {}, type = 'client') {
         <script src="/static/js/library.js"></script>
         <script src="/static/js/script.js"></script>
       </head>
-      <body style="padding: 0px; margin: 0px;">
+      <body style="padding: 0px; margin: 0px;" class="no-js" id="top">
         <div id="react-root">${content}</div>
         <script>window.REDUX_INITIAL_STATE=${JSON.stringify(state)};</script>
         ${scripts}

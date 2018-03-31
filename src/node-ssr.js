@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import { StaticRouter } from 'react-router';
 import { matchPath } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import webRoutes from 'routes';
 import apiRoutes from 'api';
 import ClientContainer from 'containers/client-container';
@@ -73,9 +74,11 @@ app.use((req, res) => {
 
         // render content
         body = ReactDOM.renderToString(
-          <StaticRouter location={req.url} context={context}>
-            <ClientContainer />
-          </StaticRouter>
+          <Provider store={store}>
+            <StaticRouter location={req.url} context={context}>
+              <ClientContainer />
+            </StaticRouter>
+          </Provider>
         );
       }
 
