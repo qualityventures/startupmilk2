@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import './container.scss';
 
 class Container extends React.PureComponent {
@@ -20,7 +21,7 @@ class Container extends React.PureComponent {
             <div className="container-wrapper">
               <div className="row align-items-lg-center">
                 <div className="col-10 col-lg-3 col-xl-2">
-                  <a className="logo" href="/">milkicons_</a>
+                  <Link className="logo" to="/">milkicons_</Link>
                 </div>
                 <div className="col-2 col-lg-9 col-xl-8">
                   <a href="#" className="navigation-toggle"><span className="navigation-toggle-icon"></span></a>
@@ -51,9 +52,9 @@ class Container extends React.PureComponent {
                 <div className="footer-sub-navigation">
                   <nav>
                     <ul className="menu-tertiary">
-                      <li><a href="#">F.A.Q</a></li>
-                      <li><a href="#">License</a></li>
-                      <li><a href="#">Contact</a></li>
+                      <li><Link to="/faq">F.A.Q</Link></li>
+                      <li><Link to="/license">License</Link></li>
+                      <li><Link to="/contact">Contact</Link></li>
                     </ul>
                   </nav>
                 </div>
