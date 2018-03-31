@@ -2,6 +2,15 @@
 
 import fs from 'fs';
 import path from 'path';
+import { TITLE_BASE, TITLE_SEPARATOR, ANALYTICS } from 'data/config';
+
+export function fetchUserData() {
+  return [];
+}
+
+export function getUserToken() {
+  return '';
+}
 
 let _bundle_cache = {};
 let _bundle_updated = 0;
@@ -51,15 +60,36 @@ function makePathToAsset(bundle, ext) {
   return '';
 }
 
-export function renderClientHTML(clientHTML) {
+export function renderHTML(content, state = {}, type = 'client') {
   let scripts = '';
   let styles = '';
+  let title = TITLE_BASE
 
   if (NODE_ENV === 'dev') {
-    scripts = '<script src="/assets/bundle.js" async></script>';
+    scripts = `<script src="/assets/${type}.js" async></script>`;
   } else {
-    scripts = makePathToAsset('bundle', 'js');
-    styles = makePathToAsset('bundle', 'css');
+    scripts = makePathToAsset(type, 'js');
+    styles = makePathToAsset(type, 'css');
+  }
+
+  if (state.title) {
+    title = `${state.title} ${TITLE_SEPARATOR} ${TITLE_BASE}`;
+  }
+
+  if (type === 'client') {
+    scripts += `
+      <div class="metrics">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111430722-2"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-111430722-2');
+        </script>
+      </div>
+    `.trim();
   }
 
   const html = `
@@ -70,7 +100,7 @@ export function renderClientHTML(clientHTML) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <link rel="alternate" hreflang="x-default" href="//startupmilk.co/" />
-        <title>startupmilk</title>
+        <title>${title}</title>
         <meta name="format-detection" content="telephone=no">
         <meta name="format-detection" content="address=no">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -81,18 +111,9 @@ export function renderClientHTML(clientHTML) {
         <script src="/static/js/script.js"></script>
       </head>
       <body style="padding: 0px; margin: 0px;">
-        <div id="react-root">${clientHTML}</div>
+        <div id="react-root">${content}</div>
+        <script>window.REDUX_INITIAL_STATE=${JSON.stringify(state)};</script>
         ${scripts}
-        <div class="metrics">
-          <!-- Global site tag (gtag.js) - Google Analytics -->
-          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111430722-2"></script>
-          <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'UA-111430722-2');
-          </script>
-        </div>
       </body>
     </html>
   `.trim().replace(/^ {4}/gm, '');

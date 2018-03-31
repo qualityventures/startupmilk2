@@ -11,9 +11,11 @@ import { StaticRouter } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import webRoutes from 'routes';
 import apiRoutes from 'api';
-import WebContainer from 'containers/web-container';
-import { renderClientHTML } from 'helpers/server';
+import ClientContainer from 'containers/client-container';
+import configureStore from 'reducers';
+import { renderHTML, getUserToken, fetchUserData } from 'helpers/ssr';
 
+const debug = require('debug')('milkicons_:ssr');
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
@@ -48,40 +50,57 @@ app.use('/api', apiRoutes);
 
 // process request
 app.use((req, res) => {
+  const store = configureStore();
+  const context = {};
+  const token = getUserToken(req.headers);
   let location = url.parse(req.url);
+  let body = '';
+  let type = 'client';
+
   location = { pathname: location.pathname, query: location.query };
 
-  // find matched route
-  webRoutes.some((route) => {
-    return matchPath(location.pathname, route);
-  });
+  Promise.all(fetchUserData(token))
+    .then((userData) => {
+      if (location.pathname.indexOf('/admin') === 0) {
+        type = 'admin';
+      } else {
+        // SSR is enabled for client only
 
-  const context = {};
+        // find matched route
+        webRoutes.some((route) => {
+          return matchPath(location.pathname, route);
+        });
 
-  // render content
-  const clientHTML = ReactDOM.renderToString(
-    <StaticRouter location={req.url} context={context}>
-      <WebContainer />
-    </StaticRouter>
-  );
+        // render content
+        body = ReactDOM.renderToString(
+          <StaticRouter location={req.url} context={context}>
+            <ClientContainer />
+          </StaticRouter>
+        );
+      }
 
-  // check for redirect
-  if (context.url) {
-    res.set({ Location: context.url });
-    res.status(301).end();
-    return;
-  }
+      // check for redirect
+      if (context.url) {
+        res.set({ Location: context.url });
+        res.status(301).end();
+        return;
+      }
 
-  // make HTML response
-  const content = renderClientHTML(clientHTML);
+      // make HTML response
+      const content = renderHTML(body, store.getState(), type);
 
-  res.set({
-    'Content-Type': 'text/html; charset=utf-8',
-    'Content-Length': Buffer.byteLength(content, 'utf8'),
-    ETag: '',
-  });
+      res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Length': Buffer.byteLength(content, 'utf8'),
+        ETag: '',
+      });
 
-  res.status(context.status || 200).end(content);
+      res.status(context.status || 200).end(content);
+    })
+    .catch((error) => {
+      debug(`request error: ${err}`);
+      res.status(500).end('Internal server error');
+    })
 });
 
 export default app;

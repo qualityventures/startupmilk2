@@ -14,7 +14,8 @@ const NODE_MODE = 'client';
  
 // config 
 const WEBPACK_ENTRY = {
-  bundle: ['milkicons_'],
+  client: ['client'],
+  admin: ['admin'],
 };
 const PUBLIC_PATH = '/assets/';
 const CONTENT_BASE = './public';

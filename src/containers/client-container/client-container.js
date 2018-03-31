@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router';
 import { Container } from 'components/ui';
 import routes from 'routes';
 
-class WebContainer extends React.Component {
+class ClientContainer extends React.Component {
   render() {
     return (
       <Container>
@@ -17,4 +17,4 @@ class WebContainer extends React.Component {
   }
 }
 
-export default WebContainer;
+export default ClientContainer;

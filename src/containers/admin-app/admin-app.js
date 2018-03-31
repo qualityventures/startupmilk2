@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import WebContainer from 'containers/web-container';
+import AdminContainer from 'containers/admin-container';
 
-class WebApp extends React.PureComponent {
+class AdminApp extends React.PureComponent {
   render() {
     return (
       <BrowserRouter>
-        <WebContainer />
+        <AdminContainer />
       </BrowserRouter>
     );
   }
 }
 
-export default WebApp;
+export default AdminApp;
