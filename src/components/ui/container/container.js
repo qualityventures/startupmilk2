@@ -1,40 +1,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import './container.scss';
 
 class Container extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    navigation: PropTypes.node,
+    location: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
+    navigation: null,
+  }
 
+  makeNavigation() {
+    const { navigation } = this.props;
+
+    if (!navigation) {
+      return null;
+    }
+
+    return (
+      <div className="col-2 col-lg-9 col-xl-8">
+        <a className="navigation-toggle"><span className="navigation-toggle-icon" /></a>
+        <div className="navigation">
+          <nav>
+            <ul className="menu-primary">{navigation}</ul>
+          </nav>
+        </div>
+      </div>
+    );
   }
 
   render() {
+    const path = this.props.location.pathname;
+    let Component = Link;
+
+    if (path.indexOf('/admin') === 0) {
+      Component = 'a';
+    }
+
     return (
       <div className="main">
-        <div className="header-global-top"></div>
+        <div className="header-global-top" />
         <header className="header-global">
           <div className="container">
             <div className="container-wrapper">
               <div className="row align-items-lg-center">
                 <div className="col-10 col-lg-3 col-xl-2">
-                  <Link className="logo" to="/">milkicons_</Link>
+                  <Component className="logo" to="/" href="/">milkicons_</Component>
                 </div>
-                <div className="col-2 col-lg-9 col-xl-8">
-                  <a href="#" className="navigation-toggle"><span className="navigation-toggle-icon"></span></a>
-                  <div className="navigation">
-                    <nav />
-                  </div>
-                </div>
+                {this.makeNavigation()}
               </div>
             </div>
           </div>
         </header>
 
-        <div className="header-global-bottom"></div>
+        <div className="header-global-bottom" />
         <div className="spanning">
           <div className="container">
             <div className="row">
@@ -52,9 +76,9 @@ class Container extends React.PureComponent {
                 <div className="footer-sub-navigation">
                   <nav>
                     <ul className="menu-tertiary">
-                      <li><Link to="/faq">F.A.Q</Link></li>
-                      <li><Link to="/license">License</Link></li>
-                      <li><Link to="/contact">Contact</Link></li>
+                      <li><Component to="/faq" href="/faq">F.A.Q</Component></li>
+                      <li><Component to="/license" href="/license">License</Component></li>
+                      <li><Component to="/contact" href="/contact">Contact</Component></li>
                     </ul>
                   </nav>
                 </div>
@@ -62,19 +86,6 @@ class Container extends React.PureComponent {
               <div className="col-6 col-lg-3">
                 <div className="footer-content">
                   <p>Price is VAT exclusive. For customers in the EU, a VAT will be added unless a valid EU VAT code is provided.</p>
-                </div>
-              </div>
-              <div className="col-12 col-lg-6 d-none d-lg-block">
-                <div className="footer-navigation">
-                  <nav>
-                    <ul className="menu-secondary">
-                      <li><a href="#">Icons</a></li>
-                      <li><a href="#">Startup Kits</a></li>
-                      <li><a href="#">Illustration</a></li>
-                      <li><a href="#">Motion</a></li>
-                      <li><a href="#">Marketing</a></li>
-                    </ul>
-                  </nav>
                 </div>
               </div>
             </div>
@@ -97,4 +108,4 @@ class Container extends React.PureComponent {
   }
 }
 
-export default Container;
+export default withRouter(Container);
