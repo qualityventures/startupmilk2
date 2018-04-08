@@ -3163,7 +3163,7 @@ input.search-input-button:hover {
   background: #ffffff;
   -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  padding: 60px 0;
+  padding: 60px;
 }
 
 .title {
@@ -3178,10 +3178,6 @@ input.search-input-button:hover {
   font-size: 24px;
   font-weight: normal;
   line-height: 1.17;
-}
-
-.catalog {
-  padding: 0px 60px;
 }
 
 .catalog-total {
@@ -3763,10 +3759,6 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     padding-right: 40px;
     max-width: 512px;
   }
-  .catalog {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
   .footer-sub-navigation {
     padding-left: 40px;
   }
@@ -3788,6 +3780,9 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   .product {
     padding-left: 40px;
     padding-right: 40px;
+  }
+  .content {
+    padding: 40px 40px;
   }
 }
 
@@ -3870,10 +3865,6 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     padding-right: 20px;
     max-width: 372px;
   }
-  .catalog {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
   .footer-sub-navigation {
     padding-left: 20px;
   }
@@ -3924,8 +3915,7 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     padding-top: 0;
   }
   .content {
-    padding-top: 25px;
-    padding-bottom: 25px;
+    padding: 25px 20px;
   }
   .catalog-page-prev,
   .catalog-page-next {

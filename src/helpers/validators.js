@@ -10,13 +10,17 @@ export function validateEmail(email) {
   return true;
 }
 
-export function validatePortfolio(portfolio) {
-  if (typeof portfolio !== 'string') {
-    return 'The Portfolio Link is in an invalid format';
+export function validatePassword(password) {
+  if (typeof password !== 'string') {
+    return 'The password is in an invalid format';
   }
 
-  if (portfolio && !portfolio.match(/^(https?:\/\/)?([0-9a-z_]+\.)+[0-9a-z_]+(\/.*)?$/i)) {
-    return 'The Portfolio Link is in an invalid format';
+  if (password.length < 8) {
+    return 'the password must be at least 8 characters';
+  }
+
+  if (password.length > 40) {
+    return 'the password must no more then 40 characters';
   }
 
   return true;

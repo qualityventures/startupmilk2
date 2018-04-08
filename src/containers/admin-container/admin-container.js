@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import { Container } from 'components/ui';
 import { connect } from 'react-redux';
 import Navigation from 'containers/navigation';
+import FormSignIn from 'containers/form-signin';
 
 class AdminContainer extends React.PureComponent {
   static propTypes = {
@@ -31,7 +32,7 @@ class AdminContainer extends React.PureComponent {
     const { access_level, logged_in } = this.props;
 
     if (!logged_in) {
-      return 'Sing in form';
+      return <FormSignIn />;
     }
 
     if (access_level !== 'admin') {
