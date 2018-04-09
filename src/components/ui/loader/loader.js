@@ -13,10 +13,10 @@ class Loader extends React.PureComponent {
 
   render() {
     return (
-      <div className={`${styles.loader} ${styles[`loader--${this.props.size}`]}`}>
-        <div className={`${styles.dot} ${styles['dot--1']}`} />
-        <div className={`${styles.dot} ${styles['dot--2']}`} />
-        <div className={`${styles.dot} ${styles['dot--3']}`} />
+      <div className={`loader loader--${this.props.size}`}>
+        <div className="dot dot--1" />
+        <div className="dot dot--2" />
+        <div className="dot dot--3" />
       </div>
     );
   }

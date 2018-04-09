@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Alert, FormInput, FormTitle, FormButton, FormLabel } from 'components/ui';
+import { Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
 import { validatePassword, validateEmail } from 'helpers/validators';
 
 class FormSignIn extends React.PureComponent {
@@ -128,7 +128,7 @@ class FormSignIn extends React.PureComponent {
       return null;
     }
 
-    return <Alert>Loader</Alert>;
+    return <Loader />;
   }
 
   makeButton() {

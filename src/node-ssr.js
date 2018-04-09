@@ -1,3 +1,6 @@
+/* global NODE_ENV */
+/* eslint-disable no-console */
+
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Express from 'express';
@@ -15,13 +18,19 @@ import apiRoutes from 'api';
 import ClientContainer from 'containers/client-container';
 import configureStore from 'reducers';
 import { renderHTML, getUserToken, fetchUserData } from 'helpers/ssr';
+import { MONGO } from 'data/config';
+import mongoose from 'mongoose';
 
 const debug = require('debug')('milkicons_:ssr');
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-/* global NODE_ENV */
-/* eslint-disable no-console */
+mongoose.connect(MONGO.url, MONGO.options).then(() => {
+  debug('Connected to MongoDB');
+}).catch((err) => {
+  console.error('Please check your MongoDB connection parameters');
+  process.exit(1);
+});
 
 const app = new Express();
 

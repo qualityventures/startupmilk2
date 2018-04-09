@@ -1,18 +1,17 @@
-'use strict';
-
 /* global NODE_ENV */
 /* global NODE_PORT */
 
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
-const debug = require('debug')('milkicons_:ssr');
 
+global.DEBUG_PREFIX = 'milkicons_';
 global.NODE_MODE = 'server';
 global.NODE_ENV = process.env.NODE_ENV || 'production';
 global.NODE_PORT = parseInt(process.env.PORT, 10) || 3020;
-global.DEBUG_PREFIX = 'milkicons_';
 global.ROOT_PATH = path.join(__dirname, '..', 'src');
+
+const debug = require('debug')(global.DEBUG_PREFIX + ':ssr');
 
 const babelrc = fs.readFileSync('./.babelrc');
 let config;

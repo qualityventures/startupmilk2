@@ -7,6 +7,14 @@ Unchartd landing
 ```
 npm i
 npm i node-sass
+cp src/data/config.default.js src/data/config.js
+nano config.js
+npm run cli init
+```
+
+### Creating admin user
+```
+npm run cli createAdminUser
 ```
 
 ### Building
