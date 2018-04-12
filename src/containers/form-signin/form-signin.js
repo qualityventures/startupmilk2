@@ -163,7 +163,7 @@ class FormSignIn extends React.PureComponent {
             name="email"
             placeholder="Email"
             disabled={disabled}
-            onKeyDown={this.signIn}
+            onSubmit={this.signIn}
           />
         </FormLabel>
 
@@ -174,7 +174,7 @@ class FormSignIn extends React.PureComponent {
             type="password"
             placeholder="Password"
             disabled={disabled}
-            onKeyDown={this.signIn}
+            onSubmit={this.signIn}
           />
         </FormLabel>
 
