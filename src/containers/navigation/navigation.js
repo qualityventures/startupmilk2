@@ -24,8 +24,17 @@ class Navigation extends React.PureComponent {
   }
 
   makeAdminNavigation() {
-    console.log('makeAdminNavigation');
-    return [];
+    const { pathname } = this.props.location;
+    const list = [
+      <NavigationLink
+        key={'products'}
+        to="/admin/products"
+        selected={pathname === '/admin' || pathname === '/admin/products'}
+        content="Products"
+      />,
+    ];
+
+    return list;
   }
 
   makeClientNavigation() {

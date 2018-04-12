@@ -6,7 +6,7 @@
   border-radius: 2px;
   background-color: #1ddd9e;
   box-shadow: 0 14px 20px 0 rgba(1, 10, 16, 0.07);
-  color: #FFF;
+  color: #FFF !important;
   text-align: center;
   font-family: SuisseBPIntl;
   font-size: 12px;
@@ -15,4 +15,6 @@
   font-stretch: normal;
   letter-spacing: 0.1px;
   text-transform: uppercase;
+  cursor: pointer;
+  display: block;
 }

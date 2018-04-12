@@ -12,8 +12,6 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
 onload(() => {
-  console.log(window.REDUX_INITIAL_STATE);
-  
   const store = configureStore(window.REDUX_INITIAL_STATE || {});
   const container = document.getElementById('react-root');
 
