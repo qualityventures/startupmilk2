@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
-import { Container } from 'components/ui';
+import { withRouter, Route, Switch } from 'react-router';
+import { Container, Alert } from 'components/ui';
 import { connect } from 'react-redux';
 import Navigation from 'containers/navigation';
 import FormSignIn from 'containers/form-signin';
+import routes from 'routes/admin';
 
 class AdminContainer extends React.PureComponent {
   static propTypes = {
-    access_level: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
     logged_in: PropTypes.bool.isRequired,
   }
 
@@ -17,29 +18,35 @@ class AdminContainer extends React.PureComponent {
   }
 
   makeNavigation() {
-    const { logged_in, access_level } = this.props;
+    const { logged_in, role } = this.props;
 
     return (
       <Navigation 
         type="admin"
-        access_level={access_level}
+        role={role}
         logged_in={logged_in}
       />
     );
   }
 
   makeContent() {
-    const { access_level, logged_in } = this.props;
+    const { role, logged_in } = this.props;
 
     if (!logged_in) {
       return <FormSignIn />;
     }
 
-    if (access_level !== 'admin') {
-      return 'Access denied';
+    if (role !== 'admin') {
+      return <Alert type="danger">Access denied</Alert>;
     }
 
-    return 'Admin Content';
+    return (
+      <Switch>
+        {routes.map(route => (
+          <Route {...route} />
+        ))}
+      </Switch>
+    );
   }
 
   render() {
@@ -55,7 +62,7 @@ class AdminContainer extends React.PureComponent {
 export default withRouter(connect(
   (state, props) => {
     return {
-      access_level: state.user.access_level,
+      role: state.user.role,
       logged_in: state.user.logged_in,
       pathname: props.location.pathname,
     };

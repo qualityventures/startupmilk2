@@ -1,6 +1,6 @@
 import React from 'react';
 
-class RouteFaq extends React.PureComponent {
+class RouteClientFaq extends React.PureComponent {
   static propTypes = {
 
   }
@@ -12,10 +12,10 @@ class RouteFaq extends React.PureComponent {
   render() {
     return (
       <div>
-        RouteFaq
+        RouteClientFaq
       </div>
     );
   }
 }
 
-export default RouteFaq;
+export default RouteClientFaq;

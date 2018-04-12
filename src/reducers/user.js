@@ -1,11 +1,29 @@
+import { USER_SIGN_IN, USER_SIGN_OUT } from 'actions/user';
+
 const initialState = {
   logged_in: false,
-  access_level: 'guest',
+  role: 'guest',
   data: {},
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case USER_SIGN_IN: {
+      const newState = { ...initialState };
+      newState.data = { ...action.data };
+      newState.role = action.data.role;
+      newState.logged_in = true;
+
+      return newState;
+    }
+
+    case USER_SIGN_OUT: {
+      const newState = { ...initialState };
+      newState.data = { ...initialState.data };
+
+      return initialState;
+    }
+
     default: {
       return state;
     }

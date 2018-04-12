@@ -4,11 +4,11 @@ import { withRouter, Route, Switch } from 'react-router';
 import { Container } from 'components/ui';
 import { connect } from 'react-redux';
 import Navigation from 'containers/navigation';
-import routes from 'routes';
+import routes from 'routes/client';
 
 class ClientContainer extends React.PureComponent {
   static propTypes = {
-    access_level: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
     logged_in: PropTypes.bool.isRequired,
   }
 
@@ -17,12 +17,12 @@ class ClientContainer extends React.PureComponent {
   }
 
   makeNavigation() {
-    const { logged_in, access_level } = this.props;
+    const { logged_in, role } = this.props;
 
     return (
       <Navigation 
         type="client"
-        access_level={access_level}
+        role={role}
         logged_in={logged_in}
       />
     );
@@ -44,7 +44,7 @@ class ClientContainer extends React.PureComponent {
 export default withRouter(connect(
   (state, props) => {
     return {
-      access_level: state.user.access_level,
+      role: state.user.role,
       logged_in: state.user.logged_in,
       pathname: props.location.pathname,
     };

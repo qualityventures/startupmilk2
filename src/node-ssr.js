@@ -13,7 +13,7 @@ import logger from 'morgan';
 import { StaticRouter } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import webRoutes from 'routes';
+import clientRoutes from 'routes/client';
 import apiRoutes from 'api';
 import ClientContainer from 'containers/client-container';
 import configureStore from 'reducers';
@@ -77,7 +77,7 @@ app.use((req, res) => {
         // SSR is enabled for client only
 
         // find matched route
-        webRoutes.some((route) => {
+        clientRoutes.some((route) => {
           return matchPath(location.pathname, route);
         });
 

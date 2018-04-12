@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
 import { validatePassword, validateEmail } from 'helpers/validators';
+import { userSignIn } from 'actions/user';
+import { tokenSet } from 'actions/token';
 
 class FormSignIn extends React.PureComponent {
   static propTypes = {
     logged_in: PropTypes.bool.isRequired,
+    userSignIn: PropTypes.func.isRequired,
+    tokenSet: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -94,7 +98,8 @@ class FormSignIn extends React.PureComponent {
       .then((json) => {
         this.setState({ loading: false });
 
-        console.log(json);
+        this.props.tokenSet(json.token);
+        this.props.userSignIn(json.data);
       })
       .catch((error) => {
         if (error && error.toString) {
@@ -186,7 +191,8 @@ export default connect(
   },
   (dispatch) => {
     return {
-
+      userSignIn: (user) => { dispatch(userSignIn(user)); },
+      tokenSet: (token) => { dispatch(tokenSet(token)); },
     };
   }
 )(FormSignIn);

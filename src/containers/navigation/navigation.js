@@ -14,7 +14,7 @@ const CATEGORIES_LIST = [
 class Navigation extends React.PureComponent {
   static propTypes = {
     location: PropTypes.object.isRequired,
-    access_level: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
     logged_in: PropTypes.bool.isRequired,
     type: PropTypes.string,
   }
@@ -56,13 +56,13 @@ class Navigation extends React.PureComponent {
   }
 
   render() {
-    const { access_level, logged_in, type } = this.props;
+    const { role, logged_in, type } = this.props;
 
     if (type !== 'admin') {
       return this.makeClientNavigation();
     }
 
-    if (access_level !== 'admin') {
+    if (role !== 'admin') {
       return null;
     }
 

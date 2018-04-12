@@ -44,13 +44,10 @@ export function authLogin(req, res) {
         return;
       }
 
-      const token = jwt.sign(
-        { email: user.email, role: user.role },
-        JWT_SECRET,
-        { expiresIn: 86400 * 30 }
-      );
+      const data = { email: user.email, role: user.role };
+      const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
 
-      returnObjectAsJSON(res, { token });
+      returnObjectAsJSON(res, { token, data });
     })
     .catch((err) => {
       log(err);

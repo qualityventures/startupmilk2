@@ -1,7 +1,7 @@
-import RouteContact from './contact';
-import RouteFaq from './faq';
-import RouteLicense from './license';
-import RouteUserProducts from './user-products';
+import RouteContact from './client-contact';
+import RouteFaq from './client-faq';
+import RouteLicense from './client-license';
+import RouteClientProducts from './client-products';
 
 export default [
   { path: '/contact',
@@ -22,11 +22,11 @@ export default [
   { path: '/products/:category',
     key: 'user-products',
     exact: true,
-    component: RouteUserProducts,
+    component: RouteClientProducts,
   },
   { path: '/',
     key: 'index',
     exact: false,
-    component: RouteUserProducts,
+    component: RouteClientProducts,
   },
 ];

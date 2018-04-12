@@ -1,6 +1,6 @@
 import React from 'react';
 
-class RouteLicense extends React.PureComponent {
+class RouteClientLicense extends React.PureComponent {
   static propTypes = {
 
   }
@@ -12,10 +12,10 @@ class RouteLicense extends React.PureComponent {
   render() {
     return (
       <div>
-        RouteLicense
+        RouteClientLicense
       </div>
     );
   }
 }
 
-export default RouteLicense;
+export default RouteClientLicense;

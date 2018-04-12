@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class RouteUserProducts extends React.PureComponent {
+class RouteAdminProducts extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object.isRequired,
   }
@@ -15,10 +15,10 @@ class RouteUserProducts extends React.PureComponent {
 
     return (
       <div>
-        RouteUserProducts - {category}
+        RouteAdminProducts - {category}
       </div>
     );
   }
 }
 
-export default RouteUserProducts;
+export default RouteAdminProducts;
