@@ -23,7 +23,7 @@ export function setCookie(name, value, expires) {
 
   if (name.length < 1) return;
 
-  document.cookie = `${name}=${value}${expires}; path=/`;
+  document.cookie = `${name}=${value}${expires};path=/;`;
 }
 
 export function removeCookie(name) {

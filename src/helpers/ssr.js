@@ -40,13 +40,14 @@ export function fetchUserData(token) {
 }
 
 export function getUserToken(headers) {
+  console.log(headers);
   const { cookie } = headers;
 
   if (!cookie) {
     return '';
   }
 
-  const match = cookie.match(/auth_jwt=(\S+)/i);
+  const match = cookie.match(/auth_jwt=([^\s;]+)/i);
 
   if (!match) {
     return '';

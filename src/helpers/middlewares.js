@@ -11,7 +11,7 @@ export function verifyToken(req, res, next) {
     return;
   }
 
-  const match = cookie.match(/auth_jwt=(\S+)/i);
+  const match = cookie.match(/auth_jwt=([^\s;]+)/i);
 
   if (!match) {
     throwUnauthorizedAccess(res, 'No token provided');
