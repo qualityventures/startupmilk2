@@ -5,6 +5,7 @@ import './form-input.scss';
 class FormInput extends React.PureComponent {
   static propTypes = {
     onKeyDown: PropTypes.func,
+    onSubmit: PropTypes.func,
     setRef: PropTypes.func,
     name: PropTypes.oneOfType([
       PropTypes.string,
@@ -24,6 +25,7 @@ class FormInput extends React.PureComponent {
 
   static defaultProps = {
     onKeyDown: null,
+    onSubmit: null,
     setRef: null,
     disabled: null,
     type: 'text',
@@ -36,10 +38,25 @@ class FormInput extends React.PureComponent {
     super(props);
 
     this.setRef = this.setRef.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   componentWillUnmount() {
     this.setRef(null);
+  }
+
+  onKeyDown(e) {
+    const { onKeyDown, onSubmit } = this.props;
+
+    if (onKeyDown && this.props.onKeyDown(e) === false) {
+      return;
+    }
+
+    if (e.keyCode !== 13) {
+      return;
+    }
+
+    onSubmit();
   }
 
   setRef(e) {
@@ -56,11 +73,8 @@ class FormInput extends React.PureComponent {
       type: this.props.type,
       disabled: this.props.disabled,
       placeholder: this.props.placeholder,
+      onKeyDown: this.onKeyDown,
     };
-
-    if (this.props.onKeyDown) {
-      props.onKeyDown = this.props.onKeyDown;
-    }
 
     if (this.props.setRef) {
       props.ref = this.setRef;

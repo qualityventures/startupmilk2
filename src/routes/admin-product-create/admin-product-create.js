@@ -160,6 +160,7 @@ class RouteAdminProductCreate extends React.PureComponent {
         <FormLabel>
           <FormInput
             setRef={this.setInputRef}
+            onSubmit={this.createProduct}
             name="url"
             placeholder="Product url"
             disabled={loading}
@@ -169,6 +170,7 @@ class RouteAdminProductCreate extends React.PureComponent {
         <FormLabel>
           <FormInput
             setRef={this.setInputRef}
+            onSubmit={this.createProduct}
             name="name"
             placeholder="Product name"
             disabled={loading}

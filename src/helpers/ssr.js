@@ -41,11 +41,6 @@ export function fetchUserData(token) {
 
 export function getUserToken(headers) {
   const { cookie } = headers;
-
-  if (!cookie) {
-    return '';
-  }
-
   const match = cookie.match(/auth_jwt=(\S+)/i);
 
   if (!match) {
