@@ -37,9 +37,11 @@ class Container extends React.PureComponent {
   render() {
     const path = this.props.location.pathname;
     let Component = Link;
+    let logo_link = '/';
 
     if (path.indexOf('/admin') === 0) {
       Component = 'a';
+      logo_link = '/admin/';
     }
 
     return (
@@ -50,7 +52,7 @@ class Container extends React.PureComponent {
             <div className="container-wrapper">
               <div className="row align-items-lg-center">
                 <div className="col-10 col-lg-3 col-xl-2">
-                  <Component className="logo" to="/" href="/">milkicons_</Component>
+                  <Link className="logo" to={logo_link}>milkicons_</Link>
                 </div>
                 {this.makeNavigation()}
               </div>

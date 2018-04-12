@@ -42,8 +42,6 @@ class RouteAdminProductCreate extends React.PureComponent {
     const ref_url = this.inputRefs.url || null;
     const ref_name = this.inputRefs.name || null;
 
-    console.log('createProduct');
-
     if (!ref_url || !ref_name) {
       return;
     }

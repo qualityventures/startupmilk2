@@ -40,7 +40,6 @@ export function fetchUserData(token) {
 }
 
 export function getUserToken(headers) {
-  console.log(headers);
   const { cookie } = headers;
 
   if (!cookie) {

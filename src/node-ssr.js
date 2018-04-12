@@ -16,6 +16,7 @@ import { Provider } from 'react-redux';
 import clientRoutes from 'routes/client';
 import apiRoutes from 'api';
 import ClientContainer from 'containers/client-container';
+import AdminContainer from 'containers/admin-container';
 import configureStore from 'reducers';
 import { renderHTML, getUserToken, fetchUserData } from 'helpers/ssr';
 import { MONGO } from 'data/config';
@@ -80,13 +81,20 @@ app.use((req, res) => {
 
       if (location.pathname.indexOf('/admin') === 0) {
         type = 'admin';
-      } else {
-        // SSR is enabled for client only
 
+        // render content
+        body = ReactDOM.renderToString(
+          <Provider store={store}>
+            <StaticRouter location={req.url} context={context}>
+              <AdminContainer />
+            </StaticRouter>
+          </Provider>
+        );
+      } else {
         // find matched route
-        clientRoutes.some((route) => {
-          return matchPath(location.pathname, route);
-        });
+        // clientRoutes.some((route) => {
+        //   return matchPath(location.pathname, route);
+        // });
 
         // render content
         body = ReactDOM.renderToString(

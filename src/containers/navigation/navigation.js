@@ -29,10 +29,19 @@ class Navigation extends React.PureComponent {
       <NavigationLink
         key={'products'}
         to="/admin/products"
-        selected={pathname === '/admin' || pathname === '/admin/products'}
+        selected={pathname === '/admin/' || pathname === '/admin/products'}
         content="Products"
       />,
     ];
+
+    list.push(
+      <NavigationLink
+        key="landing"
+        href="/"
+        selected={false}
+        content="Back to milkicons_"
+      />
+    );
 
     return list;
   }
