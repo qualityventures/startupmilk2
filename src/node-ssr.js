@@ -20,6 +20,8 @@ import configureStore from 'reducers';
 import { renderHTML, getUserToken, fetchUserData } from 'helpers/ssr';
 import { MONGO } from 'data/config';
 import mongoose from 'mongoose';
+import { userSignIn } from 'actions/user';
+import { tokenSet } from 'actions/token';
 
 const debug = require('debug')('milkicons_:ssr');
 require('es6-promise').polyfill();
@@ -71,6 +73,11 @@ app.use((req, res) => {
 
   Promise.all(fetchUserData(token))
     .then((userData) => {
+      if (userData && userData[0] && userData[0].email) {
+        store.dispatch(tokenSet(token));
+        store.dispatch(userSignIn(userData[0]));
+      }
+
       if (location.pathname.indexOf('/admin') === 0) {
         type = 'admin';
       } else {
@@ -110,7 +117,7 @@ app.use((req, res) => {
       res.status(context.status || 200).end(content);
     })
     .catch((error) => {
-      debug(`request error: ${err}`);
+      debug(`request error: ${error}`);
       res.status(500).end('Internal server error');
     })
 });
