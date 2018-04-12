@@ -5,6 +5,12 @@ import { throwUnauthorizedAccess } from 'helpers/response';
 
 export function verifyToken(req, res, next) {
   const { cookie } = req.headers;
+
+  if (!cookie) {
+    throwUnauthorizedAccess(res, 'No token provided');
+    return;
+  }
+
   const match = cookie.match(/auth_jwt=(\S+)/i);
 
   if (!match) {

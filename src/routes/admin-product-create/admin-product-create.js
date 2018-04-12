@@ -111,7 +111,7 @@ class RouteAdminProductCreate extends React.PureComponent {
   }
 
   makeSuccess() {
-    if (!this.state.loading) {
+    if (!this.state.success) {
       return null;
     }
 
