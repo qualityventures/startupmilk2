@@ -25,3 +25,11 @@ export function validatePassword(password) {
 
   return true;
 }
+
+export function validateProductUrl() {
+  return 'validateProductUrl';
+}
+
+export function validateProductName() {
+  return 'validateProductName';
+}
