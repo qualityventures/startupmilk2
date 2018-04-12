@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
+import { Form, Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
 import { validatePassword, validateEmail } from 'helpers/validators';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
@@ -152,7 +152,7 @@ class FormSignIn extends React.PureComponent {
     const disabled = this.state.loading || this.props.logged_in;
 
     return (
-      <div>
+      <Form>
         <FormTitle>Sign In</FormTitle>
         {this.makeSuccess()}
         {this.makeError()}
@@ -180,7 +180,7 @@ class FormSignIn extends React.PureComponent {
 
         {this.makeLoader()}
         {this.makeButton()}
-      </div>
+      </Form>
     );
   }
 }

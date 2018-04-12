@@ -24,7 +24,7 @@ const UserSchema = new Schema({
   created: {
     type: Date,
     default: Date.now,
-  }
+  },
 }, { collection: 'users', strict: true });
 
 UserSchema.methods.comparePassword = function(password) {
