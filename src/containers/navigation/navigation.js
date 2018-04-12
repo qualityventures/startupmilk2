@@ -39,6 +39,7 @@ class Navigation extends React.PureComponent {
 
   makeClientNavigation() {
     const { pathname } = this.props.location;
+    const { role } = this.props;
     const list = [
       <NavigationLink
         key={'all'}
@@ -60,6 +61,17 @@ class Navigation extends React.PureComponent {
         />
       );
     });
+
+    if (role === 'admin') {
+      list.push(
+        <NavigationLink
+          key="admin"
+          href="/admin/"
+          selected={false}
+          content="Admin CP"
+        />
+      );
+    }
 
     return list;
   }
