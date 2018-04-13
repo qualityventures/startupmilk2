@@ -33,6 +33,78 @@ function getProductData(req, res) {
   return data;
 }
 
+export function getProduct(req, res) {
+  const { id } = req.params;
+
+  if (!id || !id.match(/^[0-9a-z_-]+$/i)) {
+    throwError(res, 'Invalid id');
+    return;
+  }
+
+  // client product by url
+  if (id.length !== 24) {
+    throwError(res, 'Get product by url');
+    return;
+  }
+
+  // admin product by id
+  if (req.userData.role !== 'admin') {
+    throwError(res, 'Access denied');
+    return;
+  }
+
+  Products.findById(id)
+    .then((product) => {
+      if (product === null) {
+        throw new Error('Product not found');
+      }
+
+      returnObjectAsJSON(res, product);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while creating product';
+      log(error);
+      throwError(res, error);
+    });
+}
+
+export function updateProduct(req, res) {
+  const { id } = req.params;
+
+  if (!id || !id.match(/^[0-9a-z_-]+$/i)) {
+    throwError(res, 'Invalid id');
+    return;
+  }
+
+  const data = getProductData(req);
+
+  if (!data) {
+    return;
+  }
+
+  Products.findById(id)
+    .then((product) => {
+      if (product === null) {
+        throw new Error('Product not found');
+      }
+
+      product.name = data.name;
+      product.url = data.url;
+      product.price = data.price;
+      product.desc = data.desc;
+
+      return product.save();
+    })
+    .then((savedProduct) => {
+      returnObjectAsJSON(res, savedProduct);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while creating product';
+      log(error);
+      throwError(res, error);
+    });
+}
+
 export function createNewProduct(req, res) {
   const data = getProductData(req);
 

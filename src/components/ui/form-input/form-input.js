@@ -22,6 +22,10 @@ class FormInput extends React.PureComponent {
     disabled: PropTypes.bool,
     multiline: PropTypes.bool,
     type: PropTypes.string,
+    defaultValue: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
   }
 
   static defaultProps = {
@@ -34,13 +38,21 @@ class FormInput extends React.PureComponent {
     placeholder: null,
     id: null,
     multiline: false,
+    defaultValue: null,
   }
 
   constructor(props) {
     super(props);
 
+    this.input_ref = false;
     this.setRef = this.setRef.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.defaultValue !== this.props.defaultValue) {
+      this.input_ref.value = this.props.defaultValue || '';
+    }
   }
 
   componentWillUnmount() {
@@ -59,11 +71,12 @@ class FormInput extends React.PureComponent {
     }
   }
 
-  setRef(e) {
+  setRef(ref) {
+    this.input_ref = ref;
     const { name, setRef } = this.props;
 
     if (setRef) {
-      setRef(e, name || null);
+      setRef(ref, name || null);
     }
   }
 
@@ -73,11 +86,9 @@ class FormInput extends React.PureComponent {
       disabled: this.props.disabled,
       placeholder: this.props.placeholder,
       onKeyDown: this.onKeyDown,
+      defaultValue: this.props.defaultValue,
+      ref: this.setRef,
     };
-
-    if (this.props.setRef) {
-      props.ref = this.setRef;
-    }
 
     if (this.props.name) {
       props.name = this.props.name;

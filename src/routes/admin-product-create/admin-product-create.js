@@ -76,7 +76,7 @@ class RouteAdminProductCreate extends React.PureComponent {
 
     this.setState({ loading: true });
 
-    fetch('/api/products/create', {
+    fetch('/api/products/', {
       credentials: 'include',
       mode: 'cors',
       method: 'POST',
@@ -101,7 +101,7 @@ class RouteAdminProductCreate extends React.PureComponent {
       })
       .then((json) => {
         this.setState({ loading: false, success: true });
-        this.props.history.push(`/admin/product/${json.url}`);
+        this.props.history.push(`/admin/product/${json._id}`);
       })
       .catch((error) => {
         if (error && error.toString) {
