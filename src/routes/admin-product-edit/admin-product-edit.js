@@ -98,7 +98,7 @@ class RouteAdminProductEdit extends React.PureComponent {
       url: validateProductUrl,
     };
 
-    this.setState({ loading: false, error: false });
+    this.setState({ loading: false, error: false, success: false });
 
     Object.keys(fields).forEach((field) => {
       const ref = this.inputRefs[field];
