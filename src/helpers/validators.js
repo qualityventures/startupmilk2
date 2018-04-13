@@ -14,6 +14,40 @@ export function validateEmail(email) {
   return true;
 }
 
+export function validateProductDesc(desc) {
+  if (typeof desc !== 'string') {
+    return 'Please enter valid desc';
+  }
+
+  if (!desc) {
+    return true;
+  }
+
+  if (desc.length > 1000) {
+    return 'The desc must no more then 1000 characters';
+  }
+
+  return true;
+}
+
+export function validateProductPrice(price) {
+  price = parseFloat(price);
+
+  if (isNaN(price)) {
+    return 'Please enter valid price';
+  }
+
+  if (price < 0) {
+    return 'The price cannot be negative';
+  }
+
+  if (price > 1000000) {
+    return 'The price is too big';
+  }
+
+  return true;
+}
+
 export function validatePassword(password) {
   if (!password) {
     return 'The password cannot be empty';

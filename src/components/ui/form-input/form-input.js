@@ -20,6 +20,7 @@ class FormInput extends React.PureComponent {
       PropTypes.number,
     ]),
     disabled: PropTypes.bool,
+    multiline: PropTypes.bool,
     type: PropTypes.string,
   }
 
@@ -32,6 +33,7 @@ class FormInput extends React.PureComponent {
     name: null,
     placeholder: null,
     id: null,
+    multiline: false,
   }
 
   constructor(props) {
@@ -52,11 +54,9 @@ class FormInput extends React.PureComponent {
       return;
     }
 
-    if (e.keyCode !== 13) {
-      return;
+    if (onSubmit && e.keyCode === 13) {
+      onSubmit();
     }
-
-    onSubmit();
   }
 
   setRef(e) {
@@ -69,7 +69,6 @@ class FormInput extends React.PureComponent {
 
   render() {
     const props = {
-      className: 'form__input',
       type: this.props.type,
       disabled: this.props.disabled,
       placeholder: this.props.placeholder,
@@ -88,6 +87,12 @@ class FormInput extends React.PureComponent {
       props.id = this.props.id;
     }
 
+    if (this.props.multiline) {
+      props.className = 'form__textarea';
+      return <textarea {...props} />;
+    }
+
+    props.className = 'form__input';
     return (
       <input {...props} />
     );

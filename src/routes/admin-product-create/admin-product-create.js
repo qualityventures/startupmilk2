@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
-import { validateProductUrl, validateProductName } from 'helpers/validators';
+import { validateProductUrl, validateProductName, validateProductPrice, validateProductDesc } from 'helpers/validators';
+import { withRouter } from 'react-router-dom';
 
 class RouteAdminProductCreate extends React.PureComponent {
   static propTypes = {
-
+    history: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -35,30 +37,40 @@ class RouteAdminProductCreate extends React.PureComponent {
   }
 
   createProduct() {
-    const ref_url = this.inputRefs.url || null;
-    const ref_name = this.inputRefs.name || null;
-
-    if (!ref_url || !ref_name) {
-      return;
-    }
-
-    const url = ref_url.value;
-    const name = ref_name.value;
+    const fields = {
+      desc: validateProductDesc,
+      price: validateProductPrice,
+      name: validateProductName,
+      url: validateProductUrl,
+    };
+    const data = {};
+    let success = true;
 
     this.setState({ loading: false, error: false });
 
-    const url_validation = validateProductUrl(url);
-    const name_validation = validateProductName(name);
+    Object.keys(fields).forEach((field) => {
+      const ref = this.inputRefs[field];
 
-    if (url_validation !== true) {
-      ref_url.focus();
-      this.setState({ error: url_validation });
-      return;
-    }
+      if (!ref) {
+        this.setState({ error: 'Something went wrong' });
+        success = false;
+        return;
+      }
 
-    if (name_validation !== true) {
-      ref_name.focus();
-      this.setState({ error: name_validation });
+      const value = ref.value;
+      const validation = fields[field](value);
+
+      if (validation !== true) {
+        ref.focus();
+        this.setState({ error: validation });
+        success = false;
+        return;
+      }
+
+      data[field] = value;
+    });
+
+    if (!success) {
       return;
     }
 
@@ -71,10 +83,7 @@ class RouteAdminProductCreate extends React.PureComponent {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        url,
-        name,
-      }),
+      body: JSON.stringify(data),
     })
       .then((response) => {
         return response.json().then(json => ({ json, response }));
@@ -91,9 +100,8 @@ class RouteAdminProductCreate extends React.PureComponent {
         return json;
       })
       .then((json) => {
-        this.setState({ loading: false });
-
-        console.log(json);
+        this.setState({ loading: false, success: true });
+        this.props.history.push(`/admin/product/${json.url}`);
       })
       .catch((error) => {
         if (error && error.toString) {
@@ -171,6 +179,26 @@ class RouteAdminProductCreate extends React.PureComponent {
           />
         </FormLabel>
 
+        <FormLabel>
+          <FormInput
+            setRef={this.setInputRef}
+            onSubmit={this.createProduct}
+            name="price"
+            placeholder="Product price"
+            disabled={loading}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormInput
+            setRef={this.setInputRef}
+            name="desc"
+            placeholder="Product desc"
+            disabled={loading}
+            multiline
+          />
+        </FormLabel>
+
         {this.makeLoader()}
         {this.makeButton()}
       </Form>
@@ -178,4 +206,4 @@ class RouteAdminProductCreate extends React.PureComponent {
   }
 }
 
-export default RouteAdminProductCreate;
+export default withRouter(RouteAdminProductCreate);

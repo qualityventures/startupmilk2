@@ -9,6 +9,25 @@ import { JWT_SECRET } from 'data/config';
 
 const log = debug(`${DEBUG_PREFIX}:controller.auth`);
 
+function validateUserData(req, res) {
+  const { email, password } = req.body;
+
+  const email_validation = validateEmail(email);
+  const password_validation = validatePassword(password);
+
+  if (email_validation !== true) {
+    throwError(res, email_validation);
+    return false;
+  }
+
+  if (password_validation !== true) {
+    throwError(res, password_validation);
+    return false;
+  }
+
+  return true;
+}
+
 let __last_attempt = 0;
 export function authLogin(req, res) {
   if (!validateUserData(req, res)) {
@@ -61,23 +80,4 @@ export function authRegister(req, res) {
   }
 
   throwError(res, 'auth sign up');
-}
-
-function validateUserData(req, res) {
-  const { email, password } = req.body;
-
-  const email_validation = validateEmail(email);
-  const password_validation = validatePassword(password);
-
-  if (email_validation !== true) {
-    throwError(res, email_validation);
-    return false;
-  }
-
-  if (password_validation !== true) {
-    throwError(res, password_validation);
-    return false;
-  }
-
-  return true;
 }

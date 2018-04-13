@@ -19,8 +19,15 @@ const ProductsSchema = new Schema({
     trim: true,
   },
   price: {
-    type: String,
-    trim: true,
+    type: Number,
+  },
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
+  visible: {
+    type: Boolean,
+    default: false,
   },
   files: [
 

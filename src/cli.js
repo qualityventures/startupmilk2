@@ -4,6 +4,7 @@
 import { MONGO } from 'data/config';
 import { validatePassword, validateEmail } from 'helpers/validators';
 import User from 'models/user';
+import Products from 'models/products';
 import mongoose from 'mongoose';
 import readline from 'readline';
 import bcrypt from 'bcryptjs';
@@ -18,7 +19,11 @@ mongoose.connect(MONGO.url, MONGO.options).then(() => {
 export function init() {
   User.init()
     .then(() => {
-      console.log('init completed');
+      console.log('User init completed');
+      return Products.init();
+    })
+    .then(() => {
+      console.log('Product init completed');
       process.exit(1);
     })
     .catch((err) => {
@@ -56,12 +61,7 @@ export function createAdminUser() {
 
         const hashed_password = bcrypt.hashSync(pass1, 8);
 
-        User.create({
-          email,
-          role: 'admin',
-          hashed_password,
-        },
-        function (err, user) {
+        User.create({ email, role: 'admin', hashed_password }, (err, user) => {
           if (err) {
             console.log(err);
           } else {
