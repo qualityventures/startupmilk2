@@ -3,18 +3,20 @@ import User from 'models/user';
 import { JWT_SECRET } from 'data/config';
 import { throwUnauthorizedAccess } from 'helpers/response';
 
-export function verifyToken(req, res, next) {
+export function loadUserData(req, res, next) {
   const { cookie } = req.headers;
+  req.userData = {};
+  req.jwtToken = false;
 
   if (!cookie) {
-    throwUnauthorizedAccess(res, 'No token provided');
+    next();
     return;
   }
 
   const match = cookie.match(/auth_jwt=([^\s;]+)/i);
 
   if (!match) {
-    throwUnauthorizedAccess(res, 'No token provided');
+    next();
     return;
   }
 
@@ -28,28 +30,39 @@ export function verifyToken(req, res, next) {
   }
 
   if (!payload || !payload.email) {
-    throwUnauthorizedAccess(res, 'Failed to authenticate token');
+    next();
     return;
   }
 
   User.findOne({ email: payload.email })
     .then((user) => {
       if (user === null) {
-        throwUnauthorizedAccess(res, 'User not found');
+        next();
         return;
       }
 
-      if (user.role !== 'admin') {
-        throwUnauthorizedAccess(res, 'Access denied');
-        return;
-      }
-
-      req.userEmail = user.email;
-      req.userRole = user.role;
-
+      req.userData = { email: user.email, role: user.role };
+      req.jwtToken = token;
+      
       next();
     })
     .catch(() => {
-        throwUnauthorizedAccess(res, 'User not found');
+      next();
     });
+}
+
+export function checkAdminAccess(req, res, next) {
+  const { email, role } = req.userData;
+
+  if (!email) {
+    throwUnauthorizedAccess(res, 'No token provided');
+    return;
+  }
+
+  if (role !== 'admin') {
+    throwUnauthorizedAccess(res, 'Access denied');
+    return;
+  }
+
+  next();
 }

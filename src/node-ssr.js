@@ -18,11 +18,12 @@ import apiRoutes from 'api';
 import ClientContainer from 'containers/client-container';
 import AdminContainer from 'containers/admin-container';
 import configureStore from 'reducers';
-import { renderHTML, getUserToken, fetchUserData } from 'helpers/ssr';
+import { renderHTML } from 'helpers/ssr';
 import { MONGO } from 'data/config';
 import mongoose from 'mongoose';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
+import { loadUserData } from 'helpers/middlewares';
 
 const debug = require('debug')('milkicons_:ssr');
 require('es6-promise').polyfill();
@@ -59,75 +60,67 @@ app.use('/favicon.ico', Express.static(path.join(__dirname, '..', 'public', 'sta
 app.use('/apple-touch-icon.png', Express.static(path.join(__dirname, '..', 'public', 'static', 'favicons', 'apple-touch-icon.png'), staticOptions));
 app.use('/assets', Express.static(path.join(__dirname, '..', 'public', 'assets'), staticOptions));
 app.use('/static', Express.static(path.join(__dirname, '..', 'public', 'static'), staticOptions));
+app.use(loadUserData);
 app.use('/api', apiRoutes);
 
 // process request
 app.use((req, res) => {
   const store = configureStore();
   const context = {};
-  const token = getUserToken(req.headers);
   let location = url.parse(req.url);
   let body = '';
   let type = 'client';
 
+  if (req.jwtToken && req.userData.email) {
+    store.dispatch(tokenSet(req.jwtToken));
+    store.dispatch(userSignIn(req.userData));
+  }
+
   location = { pathname: location.pathname, query: location.query };
+  if (location.pathname.indexOf('/admin') === 0) {
+    type = 'admin';
 
-  Promise.all(fetchUserData(token))
-    .then((userData) => {
-      if (userData && userData[0] && userData[0].email) {
-        store.dispatch(tokenSet(token));
-        store.dispatch(userSignIn(userData[0]));
-      }
+    // render content
+    body = ReactDOM.renderToString(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={context}>
+          <AdminContainer />
+        </StaticRouter>
+      </Provider>
+    );
+  } else {
+    // find matched route
+    // clientRoutes.some((route) => {
+    //   return matchPath(location.pathname, route);
+    // });
 
-      if (location.pathname.indexOf('/admin') === 0) {
-        type = 'admin';
+    // render content
+    body = ReactDOM.renderToString(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={context}>
+          <ClientContainer />
+        </StaticRouter>
+      </Provider>
+    );
+  }
 
-        // render content
-        body = ReactDOM.renderToString(
-          <Provider store={store}>
-            <StaticRouter location={req.url} context={context}>
-              <AdminContainer />
-            </StaticRouter>
-          </Provider>
-        );
-      } else {
-        // find matched route
-        // clientRoutes.some((route) => {
-        //   return matchPath(location.pathname, route);
-        // });
+  // check for redirect
+  if (context.url) {
+    res.set({ Location: context.url });
+    res.status(301).end();
+    return;
+  }
 
-        // render content
-        body = ReactDOM.renderToString(
-          <Provider store={store}>
-            <StaticRouter location={req.url} context={context}>
-              <ClientContainer />
-            </StaticRouter>
-          </Provider>
-        );
-      }
+  // make HTML response
+  const content = renderHTML(body, store.getState(), type);
 
-      // check for redirect
-      if (context.url) {
-        res.set({ Location: context.url });
-        res.status(301).end();
-        return;
-      }
+  res.set({
+    'Content-Type': 'text/html; charset=utf-8',
+    'Content-Length': Buffer.byteLength(content, 'utf8'),
+    ETag: '',
+  });
 
-      // make HTML response
-      const content = renderHTML(body, store.getState(), type);
-
-      res.set({
-        'Content-Type': 'text/html; charset=utf-8',
-        'Content-Length': Buffer.byteLength(content, 'utf8'),
-        ETag: '',
-      });
-
-      res.status(context.status || 200).end(content);
-    })
-    .catch((error) => {
-      debug(`request error: ${error}`);
-      res.status(500).end('Internal server error');
-    })
+  res.status(context.status || 200).end(content);
 });
 
 export default app;

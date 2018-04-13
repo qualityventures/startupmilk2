@@ -1,4 +1,4 @@
-/* DEBUG_PREFIX */
+/* global DEBUG_PREFIX */
 
 import { throwError, returnObjectAsJSON, returnOkWithoutBody } from 'helpers/response';
 import { validateProductUrl, validateProductName } from 'helpers/validators';

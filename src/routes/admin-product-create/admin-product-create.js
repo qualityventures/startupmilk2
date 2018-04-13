@@ -1,10 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Form, Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
 import { validateProductUrl, validateProductName } from 'helpers/validators';
-import { userSignIn } from 'actions/user';
-import { tokenSet } from 'actions/token';
 
 class RouteAdminProductCreate extends React.PureComponent {
   static propTypes = {

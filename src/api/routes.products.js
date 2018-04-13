@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { createNewProduct } from 'controllers/controller.products';
-import { verifyToken } from 'helpers/middlewares';
+import { checkAdminAccess } from 'helpers/middlewares';
 
 const router = new Router();
 
 router.route('/create')
-  .post(verifyToken, createNewProduct);
+  .post(checkAdminAccess, createNewProduct);
 
 export default router;

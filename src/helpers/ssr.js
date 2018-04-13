@@ -6,55 +6,6 @@ import { TITLE_BASE, TITLE_SEPARATOR, ANALYTICS, JWT_SECRET } from 'data/config'
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
 
-export function fetchUserData(token) {
-  if (!token) {
-    return [];
-  }
-
-  let payload = false;
-
-  try {
-    payload = jwt.verify(token, JWT_SECRET);
-  } catch (e) {
-    payload = false;
-  }
-
-  if (!payload || !payload.email) {
-    return [];
-  }
-
-  return [new Promise((resolve) => {
-    User.findOne({ email: payload.email })
-      .then((user) => {
-        if (user === null) {
-          resolve();
-          return;
-        }
-
-        resolve({ email: user.email, role: user.role });
-      })
-      .catch(() => {
-        resolve();
-      });
-  })];
-}
-
-export function getUserToken(headers) {
-  const { cookie } = headers;
-
-  if (!cookie) {
-    return '';
-  }
-
-  const match = cookie.match(/auth_jwt=([^\s;]+)/i);
-
-  if (!match) {
-    return '';
-  }
-
-  return match[1];
-}
-
 let _bundle_cache = {};
 let _bundle_updated = 0;
 
