@@ -33,6 +33,22 @@ function getProductData(req, res) {
   return data;
 }
 
+export function getProducts(req, res) {
+  Products.find({})
+    .then((products) => {
+      if (products === null) {
+        throw new Error('Products not found');
+      }
+
+      returnObjectAsJSON(res, products);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while creating product';
+      log(error);
+      throwError(res, error);
+    });
+}
+
 export function getProduct(req, res) {
   const { id } = req.params;
 

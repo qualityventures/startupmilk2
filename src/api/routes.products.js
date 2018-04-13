@@ -1,14 +1,17 @@
 import { Router } from 'express';
-import { createNewProduct, getProduct, updateProduct } from 'controllers/controller.products';
+import { createNewProduct, getProduct, getProducts, updateProduct } from 'controllers/controller.products';
 import { checkAdminAccess } from 'helpers/middlewares';
 
 const router = new Router();
 
 router.route('/')
-  .post(checkAdminAccess, createNewProduct);
+  .get(getProducts);
 
 router.route('/:id')
-  .get(checkAdminAccess, getProduct);
+  .get(getProduct);
+
+router.route('/')
+  .post(checkAdminAccess, createNewProduct);
 
 router.route('/:id')
   .patch(checkAdminAccess, updateProduct);

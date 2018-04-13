@@ -222,7 +222,7 @@ class RouteAdminProductEdit extends React.PureComponent {
 
     return (
       <Form>
-        <FormTitle>Edit product</FormTitle>
+        <FormTitle>Edit: {data.name}</FormTitle>
         {this.makeSuccess()}
         {this.makeError()}
 
