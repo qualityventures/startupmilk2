@@ -5,7 +5,7 @@ import { validateEmail, validatePassword } from 'helpers/validators';
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
 import debug from 'debug';
-import { JWT_SECRET } from 'data/config';
+import { JWT_SECRET } from 'data/jwt';
 
 const log = debug(`${DEBUG_PREFIX}:controller.auth`);
 

@@ -1,7 +1,7 @@
 /* global NODE_ENV */
 /* eslint-disable no-console */
 
-import { MONGO } from 'data/config';
+import { MONGO } from 'data/mongo';
 import { validatePassword, validateEmail } from 'helpers/validators';
 import User from 'models/user';
 import Products from 'models/products';

@@ -10,6 +10,13 @@ const ProductsSchema = new Schema({
     index: true,
     required: true,
   },
+  category: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    index: true,
+    required: true,
+  },
   name: {
     type: String,
     trim: true,

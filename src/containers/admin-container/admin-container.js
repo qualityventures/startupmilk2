@@ -50,7 +50,6 @@ class AdminContainer extends React.PureComponent {
   }
 
   render() {
-
     return (
       <Container navigation={this.makeNavigation()}>
         {this.makeContent()}

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
-import { validateProductUrl, validateProductName, validateProductPrice, validateProductDesc } from 'helpers/validators';
+import { Form, Alert, FormInput, FormSelect, FormMisc, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
+import { validateProductUrl, validateProductName, validateProductCategory, validateProductPrice, validateProductDesc } from 'helpers/validators';
 import { withRouter } from 'react-router-dom';
+import CATEGORIES_LIST from 'data/categories';
 
 class RouteAdminProductCreate extends React.PureComponent {
   static propTypes = {
@@ -20,10 +21,16 @@ class RouteAdminProductCreate extends React.PureComponent {
       success: false,
       loading: false,
       error: false,
+      auto_url_enabled: true,
+      selectValues: Object.keys(CATEGORIES_LIST).map((key) => {
+        return { value: key, title: CATEGORIES_LIST[key] };
+      }),
     };
 
     this.inputRefs = {};
 
+    this.urlAutoFill = this.urlAutoFill.bind(this);
+    this.disableUrlAutoFill = this.disableUrlAutoFill.bind(this);
     this.createProduct = this.createProduct.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
   }
@@ -36,12 +43,32 @@ class RouteAdminProductCreate extends React.PureComponent {
     this.inputRefs[name] = e;
   }
 
+  urlAutoFill(e) {
+    if (!this.state.auto_url_enabled) {
+      return;
+    }
+
+    const name = this.inputRefs.name.value;
+    const url = name.toLowerCase().trim().replace(/\s+/g, '-');
+
+    this.inputRefs.url.value = url;
+  }
+
+  disableUrlAutoFill() {
+    if (!this.state.auto_url_enabled) {
+      return;
+    }
+
+    this.setState({ auto_url_enabled: false });
+  }
+
   createProduct() {
     const fields = {
       desc: validateProductDesc,
       price: validateProductPrice,
-      name: validateProductName,
+      category: validateProductCategory,
       url: validateProductUrl,
+      name: validateProductName,
     };
     const data = {};
     let success = true;
@@ -50,6 +77,7 @@ class RouteAdminProductCreate extends React.PureComponent {
 
     Object.keys(fields).forEach((field) => {
       const ref = this.inputRefs[field];
+      let value = '';
 
       if (!ref) {
         this.setState({ error: 'Something went wrong' });
@@ -57,7 +85,11 @@ class RouteAdminProductCreate extends React.PureComponent {
         return;
       }
 
-      const value = ref.value;
+      if (field === 'category') {
+        value = ref.options[ref.selectedIndex].value;
+      } else {
+        value = ref.value;
+      }
       const validation = fields[field](value);
 
       if (validation !== true) {
@@ -160,18 +192,15 @@ class RouteAdminProductCreate extends React.PureComponent {
         {this.makeError()}
 
         <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onSubmit={this.createProduct}
-            name="url"
-            placeholder="Product url"
-            disabled={loading}
-          />
+          <FormMisc>
+            Basic details
+          </FormMisc>
         </FormLabel>
 
         <FormLabel>
           <FormInput
             setRef={this.setInputRef}
+            onKeyUp={this.urlAutoFill}
             onSubmit={this.createProduct}
             name="name"
             placeholder="Product name"
@@ -183,9 +212,30 @@ class RouteAdminProductCreate extends React.PureComponent {
           <FormInput
             setRef={this.setInputRef}
             onSubmit={this.createProduct}
+            onKeyUp={this.disableUrlAutoFill}
+            name="url"
+            placeholder="Product url"
+            disabled={loading}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormInput
+            setRef={this.setInputRef}
+            onSubmit={this.createProduct}
             name="price"
             placeholder="Product price"
             disabled={loading}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormSelect
+            setRef={this.setInputRef}
+            name="category"
+            placeholder="Select category..."
+            disabled={loading}
+            values={this.state.selectValues}
           />
         </FormLabel>
 

@@ -1,9 +1,11 @@
 /* global DEBUG_PREFIX */
 
 import { throwError, returnObjectAsJSON } from 'helpers/response';
-import { validateProductUrl, validateProductName, validateProductDesc, validateProductPrice } from 'helpers/validators';
+import { validateProductUrl, validateProductName, validateProductCategory, validateProductDesc, validateProductPrice } from 'helpers/validators';
 import Products from 'models/products';
 import debug from 'debug';
+import { RESULTS_PER_PAGE } from 'data/config';
+import CATEGORIES_LIST from 'data/categories';
 
 const log = debug(`${DEBUG_PREFIX}:controller.products`);
 
@@ -11,8 +13,9 @@ function getProductData(req, res) {
   const fields = {
     desc: validateProductDesc,
     price: validateProductPrice,
-    name: validateProductName,
+    category: validateProductCategory,
     url: validateProductUrl,
+    name: validateProductName,
   };
   const data = {};
   const keys = Object.keys(fields);
@@ -34,13 +37,57 @@ function getProductData(req, res) {
 }
 
 export function getProducts(req, res) {
-  Products.find({})
+  const query = {};
+  const { category } = req.body;
+  let { orderby } = req.body;
+  let page = Math.min(parseInt(req.body.page || 1, 10) || 1, 100);
+  let pages = 0;
+  let total = 0;
+
+  if (['-created', 'price'].indexOf(orderby) === -1) {
+    orderby = '-created';
+  }
+
+  if (CATEGORIES_LIST[category]) {
+    query.category = category;
+  }
+
+  if (req.userData.role !== 'admin') {
+    query.visible = true;
+  } else {
+    // visibility and deleted check
+  }
+
+  Products.count(query)
+    .then((data) => {
+      total = data || 0;
+
+      pages = Math.floor(total / RESULTS_PER_PAGE);
+      if ((pages * RESULTS_PER_PAGE) < total) {
+        ++pages;
+      }
+
+      if (page > pages) {
+        page = pages;
+      }
+
+      return Products.find(query)
+        .sort(orderby)
+        .limit(RESULTS_PER_PAGE)
+        .skip(RESULTS_PER_PAGE * (page - 1))
+        .exec();
+    })
     .then((products) => {
       if (products === null) {
         throw new Error('Products not found');
       }
 
-      returnObjectAsJSON(res, products);
+      returnObjectAsJSON(res, {
+        page,
+        pages,
+        total,
+        products,
+      });
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Error while creating product';
@@ -49,23 +96,15 @@ export function getProducts(req, res) {
     });
 }
 
-export function getProduct(req, res) {
+export function getProductByUrl(req, res) {
+  throwError(res, 'getProductByUrl');
+}
+
+export function getProductById(req, res) {
   const { id } = req.params;
 
   if (!id || !id.match(/^[0-9a-z_-]+$/i)) {
     throwError(res, 'Invalid id');
-    return;
-  }
-
-  // client product by url
-  if (id.length !== 24) {
-    throwError(res, 'Get product by url');
-    return;
-  }
-
-  // admin product by id
-  if (req.userData.role !== 'admin') {
-    throwError(res, 'Access denied');
     return;
   }
 
@@ -108,6 +147,7 @@ export function updateProduct(req, res) {
       product.url = data.url;
       product.price = data.price;
       product.desc = data.desc;
+      product.category = data.category;
 
       return product.save();
     })

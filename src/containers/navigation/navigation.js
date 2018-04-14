@@ -2,20 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavigationLink } from 'components/ui';
 import { withRouter } from 'react-router';
-
-const CATEGORIES_LIST = [
-  ['icons', 'Icons'],
-  ['startup-kits', 'Startup kits'],
-  ['illustrations', 'Illustrations'],
-  ['motion', 'Motion'],
-  ['marketing', 'Marketing'],
-];
+import CATEGORIES_LIST from 'data/categories';
 
 class Navigation extends React.PureComponent {
   static propTypes = {
     location: PropTypes.object.isRequired,
     role: PropTypes.string.isRequired,
-    logged_in: PropTypes.bool.isRequired,
     type: PropTypes.string,
   }
 
@@ -58,8 +50,8 @@ class Navigation extends React.PureComponent {
       />,
     ];
 
-    CATEGORIES_LIST.forEach((category) => {
-      const [key, title] = category;
+    Object.keys(CATEGORIES_LIST).forEach((key) => {
+      const title = CATEGORIES_LIST[key];
 
       list.push(
         <NavigationLink
@@ -86,7 +78,7 @@ class Navigation extends React.PureComponent {
   }
 
   render() {
-    const { role, logged_in, type } = this.props;
+    const { role, type } = this.props;
 
     if (type !== 'admin') {
       return this.makeClientNavigation();

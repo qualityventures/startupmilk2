@@ -5,6 +5,7 @@ import './form-input.scss';
 class FormInput extends React.PureComponent {
   static propTypes = {
     onKeyDown: PropTypes.func,
+    onKeyUp: PropTypes.func,
     onSubmit: PropTypes.func,
     setRef: PropTypes.func,
     name: PropTypes.oneOfType([
@@ -29,6 +30,7 @@ class FormInput extends React.PureComponent {
   }
 
   static defaultProps = {
+    onKeyUp: null,
     onKeyDown: null,
     onSubmit: null,
     setRef: null,
@@ -86,6 +88,7 @@ class FormInput extends React.PureComponent {
       disabled: this.props.disabled,
       placeholder: this.props.placeholder,
       onKeyDown: this.onKeyDown,
+      onKeyUp: this.props.onKeyUp,
       defaultValue: this.props.defaultValue,
       ref: this.setRef,
     };

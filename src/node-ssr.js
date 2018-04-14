@@ -19,7 +19,7 @@ import ClientContainer from 'containers/client-container';
 import AdminContainer from 'containers/admin-container';
 import configureStore from 'reducers';
 import { renderHTML } from 'helpers/ssr';
-import { MONGO } from 'data/config';
+import { MONGO } from 'data/mongo';
 import mongoose from 'mongoose';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';

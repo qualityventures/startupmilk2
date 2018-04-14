@@ -8,7 +8,9 @@ Unchartd landing
 npm i
 npm i node-sass
 cp src/data/config.default.js src/data/config.js
-nano config.js
+cp src/data/mongo.default.js src/data/mongo.js
+cp src/data/jwt.default.js src/data/jwt.js
+edit jwt.js config.js mongo.js
 npm run cli init
 ```
 

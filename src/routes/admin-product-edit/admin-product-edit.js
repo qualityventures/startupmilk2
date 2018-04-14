@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
-import { validateProductUrl, validateProductName, validateProductPrice, validateProductDesc } from 'helpers/validators';
+import { Form, Alert, FormInput, FormMisc, FormSelect, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
+import { validateProductUrl, validateProductName, validateProductCategory, validateProductPrice, validateProductDesc } from 'helpers/validators';
+import CATEGORIES_LIST from 'data/categories';
 
 class RouteAdminProductEdit extends React.PureComponent {
   static propTypes = {
@@ -21,6 +22,9 @@ class RouteAdminProductEdit extends React.PureComponent {
       loaded: false,
       data: {},
       error: false,
+      selectValues: Object.keys(CATEGORIES_LIST).map((key) => {
+        return { value: key, title: CATEGORIES_LIST[key] };
+      }),
     };
 
     this.inputRefs = {};
@@ -62,7 +66,7 @@ class RouteAdminProductEdit extends React.PureComponent {
       return;
     }
 
-    fetch(`/api/products/${id}`, {
+    fetch(`/api/products/getById/${id}`, {
       credentials: 'include',
       mode: 'cors',
       method: 'GET',
@@ -94,14 +98,16 @@ class RouteAdminProductEdit extends React.PureComponent {
     const fields = {
       desc: validateProductDesc,
       price: validateProductPrice,
-      name: validateProductName,
+      category: validateProductCategory,
       url: validateProductUrl,
+      name: validateProductName,
     };
 
     this.setState({ loading: false, error: false, success: false });
 
     Object.keys(fields).forEach((field) => {
       const ref = this.inputRefs[field];
+      let value = false;
 
       if (!ref) {
         this.setState({ error: 'Something went wrong' });
@@ -109,7 +115,11 @@ class RouteAdminProductEdit extends React.PureComponent {
         return;
       }
 
-      const value = ref.value;
+      if (field === 'category') {
+        value = ref.options[ref.selectedIndex].value;
+      } else {
+        value = ref.value;
+      }
       const validation = fields[field](value);
 
       if (validation !== true) {
@@ -152,6 +162,7 @@ class RouteAdminProductEdit extends React.PureComponent {
         newData.name = product.name;
         newData.price = product.price;
         newData.desc = product.desc;
+        newData.category = product.category;
 
         this.setState({ loading: false, success: true, data: newData });
       })
@@ -227,14 +238,9 @@ class RouteAdminProductEdit extends React.PureComponent {
         {this.makeError()}
 
         <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onSubmit={this.updateProduct}
-            name="url"
-            placeholder="Product url"
-            defaultValue={data.url}
-            disabled={loading}
-          />
+          <FormMisc>
+            Basic details
+          </FormMisc>
         </FormLabel>
 
         <FormLabel>
@@ -252,10 +258,32 @@ class RouteAdminProductEdit extends React.PureComponent {
           <FormInput
             setRef={this.setInputRef}
             onSubmit={this.updateProduct}
+            name="url"
+            placeholder="Product url"
+            defaultValue={data.url}
+            disabled={loading}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormInput
+            setRef={this.setInputRef}
+            onSubmit={this.updateProduct}
             name="price"
             placeholder="Product price"
             defaultValue={data.price}
             disabled={loading}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormSelect
+            setRef={this.setInputRef}
+            name="category"
+            placeholder="Select category..."
+            disabled={loading}
+            values={this.state.selectValues}
+            defaultValue={data.category}
           />
         </FormLabel>
 
@@ -272,6 +300,26 @@ class RouteAdminProductEdit extends React.PureComponent {
 
         {this.makeLoader()}
         {this.makeButton()}
+
+        <FormLabel>
+          <FormMisc>
+            Photos
+          </FormMisc>
+        </FormLabel>
+
+        <FormLabel>
+          Photos editor
+        </FormLabel>
+
+        <FormLabel>
+          <FormMisc>
+            Files
+          </FormMisc>
+        </FormLabel>
+
+        <FormLabel>
+          Files editor
+        </FormLabel>
       </Form>
     );
   }

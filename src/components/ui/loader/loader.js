@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './loader.scss';
+import './loader.scss';
 
 class Loader extends React.PureComponent {
   static propTypes = {

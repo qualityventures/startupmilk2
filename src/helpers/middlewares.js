@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
-import { JWT_SECRET } from 'data/config';
+import { JWT_SECRET } from 'data/jwt';
 import { throwUnauthorizedAccess } from 'helpers/response';
 
 export function loadUserData(req, res, next) {

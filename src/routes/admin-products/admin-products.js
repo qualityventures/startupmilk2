@@ -29,7 +29,7 @@ class RouteAdminProducts extends React.PureComponent {
 
   loadProducts() {
     this.setState({
-      loading: false,
+      loading: true,
       loaded: false,
       error: false,
     });
@@ -84,11 +84,7 @@ class RouteAdminProducts extends React.PureComponent {
       return null;
     }
 
-    if (!data.length) {
-      return <Alert>Nothing was found</Alert>;
-    }
-
-    const ret = data.map((product) => {
+    let ret = data.products.map((product) => {
       return (
         <div className="catalog-item" key={product._id}>
           <div className="catalog-item-wrapper">
@@ -114,11 +110,15 @@ class RouteAdminProducts extends React.PureComponent {
       );
     });
 
+    if (!ret.length) {
+      ret = <Alert>Nothing was found</Alert>;
+    }
+
     return (
       <div className="catalog">
         <div className="catalog-infoblock">
           <div className="catalog-total">
-            <div className="catalog-total-count">{data.length}</div>
+            <div className="catalog-total-count">{data.total || 'Whoops'}</div>
             <div className="count-total-category">All</div>
           </div>
         </div>

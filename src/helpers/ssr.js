@@ -2,9 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { TITLE_BASE, TITLE_SEPARATOR, ANALYTICS, JWT_SECRET } from 'data/config';
-import jwt from 'jsonwebtoken';
-import User from 'models/user';
+import { TITLE_BASE, TITLE_SEPARATOR } from 'data/config';
 
 let _bundle_cache = {};
 let _bundle_updated = 0;
