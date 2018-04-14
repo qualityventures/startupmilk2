@@ -9,7 +9,7 @@ import CATEGORIES_LIST from 'data/categories';
 
 const log = debug(`${DEBUG_PREFIX}:controller.products`);
 
-function getProductData(req, res) {
+function validateProductData(req, res) {
   const fields = {
     desc: validateProductDesc,
     price: validateProductPrice,
@@ -101,26 +101,7 @@ export function getProductByUrl(req, res) {
 }
 
 export function getProductById(req, res) {
-  const { id } = req.params;
-
-  if (!id || !id.match(/^[0-9a-z_-]+$/i)) {
-    throwError(res, 'Invalid id');
-    return;
-  }
-
-  Products.findById(id)
-    .then((product) => {
-      if (product === null) {
-        throw new Error('Product not found');
-      }
-
-      returnObjectAsJSON(res, product);
-    })
-    .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while creating product';
-      log(error);
-      throwError(res, error);
-    });
+  returnObjectAsJSON(res, req.productData);
 }
 
 export function updateProduct(req, res) {
@@ -131,7 +112,7 @@ export function updateProduct(req, res) {
     return;
   }
 
-  const data = getProductData(req);
+  const data = validateProductData(req);
 
   if (!data) {
     return;
@@ -162,7 +143,7 @@ export function updateProduct(req, res) {
 }
 
 export function createNewProduct(req, res) {
-  const data = getProductData(req);
+  const data = validateProductData(req);
 
   if (!data) {
     return;
@@ -188,4 +169,9 @@ export function createNewProduct(req, res) {
       log(error);
       throwError(res, error);
     });
+}
+
+export function addProductImage(req, res) {
+  console.log('addProductImage', req.productData);
+  throwError(res, 'addProductImage');
 }

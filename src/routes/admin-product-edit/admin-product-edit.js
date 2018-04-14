@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Alert, FormInput, FormMisc, FormSelect, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
 import { validateProductUrl, validateProductName, validateProductCategory, validateProductPrice, validateProductDesc } from 'helpers/validators';
+import ImagesManager from 'containers/images-manager';
 import CATEGORIES_LIST from 'data/categories';
 
 class RouteAdminProductEdit extends React.PureComponent {
@@ -303,12 +304,15 @@ class RouteAdminProductEdit extends React.PureComponent {
 
         <FormLabel>
           <FormMisc>
-            Photos
+            Images
           </FormMisc>
         </FormLabel>
 
         <FormLabel>
-          Photos editor
+          <ImagesManager
+            productId={this.props.match.params.id}
+            images={data.images}
+          />
         </FormLabel>
 
         <FormLabel>

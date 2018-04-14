@@ -1,0 +1,27 @@
+.catalog-item-thumb {
+  position: relative;
+}
+
+.images-manager {
+  &__big-button {
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #666;
+    font-size: 20px;
+  }
+
+  &__input {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin-left: -9999px;
+  }
+}

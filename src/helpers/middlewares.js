@@ -1,7 +1,32 @@
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
+import Products from 'models/products';
 import { JWT_SECRET } from 'data/jwt';
-import { throwUnauthorizedAccess } from 'helpers/response';
+import { throwUnauthorizedAccess, throwError } from 'helpers/response';
+
+export function loadProductInfo(req, res, next) {
+  const { id } = req.params;
+
+  if (!id || !id.match(/^[0-9a-z_-]+$/i)) {
+    throwError(res, 'Invalid id');
+    return;
+  }
+
+  Products.findById(id)
+    .then((product) => {
+      if (product === null) {
+        throw new Error('Product not found');
+      }
+
+      req.productData = product;
+      next();
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Internal server error';
+      log(error);
+      throwError(res, error);
+    });
+}
 
 export function loadUserData(req, res, next) {
   const { cookie } = req.headers;

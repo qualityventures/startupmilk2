@@ -39,7 +39,7 @@ const ProductsSchema = new Schema({
   files: [
 
   ],
-  pics: [
+  images: [
 
   ],
   created: {
