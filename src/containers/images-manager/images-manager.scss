@@ -18,6 +18,24 @@
     font-size: 20px;
   }
 
+  &__small-buttons {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+
+    & span {
+      display: inline-block;
+      margin-right: 10px;
+      line-height: 20px;
+      height: 20px;
+      padding: 0px 10px;
+      background: rgba(#FFF, .9);
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
+
   &__input {
     position: absolute;
     top: 0px;

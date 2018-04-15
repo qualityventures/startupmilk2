@@ -222,3 +222,63 @@ export function addProductImage(req, res) {
 
   req.pipe(req.busboy);
 }
+
+export function moveProductImage(req, res) {
+  const { image, direction } = req.body;
+  const images = [...req.productData.images];
+  const index = images.indexOf(image);
+
+  if (index < 0) {
+    throwError(res, 'Incorrect image');
+    return;
+  }
+
+  if (direction === 'up' && index > 0) {
+    const swap = images[index - 1];
+    images[index - 1] = image;
+    images[index] = swap;
+  } else if (direction === 'down' && index < (images.length - 1)) {
+    const swap = images[index + 1];
+    images[index + 1] = image;
+    images[index] = swap;
+  } else {
+    throwError(res, 'Unable to move image');
+    return;
+  }
+
+  req.productData.images = images;
+  req.productData.save()
+    .then((savedProduct) => {
+      returnObjectAsJSON(res, savedProduct.images);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while moving image';
+      log(error);
+      throwError(res, error);
+    });
+}
+
+export function deleteProductImage(req, res) {
+  const { image } = req.body;
+  const images = [...req.productData.images];
+  const index = images.indexOf(image);
+
+  if (index < 0) {
+    throwError(res, 'Incorrect image');
+    return;
+  }
+
+  fs.unlinkSync(`${ROOT_PATH}/../public/${image}`);
+  images.splice(index, 1);
+
+  req.productData.images = images;
+  req.productData.save()
+    .then((savedProduct) => {
+      returnObjectAsJSON(res, savedProduct.images);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while deleting image';
+      log(error);
+      throwError(res, error);
+    });
+}
