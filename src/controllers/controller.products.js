@@ -298,8 +298,8 @@ export function addProductFile(req, res) {
     return;
   }
 
-  const public_path = `${ROOT_PATH}/../public/`;
-  const image_dir = `/files/${String(req.productData._id).substr(0, 2)}`;
+  const public_path = `${ROOT_PATH}/../uploads/`;
+  const image_dir = `${String(req.productData._id).substr(0, 2)}`;
   const file_id = crypto.randomBytes(8).toString('hex');
   let file_path = `${image_dir}/${file_id}`;
 
@@ -372,7 +372,7 @@ export function deleteProductFile(req, res) {
     return;
   }
 
-  fs.unlinkSync(`${ROOT_PATH}/../public/${files[index].file_path}`);
+  fs.unlinkSync(`${ROOT_PATH}/../uploads/${files[index].path}`);
   files.splice(index, 1);
 
   req.productData.files = files;

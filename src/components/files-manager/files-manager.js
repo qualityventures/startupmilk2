@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Loader, Alert, Catalog, CatalogItem } from 'components/ui';
+import FORMATS_LIST from 'data/files';
 import './files-manager.scss';
 
 class FilesManager extends React.PureComponent {
@@ -102,7 +103,7 @@ class FilesManager extends React.PureComponent {
       return;
     }
 
-    const image = e.target.getAttribute('image');
+    const file_id = e.target.getAttribute('file_id');
 
     this.setState({ loading: true, error: false });
 
@@ -113,7 +114,7 @@ class FilesManager extends React.PureComponent {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ image }),
+      body: JSON.stringify({ file_id }),
     })
       .then((response) => {
         return response.json().then(json => ({ json, response }));
@@ -133,24 +134,28 @@ class FilesManager extends React.PureComponent {
   }
 
   makeFiles() {
-    console.log(this.state.files);
-    
-    return null;
-    // return this.state.files.map((image, index) => {
-    //   const button = (
-    //     <span key="delete" image={image} onClick={this.deleteFile} className="files-manager__small-button">
-    //       x
-    //     </span>
-    //   );
+    return this.state.files.map((file, index) => {
+      const style = {};
 
-    //   return (
-    //     <CatalogItem
-    //       key={image}
-    //       backgroundFile={image}
-    //       smallButtons={buttons}
-    //     />
-    //   );
-    // });
+      if (FORMATS_LIST[file.type]) {
+        style.color = FORMATS_LIST[file.type].color;
+      }
+
+      const button = (
+        <span key="delete" file_id={file.file_id} onClick={this.deleteFile} className="files-manager__small-button">
+          x
+        </span>
+      );
+
+      return (
+        <CatalogItem
+          key={file.file_id}
+          smallButtons={button}
+          bigButton={<span style={style}>{file.type}</span>}
+          name={file.name}
+        />
+      );
+    });
   }
 
   makeError() {

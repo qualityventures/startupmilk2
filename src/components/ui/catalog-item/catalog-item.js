@@ -57,28 +57,29 @@ class Catalog extends React.PureComponent {
 
   makeThumbContent() {
     const { to, bigButton, onBigButtonClick, smallButtons } = this.props;
+    const ret = [];
 
     if (bigButton) {
-      return (
-        <div className="catalog-item__big-button" onClick={onBigButtonClick}>
+      ret.push(
+        <div key="big" className="catalog-item__big-button" onClick={onBigButtonClick}>
           {bigButton}
         </div>
       );
     }
 
     if (smallButtons) {
-      return (
-        <div className="catalog-item__small-buttons">
+      ret.push(
+        <div key="small" className="catalog-item__small-buttons">
           {smallButtons}
         </div>
       );
     }
 
     if (to) {
-      return <Link to={to} />;
+      ret.push(<Link key="link" to={to} />);
     }
 
-    return null;
+    return ret;
   }
 
   makeDescription() {

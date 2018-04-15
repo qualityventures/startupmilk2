@@ -15,7 +15,17 @@
     justify-content: center;
     text-align: center;
     color: #666;
-    font-size: 20px;
+    padding: 0px 5px;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+
+    & div, & span {
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__small-buttons {
