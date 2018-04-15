@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import FORMATS_LIST from 'data/files';
 import './catalog-item.scss';
 
 class Catalog extends React.PureComponent {
@@ -113,7 +114,7 @@ class Catalog extends React.PureComponent {
     const files = this.makeFiles();
     const cart = this.makeAddToCart();
 
-    if (!files || !cart) {
+    if (!files && !cart) {
       return null;
     }
 
@@ -132,7 +133,22 @@ class Catalog extends React.PureComponent {
       return null;
     }
 
-    const ret = <div>OMG</div>;
+    const ret = files.map((file_type) => {
+      const style = {};
+
+      if (FORMATS_LIST[file_type]) {
+        style.backgroundColor = FORMATS_LIST[file_type].color;
+      }
+
+      return (
+        <li>
+          <span className="catalog-item-panel-meta-dot" style={style} />
+          {file_type}
+        </li>
+      );
+    });
+
+    console.log(ret);
 
     // <div className="catalog-item-panel-meta">
     //   <ul>

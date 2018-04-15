@@ -92,7 +92,21 @@ export function getProducts(req, res) {
         page,
         pages,
         total,
-        products,
+        products: products.map((product) => {
+          const files = {};
+
+          product.files.forEach((file) => {
+            files[file.type] = true;
+          });
+
+          return {
+            id: product._id,
+            image: product.images[0] || null,
+            name: product.name,
+            price: product.price,
+            files: Object.keys(files),
+          }
+        }),
       });
     })
     .catch((err) => {

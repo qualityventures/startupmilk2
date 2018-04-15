@@ -85,19 +85,13 @@ class RouteAdminProducts extends React.PureComponent {
     }
 
     let ret = data.products.map((product) => {
-      const thumbStyle = {};
-
-      if (product.images.length) {
-        thumbStyle.backgroundImage = `url('${product.images[0]}')`;
-      }
-
       return (
         <CatalogItem
-          id={product._id}
-          key={product._id}
-          to={`/admin/product/${product._id}`}
+          id={product.id}
+          key={product.id}
+          to={`/admin/product/${product.id}`}
           files={product.files}
-          backgroundImage={product.images[0] || null}
+          backgroundImage={product.image}
           price={product.price}
           name={product.name}
         />
