@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Alert, FormInput, FormMisc, FormSelect, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
 import { validateProductUrl, validateProductName, validateProductCategory, validateProductPrice, validateProductDesc } from 'helpers/validators';
 import ImagesManager from 'components/images-manager';
+import FilesManager from 'components/files-manager';
 import CATEGORIES_LIST from 'data/categories';
 
 class RouteAdminProductEdit extends React.PureComponent {
@@ -322,7 +323,10 @@ class RouteAdminProductEdit extends React.PureComponent {
         </FormLabel>
 
         <FormLabel>
-          Files editor
+          <FilesManager
+            productId={this.props.match.params.id}
+            files={data.files}
+          />
         </FormLabel>
       </Form>
     );

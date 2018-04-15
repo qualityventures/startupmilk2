@@ -2,6 +2,7 @@
 /* global ROOT_PATH */
 
 import { throwError, returnObjectAsJSON } from 'helpers/response';
+import { getFileType } from 'helpers/files';
 import { validateProductUrl, validateProductName, validateProductCategory, validateProductDesc, validateProductPrice } from 'helpers/validators';
 import Products from 'models/products';
 import debug from 'debug';
@@ -292,9 +293,96 @@ export function deleteProductImage(req, res) {
 }
 
 export function addProductFile(req, res) {
-  throwError(res, 'addProductFile');
+  if (!req.busboy) {
+    throwError(res, 'Internal server error');
+    return;
+  }
+
+  const public_path = `${ROOT_PATH}/../public/`;
+  const image_dir = `/files/${String(req.productData._id).substr(0, 2)}`;
+  const file_id = crypto.randomBytes(8).toString('hex');
+  let file_path = `${image_dir}/${file_id}`;
+
+  if (!fs.existsSync(`${public_path}/${image_dir}`)) {
+    fs.mkdirSync(`${public_path}/${image_dir}`);
+  }
+
+  req.busboy.on('file', (fieldname, file, filename) => {
+    let ext = false;
+    let file_type = false;
+
+    const match = filename.match(/\.([0-9a-z_-]{1,12})$/i);
+
+    if (match) {
+      ext = match[1].toLowerCase();
+      file_type = getFileType(ext);
+      file_path += `.${ext}`;
+    }
+
+    const absolute_path = `${public_path}/${file_path}`;
+    const fstream = fs.createWriteStream(absolute_path); 
+
+    file.pipe(fstream);
+
+    fstream.on('close', () => {
+      if (!ext || !file_type) {
+        fs.unlinkSync(absolute_path);
+        throwError(res, 'Invalid file format');
+        return;
+      }
+
+      req.productData.files.push({
+        file_id,
+        type: file_type,
+        path: file_path,
+        name: filename,
+      });
+      req.productData.save()
+        .then((savedProduct) => {
+          returnObjectAsJSON(res, savedProduct.files);
+        })
+        .catch((err) => {
+          const error = err && err.toString ? err.toString() : 'Error while saving file';
+          log(error);
+          fs.unlinkSync(absolute_path);
+          throwError(res, error);
+        });
+    });
+  });
+
+  req.pipe(req.busboy);
 }
 
 export function deleteProductFile(req, res) {
-  throwError(res, 'deleteProductFile');
+  const { file_id } = req.body;
+  const files = [...req.productData.files];
+  let index = -1;
+
+  for (let i = 0; i < files.length; ++i) {
+    if (files[i].file_id !== file_id) {
+      continue;
+    }
+
+    index = i;
+    break;
+  }
+
+  if (index < 0) {
+    throwError(res, 'Incorrect image');
+    return;
+  }
+
+  fs.unlinkSync(`${ROOT_PATH}/../public/${files[index].file_path}`);
+  files.splice(index, 1);
+
+  req.productData.files = files;
+  req.productData.save()
+    .then((savedProduct) => {
+      returnObjectAsJSON(res, savedProduct.files);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while deleting file';
+      log(error);
+      throwError(res, error);
+    });
 }
