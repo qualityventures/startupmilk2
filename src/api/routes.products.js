@@ -9,6 +9,8 @@ import {
   addProductImage,
   moveProductImage,
   deleteProductImage,
+  addProductFile,
+  deleteProductFile,
 } from 'controllers/controller.products';
 
 const router = new Router();
@@ -30,6 +32,12 @@ router.route('/:id/images/move')
 
 router.route('/:id/images/delete')
   .patch(checkAdminAccess, loadProductInfo, deleteProductImage);
+
+router.route('/:id/files/')
+  .post(checkAdminAccess, loadProductInfo, addProductFile);
+
+router.route('/:id/files/delete')
+  .patch(checkAdminAccess, loadProductInfo, deleteProductFile);
 
 router.route('/')
   .post(checkAdminAccess, createNewProduct);

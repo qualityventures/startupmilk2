@@ -194,10 +194,12 @@ export function addProductImage(req, res) {
   }
 
   req.busboy.on('file', (fieldname, file, filename) => {
+    let ext = false;
     const match = filename.match(/\.(jpg|jpeg|png|gif)$/i);
 
     if (match) {
-      image_path += `.${match[1].toLowerCase()}`;
+      ext = match[1].toLowerCase();
+      image_path += `.${ext}`;
     }
 
     const file_path = `${public_path}/${image_path}`;
@@ -206,6 +208,12 @@ export function addProductImage(req, res) {
     file.pipe(fstream);
 
     fstream.on('close', () => {
+      if (!ext) {
+        fs.unlinkSync(file_path);
+        throwError(res, 'Invalid file format');
+        return;
+      }
+
       req.productData.images.push(image_path);
       req.productData.save()
         .then((savedProduct) => {
@@ -281,4 +289,12 @@ export function deleteProductImage(req, res) {
       log(error);
       throwError(res, error);
     });
+}
+
+export function addProductFile(req, res) {
+  throwError(res, 'addProductFile');
+}
+
+export function deleteProductFile(req, res) {
+  throwError(res, 'deleteProductFile');
 }

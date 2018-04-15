@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loader, Alert, FormTitle, FormButton } from 'components/ui';
+import { Loader, Alert, FormTitle, FormButton, Catalog, CatalogItem } from 'components/ui';
 import { Link } from 'react-router-dom';
 
 class RouteAdminProducts extends React.PureComponent {
@@ -92,27 +92,15 @@ class RouteAdminProducts extends React.PureComponent {
       }
 
       return (
-        <div className="catalog-item" key={product._id}>
-          <div className="catalog-item-wrapper">
-            <div className="catalog-item-overflow">
-              <div className="catalog-item-thumb" style={thumbStyle}>
-                <Link to={`/admin/product/${product._id}`} />
-              </div>
-              <div className="catalog-item-description">
-                <div className="catalog-item-description-name">{product.name}</div>
-                <div className="catalog-item-description-price"><span>{product.price ? `$${product.price}` : 'Free!'}</span></div>
-              </div>
-              <div className="catalog-item-panel">
-                <div className="catalog-item-panel-meta">
-                  <ul />
-                </div>
-                <div className="catalog-item-panel-navigation">
-                  <Link to={`/admin/product/${product._id}`}>Edit</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CatalogItem
+          id={product._id}
+          key={product._id}
+          to={`/admin/product/${product._id}`}
+          files={product.files}
+          backgroundImage={product.images[0] || null}
+          price={product.price}
+          name={product.name}
+        />
       );
     });
 
@@ -121,18 +109,9 @@ class RouteAdminProducts extends React.PureComponent {
     }
 
     return (
-      <div className="catalog">
-        <div className="catalog-infoblock">
-          <div className="catalog-total">
-            <div className="catalog-total-count">{data.total || 'Whoops'}</div>
-            <div className="count-total-category">All</div>
-          </div>
-        </div>
-
-        <div className="catalog-list">
-          {ret}
-        </div>
-      </div>
+      <Catalog>
+        {ret}
+      </Catalog>
     );
   }
 

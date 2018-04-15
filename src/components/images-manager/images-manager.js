@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loader, Alert } from 'components/ui';
+import { Loader, Alert, Catalog, CatalogItem } from 'components/ui';
 import './images-manager.scss';
 
 class ImagesManager extends React.PureComponent {
@@ -171,31 +171,36 @@ class ImagesManager extends React.PureComponent {
 
   makeImages() {
     return this.state.images.map((image, index) => {
-      let move_up = null;
-      let move_down = null;
+      const buttons = [];
 
       if (index > 0) {
-        move_up = <span image={image} direction="up" onClick={this.moveImage}>&lt;</span>;
+        buttons.push(
+          <span key="up" image={image} direction="up" onClick={this.moveImage} className="images-manager__small-button">
+            &lt;
+          </span>
+        );
       }
 
       if (index < (this.state.images.length - 1)) {
-        move_down = <span image={image} direction="down" onClick={this.moveImage}>&gt;</span>;
+        buttons.push(
+          <span key="down" image={image} direction="down" onClick={this.moveImage} className="images-manager__small-button">
+            &gt;
+          </span>
+        );
       }
 
+      buttons.push(
+        <span key="delete" image={image} onClick={this.deleteImage} className="images-manager__small-button">
+          x
+        </span>
+      );
+
       return (
-        <div className="catalog-item" key={image}>
-          <div className="catalog-item-wrapper">
-            <div className="catalog-item-overflow">
-              <div className="catalog-item-thumb" style={{ backgroundImage: `url('${image}')` }}>
-                <div className="images-manager__small-buttons">
-                  {move_up}
-                  {move_down}
-                  <span image={image} onClick={this.deleteImage}>x</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CatalogItem
+          key={image}
+          backgroundImage={image}
+          smallButtons={buttons}
+        />
       );
     });
   }
@@ -212,32 +217,23 @@ class ImagesManager extends React.PureComponent {
 
   render() {
     return (
-      <div className="catalog">
+      <div>
         {this.makeError()}
-
-        <div className="catalog-list">
-          <input 
-            type="file"
-            className="images-manager__input"
-            encType="multipart/form-data"
-            ref={this.setRefInput}
-            onChange={this.onUpload}
-          />
-
+        <input 
+          type="file"
+          className="images-manager__input"
+          encType="multipart/form-data"
+          ref={this.setRefInput}
+          onChange={this.onUpload}
+        />
+        <Catalog>
           {this.makeImages()}
 
-          <div className="catalog-item">
-            <div className="catalog-item-wrapper">
-              <div className="catalog-item-overflow">
-                <div className="catalog-item-thumb">
-                  <div className="images-manager__big-button" onClick={this.toggleUpload}>
-                    {this.state.loading ? <Loader /> : <span>+</span>}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <CatalogItem
+            bigButton={this.state.loading ? <Loader /> : <span>+</span>}
+            onBigButtonClick={this.toggleUpload}
+          />
+        </Catalog>
       </div>
     );
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Alert, FormInput, FormMisc, FormSelect, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
 import { validateProductUrl, validateProductName, validateProductCategory, validateProductPrice, validateProductDesc } from 'helpers/validators';
-import ImagesManager from 'containers/images-manager';
+import ImagesManager from 'components/images-manager';
 import CATEGORIES_LIST from 'data/categories';
 
 class RouteAdminProductEdit extends React.PureComponent {
