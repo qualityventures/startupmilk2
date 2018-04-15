@@ -85,11 +85,17 @@ class RouteAdminProducts extends React.PureComponent {
     }
 
     let ret = data.products.map((product) => {
+      const thumbStyle = {};
+
+      if (product.images.length) {
+        thumbStyle.backgroundImage = `url('${product.images[0]}')`;
+      }
+
       return (
         <div className="catalog-item" key={product._id}>
           <div className="catalog-item-wrapper">
             <div className="catalog-item-overflow">
-              <div className="catalog-item-thumb">
+              <div className="catalog-item-thumb" style={thumbStyle}>
                 <Link to={`/admin/product/${product._id}`} />
               </div>
               <div className="catalog-item-description">

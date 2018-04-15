@@ -10,6 +10,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
+import busboy from 'connect-busboy';
 import { StaticRouter } from 'react-router';
 import { matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -53,11 +54,13 @@ if (NODE_ENV === 'dev') {
 }
 
 app.use(compression());
+app.use(busboy({ immediate: false, limits: { fileSize: 100 * 1024 * 1024 } }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/favicon.ico', Express.static(path.join(__dirname, '..', 'public', 'static', 'favicons', 'favicon.ico'), staticOptions));
 app.use('/apple-touch-icon.png', Express.static(path.join(__dirname, '..', 'public', 'static', 'favicons', 'apple-touch-icon.png'), staticOptions));
+app.use('/images', Express.static(path.join(__dirname, '..', 'public', 'images'), staticOptions));
 app.use('/assets', Express.static(path.join(__dirname, '..', 'public', 'assets'), staticOptions));
 app.use('/static', Express.static(path.join(__dirname, '..', 'public', 'static'), staticOptions));
 app.use(loadUserData);

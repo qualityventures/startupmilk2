@@ -1,4 +1,5 @@
 /* global DEBUG_PREFIX */
+/* global ROOT_PATH */
 
 import { throwError, returnObjectAsJSON } from 'helpers/response';
 import { validateProductUrl, validateProductName, validateProductCategory, validateProductDesc, validateProductPrice } from 'helpers/validators';
@@ -6,6 +7,8 @@ import Products from 'models/products';
 import debug from 'debug';
 import { RESULTS_PER_PAGE } from 'data/config';
 import CATEGORIES_LIST from 'data/categories';
+import crypto from 'crypto';
+import fs from 'fs';
 
 const log = debug(`${DEBUG_PREFIX}:controller.products`);
 
@@ -32,6 +35,8 @@ function validateProductData(req, res) {
 
     data[field] = value;
   }
+
+  data.deleted = !!req.body.deleted;
 
   return data;
 }
@@ -129,6 +134,8 @@ export function updateProduct(req, res) {
       product.price = data.price;
       product.desc = data.desc;
       product.category = data.category;
+      product.deleted = data.deleted;
+      product.updateVisibility();
 
       return product.save();
     })
@@ -172,6 +179,46 @@ export function createNewProduct(req, res) {
 }
 
 export function addProductImage(req, res) {
-  console.log('addProductImage', req.productData);
-  throwError(res, 'addProductImage');
+  if (!req.busboy) {
+    throwError(res, 'Internal server error');
+    return;
+  }
+
+  const public_path = `${ROOT_PATH}/../public/`;
+  const image_dir = `/images/${String(req.productData._id).substr(0, 2)}`;
+  const image_id = crypto.randomBytes(8).toString('hex');
+  let image_path = `${image_dir}/${image_id}`;
+
+  if (!fs.existsSync(`${public_path}/${image_dir}`)) {
+    fs.mkdirSync(`${public_path}/${image_dir}`);
+  }
+
+  req.busboy.on('file', (fieldname, file, filename) => {
+    const match = filename.match(/\.(jpg|jpeg|png|gif)$/i);
+
+    if (match) {
+      image_path += `.${match[1].toLowerCase()}`;
+    }
+
+    const file_path = `${public_path}/${image_path}`;
+    const fstream = fs.createWriteStream(file_path); 
+
+    file.pipe(fstream);
+
+    fstream.on('close', () => {
+      req.productData.images.push(image_path);
+      req.productData.save()
+        .then((savedProduct) => {
+          returnObjectAsJSON(res, savedProduct.images);
+        })
+        .catch((err) => {
+          const error = err && err.toString ? err.toString() : 'Error while saving image';
+          log(error);
+          fs.unlinkSync(file_path);
+          throwError(res, error);
+        });
+    });
+  });
+
+  req.pipe(req.busboy);
 }

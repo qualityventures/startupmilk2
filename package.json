@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
+    "connect-busboy": "0.0.2",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.7",
     "debug": "^3.1.0",

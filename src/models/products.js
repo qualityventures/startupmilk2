@@ -48,4 +48,9 @@ const ProductsSchema = new Schema({
   },
 }, { collection: 'products', strict: true });
 
+
+ProductsSchema.methods.updateVisibility = function() {
+  this.visible = this.deleted || !this.images.length || !this.files.length;
+};
+
 export default mongoose.model('Products', ProductsSchema);

@@ -67,9 +67,6 @@ class ImagesManager extends React.PureComponent {
       credentials: 'include',
       mode: 'cors',
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body: formData,
     })
       .then((response) => {
@@ -81,8 +78,7 @@ class ImagesManager extends React.PureComponent {
         return json;
       })
       .then((images) => {
-        console.log(images);
-        this.setState({ loading: false });
+        this.setState({ loading: false, images: [...images] });
       })
       .catch((err) => {
         const error = err && err.toString ? err.toString() : 'Bad response from server';
@@ -101,11 +97,21 @@ class ImagesManager extends React.PureComponent {
   }
 
   makeImages() {
-    const { images } = this.state;
-
-    console.log('makeImages', images);
-
-    return [];
+    return this.state.images.map((image) => {
+      return (
+        <div className="catalog-item" key={image}>
+          <div className="catalog-item-wrapper">
+            <div className="catalog-item-overflow">
+              <div className="catalog-item-thumb" style={{ backgroundImage: `url('${image}')` }}>
+                <div className="images-manager__big-button">
+                  Buttons
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
   }
 
   makeError() {
