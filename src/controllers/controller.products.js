@@ -44,14 +44,19 @@ function validateProductData(req, res) {
 
 export function getProducts(req, res) {
   const query = {};
-  const { category } = req.body;
-  let { orderby } = req.body;
-  let page = Math.min(parseInt(req.body.page || 1, 10) || 1, 100);
+  const { category, status, } = req.query;
+  let { sort, search } = req.query;
+  let page = Math.min(parseInt(req.query.page || 1, 10) || 1, 100);
   let pages = 0;
   let total = 0;
 
-  if (['-created', 'price'].indexOf(orderby) === -1) {
-    orderby = '-created';
+  if (['-created', 'price'].indexOf(sort) === -1) {
+    sort = '-created';
+  }
+
+  if (search) {
+    search = search.trim().replace(/[^0-9a-z]/gi, '').replace(/\s+/g, '|');
+    console.log(req.query.search, search);
   }
 
   if (CATEGORIES_LIST[category]) {
@@ -60,8 +65,8 @@ export function getProducts(req, res) {
 
   if (req.userData.role !== 'admin') {
     query.visible = true;
-  } else {
-    // visibility and deleted check
+  } else if (status === 'deleted') {
+    query.deleted = true;
   }
 
   Products.count(query)
@@ -78,7 +83,7 @@ export function getProducts(req, res) {
       }
 
       return Products.find(query)
-        .sort(orderby)
+        .sort(sort)
         .limit(RESULTS_PER_PAGE)
         .skip(RESULTS_PER_PAGE * (page - 1))
         .exec();

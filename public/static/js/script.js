@@ -43,33 +43,6 @@ $(document).ready(function(){
 
     //------------------------------------------------------------------------//
 
-    //drop
-    activePop = null;
-    dropClass = $('.drop');
-    function closeInactivePop() {
-        dropClass.each(function (i) {
-            if ($(this).hasClass('active') && i!=activePop) {
-                $(this).removeClass('active');
-            }
-        });
-        return false;
-    }
-    dropClass.mouseover(function() {
-        activePop = dropClass.index(this);
-    });
-    dropClass.mouseout(function() {
-        activePop = null;
-    });
-    $(document.body).click(function(){
-        closeInactivePop();
-    });
-    $('.drop-toggle').on('click', function(event) {
-        event.preventDefault();
-        $(this).parent(dropClass).toggleClass('active');
-    });
-
-    //------------------------------------------------------------------------//
-
     //panel
     scrollHeader($(window).scrollTop());
     $(window).scroll(function() {

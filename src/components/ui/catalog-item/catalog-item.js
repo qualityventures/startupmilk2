@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import FORMATS_LIST from 'data/files';
 import './catalog-item.scss';
 
-class Catalog extends React.PureComponent {
+class CatalogItem extends React.PureComponent {
   static propTypes = {
     id: PropTypes.string,
     smallButtons: PropTypes.node,
@@ -141,22 +141,12 @@ class Catalog extends React.PureComponent {
       }
 
       return (
-        <li>
+        <li key={file_type}>
           <span className="catalog-item-panel-meta-dot" style={style} />
           {file_type}
         </li>
       );
     });
-
-    console.log(ret);
-
-    // <div className="catalog-item-panel-meta">
-    //   <ul>
-    //     <li><span className="catalog-item-panel-meta-dot" style="background-color: #fad613;" />Sketch</li>
-    //     <li><span className="catalog-item-panel-meta-dot" style="background-color: #325bb9;" />PSD</li>
-    //     <li><span className="catalog-item-panel-meta-dot" style="background-color: #fa8513;" />AI</li>
-    //   </ul>
-    // </div>
 
     return <div className="catalog-item-panel-meta"><ul>{ret}</ul></div>;
   }
@@ -195,4 +185,4 @@ class Catalog extends React.PureComponent {
   }
 }
 
-export default Catalog;
+export default CatalogItem;

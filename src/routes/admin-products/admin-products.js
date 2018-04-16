@@ -1,7 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loader, Alert, FormTitle, FormButton, Catalog, CatalogItem } from 'components/ui';
-import { Link } from 'react-router-dom';
+import { Loader, Alert, FormTitle, Form, FormButton, Catalog, CatalogItem, Paginator } from 'components/ui';
+import areEqual from 'helpers/are-equal';
+import { makeArgs, getArgs } from 'helpers/args';
+import './admin-products.scss';
+
+const DEFAULT_SEARCH = {
+  page: 1,
+  category: 'all',
+  status: 'all',
+  search: '',
+  sort: '-created',
+};
 
 class RouteAdminProducts extends React.PureComponent {
   static propTypes = {
@@ -18,8 +28,9 @@ class RouteAdminProducts extends React.PureComponent {
     this.state = {
       loading: false,
       loaded: false,
-      data: false,
+      data: {},
       error: false,
+      search: false,
     };
   }
 
@@ -27,14 +38,37 @@ class RouteAdminProducts extends React.PureComponent {
     this.loadProducts();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.search !== this.props.location.search) {
+      this.loadProducts();
+    }
+  }
+
   loadProducts() {
+    const args = getArgs(this.props.location.search);
+    const search = {
+      page: parseInt(args.page || 1, 10) || DEFAULT_SEARCH.page,
+      category: args.category || DEFAULT_SEARCH.category,
+      status: args.status || DEFAULT_SEARCH.status,
+      search: args.search || DEFAULT_SEARCH.search,
+      sort: args.sort || DEFAULT_SEARCH.sort,
+    };
+
+    if (areEqual(search, this.state.search)) {
+      return;
+    }
+
+    window.scrollTo(0, 0);
+
     this.setState({
       loading: true,
       loaded: false,
       error: false,
+      search: { ...search },
+      data: {},
     });
 
-    fetch('/api/products/', {
+    fetch(`/api/products/?${makeArgs(search)}`, {
       credentials: 'include',
       mode: 'cors',
       method: 'GET',
@@ -78,9 +112,9 @@ class RouteAdminProducts extends React.PureComponent {
   }
 
   makeProducts() {
-    const { data } = this.state;
+    const { data, search } = this.state;
 
-    if (data === false) {
+    if (!data.products || !search) {
       return null;
     }
 
@@ -103,9 +137,31 @@ class RouteAdminProducts extends React.PureComponent {
     }
 
     return (
-      <Catalog>
+      <Catalog
+        total={data.total}
+        sortValue={search.sort}
+        sortLink={`/admin/products/?${makeArgs({ ...search, page: 1, sort: { value: '%sort%', escape: false } })}`}
+      >
         {ret}
       </Catalog>
+    );
+  }
+
+  makePaginator() {
+    const { data, loading, search } = this.state;
+
+    if (loading || !search) {
+      return null;
+    }
+
+    const { page, pages } = data;
+
+    return (
+      <Paginator
+        page={page || 1}
+        pages={pages || 1}
+        to={`/admin/products/?${makeArgs({ ...search, page: { value: '%page%', escape: false } })}`}
+      />
     );
   }
 
@@ -115,12 +171,22 @@ class RouteAdminProducts extends React.PureComponent {
 
     return (
       <div>
-        <FormTitle>Products list</FormTitle>
-        <div><FormButton to="/admin/product/create">Add new product</FormButton></div>
+        <FormTitle>
+          Products list
+          <div className="admin-products__create">
+            <FormButton to="/admin/product/create">Add new product</FormButton>
+          </div>
+        </FormTitle>
+        
+        <Form>
+          SEARCH AND CATEGORIES
+        </Form>
+
         <br />
-        {this.makeLoader()}
         {this.makeError()}
         {this.makeProducts()}
+        {this.makeLoader()}
+        {this.makePaginator()}
       </div>
     );
   }
