@@ -1,8 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loader, Alert, FormTitle, Form, FormButton, Catalog, CatalogItem, Paginator } from 'components/ui';
+import {
+  Loader,
+  Alert,
+  FormTitle,
+  FormSearch,
+  FormSelect,
+  Form,
+  FormButton,
+  Catalog,
+  CatalogItem,
+  Paginator,
+} from 'components/ui';
 import areEqual from 'helpers/are-equal';
 import { makeArgs, getArgs } from 'helpers/args';
+import { withRouter } from 'react-router-dom';
+import CATEGORIES_LIST from 'data/categories';
 import './admin-products.scss';
 
 const DEFAULT_SEARCH = {
@@ -16,6 +29,7 @@ const DEFAULT_SEARCH = {
 class RouteAdminProducts extends React.PureComponent {
   static propTypes = {
     location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -31,7 +45,13 @@ class RouteAdminProducts extends React.PureComponent {
       data: {},
       error: false,
       search: false,
+      selectValues: Object.keys(CATEGORIES_LIST).map((key) => {
+        return { value: key, title: CATEGORIES_LIST[key] };
+      }),
     };
+
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
   }
 
   componentDidMount() {
@@ -57,8 +77,6 @@ class RouteAdminProducts extends React.PureComponent {
     if (areEqual(search, this.state.search)) {
       return;
     }
-
-    window.scrollTo(0, 0);
 
     this.setState({
       loading: true,
@@ -91,6 +109,30 @@ class RouteAdminProducts extends React.PureComponent {
         const error = err && err.toString ? err.toString() : 'Bad response from server';
         this.setState({ error, loading: false });
       });
+  }
+
+  handleCategoryChange(value) {
+    value = value || '';
+
+    const { search } = this.state;
+
+    if (value === search.category) {
+      return;
+    }
+
+    const url = `/admin/products/?${makeArgs({ ...search, page: 1, search: '', category: value })}`;
+    this.props.history.push(url);
+  }
+
+  handleSearchChange(value) {
+    const { search } = this.state;
+
+    if (value === search.search) {
+      return;
+    }
+
+    const url = `/admin/products/?${makeArgs({ ...search, page: 1, search: value })}`;
+    this.props.history.push(url);
   }
 
   makeLoader() {
@@ -133,7 +175,7 @@ class RouteAdminProducts extends React.PureComponent {
     });
 
     if (!ret.length) {
-      ret = <Alert>Nothing was found</Alert>;
+      return <Alert>Nothing was found</Alert>;
     }
 
     return (
@@ -165,10 +207,35 @@ class RouteAdminProducts extends React.PureComponent {
     );
   }
 
-  render() {
-    // const category = 'all';
-    // console.log(this.props.location.search);
+  makeSearch() {
+    const { search, loading } = this.state;
 
+    if (!search) {
+      return null;
+    }
+
+    return (
+      <Form>
+        <FormSearch
+          disabled={loading}
+          defaultValue={search.search}
+          onSearch={this.handleSearchChange}
+        />
+
+        <br />
+
+        <FormSelect
+          name="category"
+          placeholder="Any category..."
+          disabled={loading}
+          onChange={this.handleCategoryChange}
+          values={this.state.selectValues}
+        />
+      </Form>
+    );
+  }
+
+  render() {
     return (
       <div>
         <FormTitle>
@@ -177,10 +244,8 @@ class RouteAdminProducts extends React.PureComponent {
             <FormButton to="/admin/product/create">Add new product</FormButton>
           </div>
         </FormTitle>
-        
-        <Form>
-          SEARCH AND CATEGORIES
-        </Form>
+
+        {this.makeSearch()}
 
         <br />
         {this.makeError()}
@@ -192,4 +257,4 @@ class RouteAdminProducts extends React.PureComponent {
   }
 }
 
-export default RouteAdminProducts;
+export default withRouter(RouteAdminProducts);

@@ -19,6 +19,7 @@ class FormSelect extends React.PureComponent {
     ]),
     disabled: PropTypes.bool,
     values: PropTypes.array.isRequired,
+    onChange: PropTypes.func,
     defaultValue: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
@@ -27,6 +28,7 @@ class FormSelect extends React.PureComponent {
 
   static defaultProps = {
     setRef: null,
+    onChange: null,
     disabled: null,
     name: null,
     placeholder: 'Select...',
@@ -109,7 +111,7 @@ class FormSelect extends React.PureComponent {
   }
 
   updateValue() {
-    const { values } = this.props;
+    const { values, onChange, name } = this.props;
     const value = this.ref_select.options[this.ref_select.selectedIndex].value || false;
     let title = this.props.placeholder;
 
@@ -120,6 +122,10 @@ class FormSelect extends React.PureComponent {
 
       title = values[i].title;
       break;
+    }
+
+    if (onChange) {
+      onChange(value, name || null);
     }
 
     this.setState({

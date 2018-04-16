@@ -8,6 +8,7 @@ export { default as FormLabel } from './form-label';
 export { default as FormTitle } from './form-title';
 export { default as FormSelect } from './form-select';
 export { default as FormMisc } from './form-misc';
+export { default as FormSearch } from './form-search';
 export { default as Form } from './form';
 export { default as Catalog } from './catalog';
 export { default as CatalogItem } from './catalog-item';

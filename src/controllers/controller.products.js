@@ -55,8 +55,11 @@ export function getProducts(req, res) {
   }
 
   if (search) {
-    search = search.trim().replace(/[^0-9a-z]/gi, '').replace(/\s+/g, '|');
-    console.log(req.query.search, search);
+    search = search.replace(/[^0-9a-z ]/gi, '').trim().replace(/\s+/g, '|');
+
+    if (search) {
+      query.name = { $regex: search, $options: 'i' };
+    }
   }
 
   if (CATEGORIES_LIST[category]) {
@@ -73,7 +76,7 @@ export function getProducts(req, res) {
     .then((data) => {
       total = data || 0;
 
-      pages = Math.floor(total / RESULTS_PER_PAGE);
+      pages = Math.max(Math.floor(total / RESULTS_PER_PAGE), 1);
       if ((pages * RESULTS_PER_PAGE) < total) {
         ++pages;
       }
