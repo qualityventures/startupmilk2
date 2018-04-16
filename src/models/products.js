@@ -50,7 +50,7 @@ const ProductsSchema = new Schema({
 
 
 ProductsSchema.methods.updateVisibility = function() {
-  this.visible = this.deleted || !this.images.length || !this.files.length;
+  this.visible = !(this.deleted || !this.images.length || !this.files.length);
 };
 
 export default mongoose.model('Products', ProductsSchema);

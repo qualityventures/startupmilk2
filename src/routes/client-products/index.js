@@ -1,1 +1,1 @@
-export { default as default } from './client-products.js';
+export { RouteClientProducts, fetchClientProducts } from './client-products.js';

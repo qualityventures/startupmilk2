@@ -5,12 +5,16 @@ import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
 import token from './token';
 import title from './title';
 import user from './user';
+import products from './products';
+import product from './product';
 
 export default function (state = {}) {
   const reducer = combineReducers({
     title,
     token,
     user,
+    products,
+    product,
   });
 
   let composeEnhancers = compose;

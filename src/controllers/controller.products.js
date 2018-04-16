@@ -110,10 +110,11 @@ export function getProducts(req, res) {
           return {
             id: product._id,
             image: product.images[0] || null,
+            url: product.url,
             name: product.name,
             price: product.price,
             files: Object.keys(files),
-          }
+          };
         }),
       });
     })
@@ -125,7 +126,41 @@ export function getProducts(req, res) {
 }
 
 export function getProductByUrl(req, res) {
-  throwError(res, 'getProductByUrl');
+  const { url } = req.params;
+
+  if (!url || !url.match(/^[0-9a-z_-]+$/i)) {
+    throwError(res, 'Invalid url');
+    return;
+  }
+
+  Products.findOne({ url, visible: true })
+    .then((product) => {
+      if (product === null) {
+        throw new Error('Product not found');
+      }
+
+      const files = {};
+
+      product.files.forEach((file) => {
+        files[file.type] = true;
+      });
+
+      returnObjectAsJSON(res, {
+        id: product._id,
+        image: product.images[0] || null,
+        images: product.images,
+        url: product.url,
+        name: product.name,
+        price: product.price,
+        desc: product.desc,
+        files: Object.keys(files),
+      });
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Internal server error';
+      log(error);
+      throwError(res, error);
+    });
 }
 
 export function getProductById(req, res) {

@@ -20,6 +20,7 @@ import ClientContainer from 'containers/client-container';
 import AdminContainer from 'containers/admin-container';
 import configureStore from 'reducers';
 import { renderHTML } from 'helpers/ssr';
+import { throwInternalServerError } from 'helpers/response';
 import { MONGO } from 'data/mongo';
 import mongoose from 'mongoose';
 import { userSignIn } from 'actions/user';
@@ -71,59 +72,76 @@ app.use((req, res) => {
   const store = configureStore();
   const context = {};
   let location = url.parse(req.url);
+  location = { pathname: location.pathname, search: location.query, query: location.query };
   let body = '';
   let type = 'client';
+  let promises = [];
+  const is_admin = location.pathname.indexOf('/admin') === 0;
 
   if (req.jwtToken && req.userData.email) {
     store.dispatch(tokenSet(req.jwtToken));
     store.dispatch(userSignIn(req.userData));
   }
 
-  location = { pathname: location.pathname, query: location.query };
-  if (location.pathname.indexOf('/admin') === 0) {
+  if (is_admin) {
     type = 'admin';
-
-    // render content
-    body = ReactDOM.renderToString(
-      <Provider store={store}>
-        <StaticRouter location={req.url} context={context}>
-          <AdminContainer />
-        </StaticRouter>
-      </Provider>
-    );
   } else {
     // find matched route
-    // clientRoutes.some((route) => {
-    //   return matchPath(location.pathname, route);
-    // });
+    clientRoutes.some((route) => {
+      const match = matchPath(location.pathname, route);
 
-    // render content
-    body = ReactDOM.renderToString(
-      <Provider store={store}>
-        <StaticRouter location={req.url} context={context}>
-          <ClientContainer />
-        </StaticRouter>
-      </Provider>
-    );
+      if (match && route.fetchData) {
+        promises = route.fetchData(location, store, match);
+      }
+
+      return match;
+    });
   }
 
-  // check for redirect
-  if (context.url) {
-    res.set({ Location: context.url });
-    res.status(301).end();
-    return;
-  }
+  Promise.all(promises)
+    .then(() => {
+      if (is_admin) {
+        // render content
+        body = ReactDOM.renderToString(
+          <Provider store={store}>
+            <StaticRouter location={req.url} context={context}>
+              <AdminContainer />
+            </StaticRouter>
+          </Provider>
+        );
+      } else {
+        // render content
+        body = ReactDOM.renderToString(
+          <Provider store={store}>
+            <StaticRouter location={req.url} context={context}>
+              <ClientContainer />
+            </StaticRouter>
+          </Provider>
+        );
+      }
 
-  // make HTML response
-  const content = renderHTML(body, store.getState(), type);
+      // check for redirect
+      if (context.url) {
+        res.set({ Location: context.url });
+        res.status(301).end();
+        return;
+      }
 
-  res.set({
-    'Content-Type': 'text/html; charset=utf-8',
-    'Content-Length': Buffer.byteLength(content, 'utf8'),
-    ETag: '',
-  });
+      // make HTML response
+      const content = renderHTML(body, store.getState(), type);
 
-  res.status(context.status || 200).end(content);
+      res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Length': Buffer.byteLength(content, 'utf8'),
+        ETag: '',
+      });
+
+      res.status(context.status || 200).end(content);
+    })
+    .catch((error) => {
+      debug(error);
+      throwInternalServerError(res);
+    });
 });
 
 export default app;

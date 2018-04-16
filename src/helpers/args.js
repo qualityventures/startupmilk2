@@ -15,6 +15,10 @@ export function makeArgs(args) {
 export function getArgs(search) {
   const args = {};
 
+  if (!search) {
+    return args;
+  }
+
   search.replace(/^\?/, '').split('&').forEach((variable) => {
     if (!variable) {
       return;

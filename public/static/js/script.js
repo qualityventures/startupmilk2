@@ -51,26 +51,6 @@ $(document).ready(function(){
 
     //------------------------------------------------------------------------//
 
-    //slider
-    $('.gallery-list').slick({
-        dots: true,
-        arrows: true,
-        draggable: true,
-        infinite: false,
-        centerMode: false,
-        centerPadding: '0px',
-        autoplay: false,
-        autoplaySpeed: 5000,
-        speed: 500,
-        pauseOnHover: false,
-        pauseOnDotsHover: false,
-        slide: '.gallery-item',
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        //asNavFor: '',
-        //fade: true
-    });
-
 });//document ready
 
 //*********************************************************************//

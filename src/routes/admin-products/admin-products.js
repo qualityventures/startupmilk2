@@ -160,7 +160,7 @@ class RouteAdminProducts extends React.PureComponent {
       return null;
     }
 
-    let ret = data.products.map((product) => {
+    const ret = data.products.map((product) => {
       return (
         <CatalogItem
           id={product.id}
