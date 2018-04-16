@@ -230,6 +230,7 @@ class RouteAdminProducts extends React.PureComponent {
           disabled={loading}
           onChange={this.handleCategoryChange}
           values={this.state.selectValues}
+          defaultValue={search.category}
         />
       </Form>
     );

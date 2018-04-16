@@ -54,6 +54,7 @@ class FormSelect extends React.PureComponent {
   componentDidUpdate(prevProps) {
     if (prevProps.defaultValue !== this.props.defaultValue) {
       /* eslint-disable react/no-did-update-set-state */
+      console.log('omgomg', this.getSelectValue());
       this.setState({ niceValue: this.getSelectValue() });
     }
   }
