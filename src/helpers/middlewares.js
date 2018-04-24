@@ -1,8 +1,52 @@
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
+import Cart from 'models/cart';
 import Products from 'models/products';
 import { JWT_SECRET } from 'data/jwt';
 import { throwUnauthorizedAccess, throwError } from 'helpers/response';
+
+export function loadCartInfo(req, res, next) {
+  const { cookie } = req.headers;
+  req.cartData = false;
+
+  if (!cookie) {
+    next();
+    return;
+  }
+
+  const match = cookie.match(/cart_id=([^\s;]+)/i);
+
+  if (!match) {
+    next();
+    return;
+  }
+
+  const token = match[1];
+  let payload = false;
+
+  try {
+    payload = jwt.verify(token, JWT_SECRET);
+  } catch (e) {
+    payload = false;
+  }
+
+  if (!payload || !payload.id) {
+    next();
+    return;
+  }
+
+  Cart.findById(payload.id).populate('list')
+    .then((cart) => {
+      req.cartData = cart;
+      next();
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Internal server error';
+      log(error);
+      throwError(res, error);
+      next();
+    });
+}
 
 export function loadProductInfo(req, res, next) {
   const { id } = req.params;
@@ -25,6 +69,7 @@ export function loadProductInfo(req, res, next) {
       const error = err && err.toString ? err.toString() : 'Internal server error';
       log(error);
       throwError(res, error);
+      next();
     });
 }
 

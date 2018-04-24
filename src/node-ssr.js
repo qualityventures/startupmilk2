@@ -25,7 +25,8 @@ import { MONGO } from 'data/mongo';
 import mongoose from 'mongoose';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
-import { loadUserData } from 'helpers/middlewares';
+import { setCartProducts } from 'actions/cart';
+import { loadUserData, loadCartInfo } from 'helpers/middlewares';
 
 const debug = require('debug')('milkicons_:ssr');
 require('es6-promise').polyfill();
@@ -65,6 +66,7 @@ app.use('/images', Express.static(path.join(__dirname, '..', 'public', 'images')
 app.use('/assets', Express.static(path.join(__dirname, '..', 'public', 'assets'), staticOptions));
 app.use('/static', Express.static(path.join(__dirname, '..', 'public', 'static'), staticOptions));
 app.use(loadUserData);
+app.use(loadCartInfo);
 app.use('/api', apiRoutes);
 
 // process request
@@ -81,6 +83,10 @@ app.use((req, res) => {
   if (req.jwtToken && req.userData.email) {
     store.dispatch(tokenSet(req.jwtToken));
     store.dispatch(userSignIn(req.userData));
+  }
+
+  if (req.cartData) {
+    store.dispatch(setCartProducts(req.cartData.toJSON()));
   }
 
   if (is_admin) {

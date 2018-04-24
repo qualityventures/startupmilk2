@@ -101,20 +101,7 @@ export function getProducts(req, res) {
         pages,
         total,
         products: products.map((product) => {
-          const files = {};
-
-          product.files.forEach((file) => {
-            files[file.type] = true;
-          });
-
-          return {
-            id: product._id,
-            image: product.images[0] || null,
-            url: product.url,
-            name: product.name,
-            price: product.price,
-            files: Object.keys(files),
-          };
+          return product.toJSON();
         }),
       });
     })

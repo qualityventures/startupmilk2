@@ -48,6 +48,22 @@ const ProductsSchema = new Schema({
   },
 }, { collection: 'products', strict: true });
 
+ProductsSchema.methods.toJSON = function() {
+  const files = {};
+
+  this.files.forEach((file) => {
+    files[file.type] = true;
+  });
+
+  return {
+    id: this._id,
+    image: this.images[0] || null,
+    url: this.url,
+    name: this.name,
+    price: this.price,
+    files: Object.keys(files),
+  };
+};
 
 ProductsSchema.methods.updateVisibility = function() {
   this.visible = !(this.deleted || !this.images.length || !this.files.length);

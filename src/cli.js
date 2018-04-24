@@ -5,6 +5,7 @@ import { MONGO } from 'data/mongo';
 import { validatePassword, validateEmail } from 'helpers/validators';
 import User from 'models/user';
 import Products from 'models/products';
+import Cart from 'models/cart';
 import mongoose from 'mongoose';
 import readline from 'readline';
 import bcrypt from 'bcryptjs';
@@ -24,6 +25,10 @@ export function init() {
     })
     .then(() => {
       console.log('Product init completed');
+      return Cart.init();
+    })
+    .then(() => {
+      console.log('Cart init completed');
       process.exit(1);
     })
     .catch((err) => {
