@@ -146,6 +146,7 @@ class RouteClientProducts extends React.PureComponent {
           backgroundImage={product.image}
           price={product.price}
           name={product.name}
+          showAddToCart
         />
       );
     });

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { loadProduct } from 'actions/product';
 import { Loader, Alert } from 'components/ui';
 import FORMATS_LIST from 'data/files';
+import CartButton from 'containers/cart-button';
 
 function fetchClientProduct(location, store, match) {
   const state = store.getState().product;
@@ -24,6 +25,7 @@ class RouteClientProduct extends React.PureComponent {
     setTitle: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired,
+    loaded: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.oneOfType([
       PropTypes.string,
@@ -45,6 +47,36 @@ class RouteClientProduct extends React.PureComponent {
     fetchClientProduct(location, window.REDUX_STORE, match);
     this.updateTitle();
 
+    if (this.props.loaded) {
+      this.initSlider();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { location, match } = nextProps;
+
+    fetchClientProduct(location, window.REDUX_STORE, match);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.loaded && this.props.loaded) {
+      this.initSlider();
+    }
+    
+    this.updateTitle();
+  }
+
+  getTitle() {
+    const { data, error, loading } = this.props;
+
+    if (loading) return 'Loading...';
+    if (error) return 'Error';
+    if (data.name) return data.name;
+
+    return '';
+  }
+
+  initSlider() {
     /* global $ */
     // slider
     $('.gallery-list').slick({
@@ -63,26 +95,6 @@ class RouteClientProduct extends React.PureComponent {
       slidesToShow: 1,
       slidesToScroll: 1,
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { location, match } = nextProps;
-
-    fetchClientProduct(location, window.REDUX_STORE, match);
-  }
-
-  componentDidUpdate() {
-    this.updateTitle();
-  }
-
-  getTitle() {
-    const { data, error, loading } = this.props;
-
-    if (loading) return 'Loading...';
-    if (error) return 'Error';
-    if (data.name) return data.name;
-
-    return '';
   }
 
   updateTitle() {
@@ -154,13 +166,13 @@ class RouteClientProduct extends React.PureComponent {
   }
 
   render() {
-    const { error, loading, data } = this.props;
+    const { error, loading, loaded, data } = this.props;
 
     if (error) {
       return <Alert type="danger">{error}</Alert>;
     }
 
-    if (loading) {
+    if (loading || !loaded) {
       return <Loader />;
     }
 
@@ -176,10 +188,11 @@ class RouteClientProduct extends React.PureComponent {
             </div>
             
             <div className="product-navigation">
-              <a className="button-add button-dark">
-                Add to cart
-                <span>{data.price ? `$${data.price}` : 'Free!'}</span>
-              </a>
+              <CartButton
+                productId={data.id}
+                price={data.price}
+                color="black"
+              />
             </div>
 
             {this.makeFiles()}
@@ -199,6 +212,7 @@ const WrapperClientProduct = connect(
       data: product.data,
       error: product.error,
       loading: product.loading,
+      loaded: product.loaded,
     };
   },
   (dispatch) => {

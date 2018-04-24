@@ -3370,6 +3370,7 @@ input.search-input-button:hover {
 }
 
 a.button-add {
+  cursor: pointer;
   display: inline-block;
   position: relative;
   height: 41px;
@@ -3405,6 +3406,8 @@ a.button-add:before {
 }
 
 a.button-add span {
+  overflow: hidden;
+  position: relative;
   margin-left: 20px;
   vertical-align: top;
   display: inline-block;

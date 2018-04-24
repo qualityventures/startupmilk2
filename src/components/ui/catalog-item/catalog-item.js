@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import FORMATS_LIST from 'data/files';
+import CartButton from 'containers/cart-button';
 import './catalog-item.scss';
 
 class CatalogItem extends React.PureComponent {
@@ -14,8 +15,8 @@ class CatalogItem extends React.PureComponent {
     price: PropTypes.number,
     name: PropTypes.string,
     files: PropTypes.array,
-    onAddToCart: PropTypes.func,
     to: PropTypes.string,
+    showAddToCart: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -27,22 +28,8 @@ class CatalogItem extends React.PureComponent {
     price: null,
     name: null,
     files: null,
-    onAddToCart: null,
     to: null,
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.onAddToCart = this.onAddToCart.bind(this);
-  }
-
-  onAddToCart() {
-    const { onAddToCart, id } = this.props;
-
-    if (onAddToCart) {
-      onAddToCart(id || null);
-    }
+    showAddToCart: false,
   }
 
   getThumbBackground() {
@@ -152,17 +139,19 @@ class CatalogItem extends React.PureComponent {
   }
 
   makeAddToCart() {
-    const { onAddToCart, price } = this.props;
+    const { id, showAddToCart, price } = this.props;
 
-    if (!onAddToCart) {
+    if (!id || !showAddToCart) {
       return null;
     }
 
     return (
       <div className="catalog-item-panel-navigation">
-        <a className="button-add" onClick={this.onAddToCart}>
-          Add to cart <span>{price ? `$${price}` : 'Free'}</span>
-        </a>
+        <CartButton
+          productId={id}
+          price={price}
+          color="white"
+        />
       </div>
     );
   }

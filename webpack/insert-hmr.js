@@ -1,5 +1,3 @@
-'use strict';
-
 /* global DEV_SERVER_HOST */
 /* global DEV_SERVER_PORT */
 

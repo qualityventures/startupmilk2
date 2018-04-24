@@ -1,4 +1,4 @@
-export const TITLE_BASE = 'startupmilk';
+export const TITLE_BASE = 'milkicons_';
 export const TITLE_SEPARATOR = '|';
 export const API_HOST = 'http://localhost:3019/';
 export const RESULTS_PER_PAGE = 20;

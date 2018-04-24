@@ -7,6 +7,7 @@ import title from './title';
 import user from './user';
 import products from './products';
 import product from './product';
+import cart from './cart';
 
 export default function (state = {}) {
   const reducer = combineReducers({
@@ -15,6 +16,7 @@ export default function (state = {}) {
     user,
     products,
     product,
+    cart,
   });
 
   let composeEnhancers = compose;
