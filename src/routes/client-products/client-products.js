@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { setTitle } from 'actions/title';
+import TitleUpdater from 'containers/title-updater';
 import { connect } from 'react-redux';
 import areEqual from 'helpers/are-equal';
 import { makeArgs, getArgs } from 'helpers/args';
@@ -44,7 +44,6 @@ class RouteClientProducts extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-    setTitle: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -65,25 +64,16 @@ class RouteClientProducts extends React.PureComponent {
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
-  componentWillMount() {
-    this.updateTitle();
-  }
-
   componentDidMount() {
     const { location, match } = this.props;
 
     fetchClientProducts(location, window.REDUX_STORE, match);
-    this.updateTitle();
   }
 
   componentWillReceiveProps(nextProps) {
     const { location, match } = nextProps;
 
     fetchClientProducts(location, window.REDUX_STORE, match);
-  }
-
-  componentDidUpdate() {
-    this.updateTitle();
   }
 
   handleSearchChange(value) {
@@ -95,10 +85,6 @@ class RouteClientProducts extends React.PureComponent {
 
     const url = `${this.makeLink()}?${makeArgs({ sort: query.sort, search: value })}`;
     this.props.history.push(url);
-  }
-
-  updateTitle() {
-    this.props.setTitle('');
   }
 
   makeLink() {
@@ -211,6 +197,7 @@ class RouteClientProducts extends React.PureComponent {
   render() {
     return (
       <div>
+        <TitleUpdater title="" />
         <div className="title">
           <h1>Premium design resources to speed up your creative workflow</h1>
         </div>
@@ -232,7 +219,6 @@ const WrapperClientProducts = connect(
     const products = state.products;
 
     return {
-      title: state.title,
       data: products.data,
       error: products.error,
       loading: products.loading,
@@ -241,7 +227,7 @@ const WrapperClientProducts = connect(
   },
   (dispatch) => {
     return {
-      setTitle: (title) => { dispatch(setTitle(title)); },
+
     };
   }
 )(RouteClientProducts);

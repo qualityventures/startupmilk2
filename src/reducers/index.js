@@ -3,7 +3,7 @@
 import thunk from 'redux-thunk';
 import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
 import token from './token';
-import title from './title';
+import app from './app';
 import user from './user';
 import products from './products';
 import product from './product';
@@ -11,7 +11,7 @@ import cart from './cart';
 
 export default function (state = {}) {
   const reducer = combineReducers({
-    title,
+    app,
     token,
     user,
     products,

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { setTitle } from 'actions/title';
 import { connect } from 'react-redux';
 import { loadProduct } from 'actions/product';
 import { Loader, Alert } from 'components/ui';
+import TitleUpdater from 'containers/title-updater';
 import FORMATS_LIST from 'data/files';
 import CartButton from 'containers/cart-button';
 
@@ -22,8 +22,6 @@ class RouteClientProduct extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-    setTitle: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired,
     loaded: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -37,15 +35,10 @@ class RouteClientProduct extends React.PureComponent {
 
   }
 
-  componentWillMount() {
-    this.updateTitle();
-  }
-
   componentDidMount() {
     const { location, match } = this.props;
 
     fetchClientProduct(location, window.REDUX_STORE, match);
-    this.updateTitle();
 
     if (this.props.loaded) {
       this.initSlider();
@@ -62,8 +55,6 @@ class RouteClientProduct extends React.PureComponent {
     if (!prevProps.loaded && this.props.loaded) {
       this.initSlider();
     }
-    
-    this.updateTitle();
   }
 
   getTitle() {
@@ -95,16 +86,6 @@ class RouteClientProduct extends React.PureComponent {
       slidesToShow: 1,
       slidesToScroll: 1,
     });
-  }
-
-  updateTitle() {
-    const title = this.getTitle();
-
-    if (title === this.props.title) {
-      return;
-    }
-
-    this.props.setTitle(title);
   }
 
   makeGallery() {
@@ -167,37 +148,43 @@ class RouteClientProduct extends React.PureComponent {
 
   render() {
     const { error, loading, loaded, data } = this.props;
+    let content = null;
 
     if (error) {
-      return <Alert type="danger">{error}</Alert>;
-    }
+      content = <Alert type="danger">{error}</Alert>;
+    } else if (loading || !loaded) {
+      content = <Loader />;
+    } else {
+      content = (
+        <div className="product">
+          {this.makeGallery()}
 
-    if (loading || !loaded) {
-      return <Loader />;
+          <div className="product-content">
+            <div className="product-content-wrapper">
+              <div className="product-description">
+                <h1>{data.name}</h1>
+                <p>{data.desc}</p>
+              </div>
+              
+              <div className="product-navigation">
+                <CartButton
+                  productId={data.id}
+                  price={data.price}
+                  color="black"
+                />
+              </div>
+
+              {this.makeFiles()}
+            </div>
+          </div>
+        </div>
+      );
     }
 
     return (
-      <div className="product">
-        {this.makeGallery()}
-
-        <div className="product-content">
-          <div className="product-content-wrapper">
-            <div className="product-description">
-              <h1>{data.name}</h1>
-              <p>{data.desc}</p>
-            </div>
-            
-            <div className="product-navigation">
-              <CartButton
-                productId={data.id}
-                price={data.price}
-                color="black"
-              />
-            </div>
-
-            {this.makeFiles()}
-          </div>
-        </div>
+      <div>
+        <TitleUpdater title={this.getTitle()} />
+        {content}
       </div>
     );
   }
@@ -208,7 +195,6 @@ const WrapperClientProduct = connect(
     const product = state.product;
 
     return {
-      title: state.title,
       data: product.data,
       error: product.error,
       loading: product.loading,
@@ -217,7 +203,7 @@ const WrapperClientProduct = connect(
   },
   (dispatch) => {
     return {
-      setTitle: (title) => { dispatch(setTitle(title)); },
+
     };
   }
 )(RouteClientProduct);

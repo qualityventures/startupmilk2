@@ -1,32 +1,40 @@
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { setTitle } from 'actions/app';
 import { TITLE_BASE, TITLE_SEPARATOR } from 'data/config';
 
 class TitleUpdater extends React.PureComponent {
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    currentTitle: PropTypes.string.isRequired,
+    setTitle: PropTypes.func.isRequired,
   }
 
-  componentDidMount() {
+  static defaultProps = {
+    title: '',
+  }
+
+  componentWillMount() {
     this.updateTitle();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.title !== this.props.title) {
+    if (this.props.currentTitle !== this.props.title) {
       this.updateTitle();
     }
   }
 
   updateTitle() {
     const { title } = this.props;
+    this.props.setTitle(title);
 
-    if (title) {
-      document.title = `${title} ${TITLE_SEPARATOR} ${TITLE_BASE}`;
-    } else {
-      document.title = TITLE_BASE;
+    if (typeof document !== 'undefined') {
+      if (title) {
+        document.title = `${title} ${TITLE_SEPARATOR} ${TITLE_BASE}`;
+      } else {
+        document.title = TITLE_BASE;
+      }
     }
   }
 
@@ -38,12 +46,12 @@ class TitleUpdater extends React.PureComponent {
 export default connect(
   (state) => {
     return {
-      title: state.title,
+      currentTitle: state.app.title,
     };
   },
   (dispatch) => {
     return {
-
+      setTitle: (title) => { dispatch(setTitle(title)); },
     };
   }
 )(TitleUpdater);

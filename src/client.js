@@ -18,6 +18,8 @@ onload(() => {
   window.REDUX_INITIAL_STATE = null;
   window.REDUX_STORE = store;
 
+  console.log(store.getState());
+
   // React HMR
   if (NODE_ENV === 'dev') {
     const AppContainer = require('react-hot-loader').AppContainer;

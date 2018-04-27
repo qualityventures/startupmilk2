@@ -4,7 +4,6 @@ import { withRouter, Route, Switch } from 'react-router';
 import { Container } from 'components/ui';
 import { connect } from 'react-redux';
 import Navigation from 'containers/navigation';
-import TitleUpdater from 'containers/title-updater';
 import routes from 'routes/client';
 
 class ClientContainer extends React.PureComponent {
@@ -32,7 +31,6 @@ class ClientContainer extends React.PureComponent {
   render() {
     return (
       <Container navigation={this.makeNavigation()}>
-        <TitleUpdater />
         <Switch>
           {routes.map(route => (
             <Route {...route} />
