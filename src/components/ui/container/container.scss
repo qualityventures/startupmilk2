@@ -4015,3 +4015,38 @@ a.button-add.button-dark:before, a.button-add:hover:before {
 }
 
 /* retina */
+
+.navigation_cart {
+  color: #00F !important;
+  position: relative;
+  border-color: transparent !important;
+
+  & a {
+    border-color: transparent !important;
+    cursor: pointer;
+  }
+
+  & span {
+    display: inline-block;
+    border-radius: 50%;
+    background: #2180f8;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    margin-left: 15px;
+    color: #FFF;
+    font-weight: bold;
+  }
+
+  &--visible {
+    color: #FFF !important;
+  }
+
+  &--hidden {
+
+  }
+
+  @media (max-width: 575px) {
+    
+  }
+}

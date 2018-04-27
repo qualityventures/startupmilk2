@@ -8,11 +8,34 @@ class Container extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     navigation: PropTypes.node,
+    toggleCart: PropTypes.func,
+    cartItems: PropTypes.number,
+    showCart: PropTypes.bool,
     location: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
     navigation: null,
+    toggleCart: null,
+    cartItems: null,
+    showCart: false,
+  }
+
+  makeCart() {
+    const { cartItems, toggleCart, showCart } = this.props;
+
+    if (!toggleCart) {
+      return null;
+    }
+
+    return (
+      <li className={`navigation_cart navigation_cart--${showCart ? 'visible' : 'hidden'}`}>
+        <a onClick={toggleCart}>
+          CART
+          <span>{cartItems}</span>
+        </a>
+      </li>
+    );
   }
 
   makeNavigation() {
@@ -27,7 +50,10 @@ class Container extends React.PureComponent {
         <a className="navigation-toggle"><span className="navigation-toggle-icon" /></a>
         <div className="navigation">
           <nav>
-            <ul className="menu-primary">{navigation}</ul>
+            <ul className="menu-primary">
+              {navigation}
+              {this.makeCart()}
+            </ul>
           </nav>
         </div>
       </div>
@@ -43,6 +69,8 @@ class Container extends React.PureComponent {
       Component = 'a';
       logo_link = '/admin/';
     }
+
+    console.log(this.props.cartItems);
 
     return (
       <div className="main">
