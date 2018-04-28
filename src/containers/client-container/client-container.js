@@ -40,6 +40,7 @@ class ClientContainer extends React.PureComponent {
   }
 
   toggleCart() {
+    console.log('toggleCart');
     if (this.props.show_cart) {
       this.props.hideCart();
     } else {

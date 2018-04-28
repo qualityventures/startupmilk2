@@ -28,14 +28,17 @@ class Container extends React.PureComponent {
       return null;
     }
 
-    return (
-      <li className={`navigation_cart navigation_cart--${showCart ? 'visible' : 'hidden'}`}>
-        <a onClick={toggleCart}>
-          CART
-          <span>{cartItems}</span>
-        </a>
-      </li>
-    );
+    return [
+      <a key="cart" onClick={toggleCart} className={`cart_button cart_button--${showCart ? 'visible' : 'hidden'}`}>
+        CART
+        <span>{cartItems}</span>
+      </a>,
+      <div
+        key="shadow"
+        className={`cart_shadow cart_shadow--${showCart ? 'visible' : 'hidden'}`}
+        onClick={toggleCart}
+      />,
+    ];
   }
 
   makeNavigation() {
@@ -52,7 +55,6 @@ class Container extends React.PureComponent {
           <nav>
             <ul className="menu-primary">
               {navigation}
-              {this.makeCart()}
             </ul>
           </nav>
         </div>
@@ -70,8 +72,6 @@ class Container extends React.PureComponent {
       logo_link = '/admin/';
     }
 
-    console.log(this.props.cartItems);
-
     return (
       <div className="main">
         <div className="header-global-top" />
@@ -83,6 +83,7 @@ class Container extends React.PureComponent {
                   <Link className="logo" to={logo_link}>milkicons_</Link>
                 </div>
                 {this.makeNavigation()}
+                {this.makeCart()}
               </div>
             </div>
           </div>
