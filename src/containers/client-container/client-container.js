@@ -5,6 +5,7 @@ import { Container } from 'components/ui';
 import { connect } from 'react-redux';
 import { showCart, hideCart } from 'actions/app';
 import Navigation from 'containers/navigation';
+import Cart from 'containers/cart';
 import routes from 'routes/client';
 
 class ClientContainer extends React.PureComponent {
@@ -40,7 +41,6 @@ class ClientContainer extends React.PureComponent {
   }
 
   toggleCart() {
-    console.log('toggleCart');
     if (this.props.show_cart) {
       this.props.hideCart();
     } else {
@@ -52,6 +52,7 @@ class ClientContainer extends React.PureComponent {
     return (
       <Container
         navigation={this.makeNavigation()}
+        cart={<Cart />}
         toggleCart={this.toggleCart}
         cartItems={this.props.cartItems}
         showCart={this.props.show_cart}

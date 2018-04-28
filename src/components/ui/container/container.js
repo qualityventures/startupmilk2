@@ -8,6 +8,7 @@ class Container extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     navigation: PropTypes.node,
+    cart: PropTypes.node,
     toggleCart: PropTypes.func,
     cartItems: PropTypes.number,
     showCart: PropTypes.bool,
@@ -16,28 +17,28 @@ class Container extends React.PureComponent {
 
   static defaultProps = {
     navigation: null,
+    cart: null,
     toggleCart: null,
     cartItems: null,
     showCart: false,
   }
 
   makeCart() {
-    const { cartItems, toggleCart, showCart } = this.props;
+    const { cartItems, toggleCart, showCart, cart } = this.props;
 
-    if (!toggleCart) {
+    if (!toggleCart || !cart) {
       return null;
     }
 
     return [
-      <a key="cart" onClick={toggleCart} className={`cart_button cart_button--${showCart ? 'visible' : 'hidden'}`}>
+      <a key="cart_button" onClick={toggleCart} className={`cart_button cart_button--${showCart ? 'visible' : 'hidden'}`}>
         CART
         <span>{cartItems}</span>
       </a>,
-      <div
-        key="shadow"
-        className={`cart_shadow cart_shadow--${showCart ? 'visible' : 'hidden'}`}
-        onClick={toggleCart}
-      />,
+      <div key="shadow" className={`cart_shadow cart_shadow--${showCart ? 'visible' : 'hidden'}`} />,
+      <div key="cart_container" className={`cart_container cart_container--${showCart ? 'visible' : 'hidden'}`}>
+        {cart}
+      </div>,
     ];
   }
 

@@ -1,0 +1,48 @@
+.cart-popup {
+  &__wrapper {
+    background: #2180f8;
+    border-radius: 2px;
+    -webkit-backdrop-filter: blur(9.5px);
+    backdrop-filter: blur(9.5px);
+  }
+
+  &__empty {
+    padding: 40px;
+    text-align: center;
+  }
+
+  &__checkout {
+    color: #FFF;
+    padding: 28px 24px;
+  }
+
+  &__products {
+    background: #181a20;
+    padding: 40px 24px;
+    color: #FFF;
+  }
+
+  &__price {
+    text-align: right;
+    height: 24px;
+    line-height: 24px;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: -0.6px;
+  }
+
+  &__total {
+    text-align: right;
+    height: 11px;
+    line-height: 11px;
+    font-size: 10px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 2px;
+  }
+}

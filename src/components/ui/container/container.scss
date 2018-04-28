@@ -4101,3 +4101,42 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     opacity: 0;
   }
 }
+
+.cart_container {
+  position: absolute;
+  right: 40px;
+  width: 394px;
+  top: 80px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (max-width: 1199px) {
+    right: 15px;
+  }
+
+  @media (max-width: 991px) {
+    right: 60px;
+  }
+
+  .header-fixed & {
+    margin-right: 40px;
+
+    @media (max-width: 991px) {
+      margin-right: 40px;
+    }
+
+    @media (max-width: 767px) {
+      margin-right: 20px;
+    }
+  }
+
+  &--visible {
+    z-index: 999999;
+    opacity: 1;
+  }
+
+  &--hidden {
+    z-index: -1;
+    visibility: hidden;
+    opacity: 0;
+  }
+}
