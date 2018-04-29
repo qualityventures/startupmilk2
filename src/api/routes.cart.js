@@ -8,9 +8,9 @@ import {
 const router = new Router();
 
 router.route('/add/:id')
-  .get(loadProductInfo, cartAddProduct);
+  .post(loadProductInfo, cartAddProduct);
 
 router.route('/remove/:id')
-  .get(loadProductInfo, cartRemoveProduct);
+  .post(loadProductInfo, cartRemoveProduct);
 
 export default router;

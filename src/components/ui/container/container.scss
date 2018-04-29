@@ -4037,6 +4037,8 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   position: absolute;
   right: 40px;
   z-index: 99999;
+  opacity: 1;
+  visibility: visible;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (max-width: 1199px) {
@@ -4063,8 +4065,9 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     color: #FFF !important;
   }
 
-  &--hidden {
-
+  &--empty {
+    opacity: 0;
+    visibility: hidden;
   }
 
   .header-fixed & {
@@ -4106,27 +4109,20 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   position: absolute;
   right: 40px;
   width: 394px;
+  max-width: 90vw;
   top: 80px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (max-width: 1199px) {
-    right: 15px;
+    right: 40px;
   }
 
   @media (max-width: 991px) {
-    right: 60px;
+    right: 10px;
   }
-
-  .header-fixed & {
-    margin-right: 40px;
-
-    @media (max-width: 991px) {
-      margin-right: 40px;
-    }
-
-    @media (max-width: 767px) {
-      margin-right: 20px;
-    }
+  
+  @media (max-width: 767px) {
+    top: 50px;
   }
 
   &--visible {

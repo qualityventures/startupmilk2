@@ -66,12 +66,37 @@ export function cartRemoveProduct(req, res) {
     return;
   }
 
-  const product_id = req.productData._id;
-
-  if (!req.cartData || !req.cartData[product_id]) {
-    throwError(res, 'Product not found');
+  if (!req.cartData) {
+    throwError(res, 'Cart is empty');
     return;
   }
 
-  throwError(res, 'cartRemoveProduct');
+  const product_id = req.productData._id.toString();
+  let index = -1;
+
+  for (let i = 0; i < req.cartData.list.length; ++i) {
+    if (req.cartData.list[i]._id.toString() === product_id) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index === -1) {
+    returnObjectAsJSON(res, req.cartData.toJSON());
+    return;
+  }
+
+  req.cartData.list.splice(index, 1);
+  req.cartData.save()
+    .then((cart) => {
+      return Cart.findById(cart._id).populate('list');
+    })
+    .then((cart) => {
+      returnObjectAsJSON(res, cart.toJSON());
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while removing product';
+      log(error);
+      throwError(res, error);
+    });
 }

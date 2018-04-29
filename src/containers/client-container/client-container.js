@@ -28,6 +28,12 @@ class ClientContainer extends React.PureComponent {
     this.toggleCart = this.toggleCart.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.show_cart && !nextProps.cartItems && this.props.cartItems) {
+      this.props.hideCart();
+    }
+  }
+
   makeNavigation() {
     const { logged_in, role } = this.props;
 

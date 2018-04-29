@@ -9,7 +9,7 @@ export function setCartProducts(products) {
 export function addToCart(product_id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      apiFetch(`api/cart/add/${product_id}`)
+      apiFetch(`api/cart/add/${product_id}`, { method: 'POST' })
         .then((data) => {
           dispatch(setCartProducts(data));
           resolve();
@@ -24,7 +24,7 @@ export function addToCart(product_id) {
 export function removeFromCart(product_id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      apiFetch(`api/cart/add/${product_id}`)
+      apiFetch(`api/cart/remove/${product_id}`, { method: 'POST' })
         .then((data) => {
           dispatch(setCartProducts(data));
           resolve();

@@ -7,8 +7,9 @@
   }
 
   &__empty {
-    padding: 40px;
+    padding: 20px;
     text-align: center;
+    color: #FFF;
   }
 
   &__checkout {
@@ -18,8 +19,9 @@
 
   &__products {
     background: #181a20;
-    padding: 40px 24px;
+    padding: 40px 24px 20px 24px;
     color: #FFF;
+    position: relative;
   }
 
   &__price {
@@ -44,5 +46,124 @@
     font-stretch: normal;
     line-height: normal;
     letter-spacing: 2px;
+  }
+
+  &__exp {
+    display: inline-block;
+    width: 110px;
+    padding-right: 11px;
+  }
+
+  &__cvc {
+    display: inline-block;
+    width: 110px;
+  }
+
+  &__submit {
+    width: 142px;
+    margin-left: auto;
+  }
+
+  &__product {
+    position: relative;
+
+    &-wrapper {
+      display: inline-block;
+      width: 50%;
+
+      &:nth-child(even) {
+        padding-left: 7.5px;
+      }
+
+      &:nth-child(odd) {
+        padding-right: 7.5px;
+      }
+    }
+
+    &-image-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      margin-bottom: 11px;
+    }
+
+    &-image {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      background-position: 50% 50%;
+      background-size: cover;
+    }
+
+    &-name {
+      float: left;
+      width: 90px;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      height: 25px;
+      line-height: 25px;
+      font-size: 12px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.67;
+      letter-spacing: 0.2px;
+      text-align: left;
+    }
+
+    &-price {
+      float: right;
+      height: 25px;
+      padding: 0px 8px;
+      line-height: 25px;
+      border-radius: 12.5px;
+      background-color: #050505;
+      font-size: 11px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      letter-spacing: 0.3px;
+    }
+
+    &-remove {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background-image: url('./media/x.svg');
+      background-size: 20px 20px;
+      top: -9px;
+      right: -9px;
+      cursor: pointer;
+    }
+  }
+
+  &__page-prev {
+    left: 0px;
+    top: 50%;
+    margin-top: -20px;
+    margin-left: -10px;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    cursor: pointer;
+    background-position: 50% 50%;
+    background-size: 22px 22px;
+    background-image: url('./media/page-prev.png');
+  }
+
+  &__page-next {
+    right: 0px;
+    top: 50%;
+    margin-top: -20px;
+    margin-right: -10px;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    cursor: pointer;
+    background-position: 50% 50%;
+    background-size: 22px 22px;
+    background-image: url('./media/page-next.png');
   }
 }
