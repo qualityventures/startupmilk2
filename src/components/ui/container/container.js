@@ -43,7 +43,7 @@ class Container extends React.PureComponent {
     return [
       <a key="cart_button" onClick={toggleCart} className={className}>
         CART
-        <span>{cartItems || ' '}</span>
+        <span>{cartItems || '-'}</span>
       </a>,
       <div key="shadow" className={`cart_shadow cart_shadow--${showCart ? 'visible' : 'hidden'}`} />,
       <div key="cart_container" className={`cart_container cart_container--${showCart ? 'visible' : 'hidden'}`}>
