@@ -2867,6 +2867,7 @@ input.search-input-button:hover {
 .container-wrapper {
   padding: 10px 0;
   height: 60px;
+  position: relative;
   -webkit-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   -o-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
