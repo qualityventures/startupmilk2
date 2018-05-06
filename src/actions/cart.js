@@ -2,8 +2,8 @@ import apiFetch from 'helpers/api-fetch';
 
 export const CART_SET_PRODUCTS = 'cart:set_products';
 
-export function setCartProducts(products) {
-  return { type: CART_SET_PRODUCTS, products };
+export function setCartProducts({ products, total }) {
+  return { type: CART_SET_PRODUCTS, products, total };
 }
 
 export function addToCart(product_id) {

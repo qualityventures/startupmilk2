@@ -78,7 +78,7 @@ class CartButton extends React.PureComponent {
 export default connect(
   (state, props) => {
     return {
-      in_cart: !!state.cart[props.productId],
+      in_cart: !!state.cart.products_list[props.productId],
     };
   },
   (dispatch) => {

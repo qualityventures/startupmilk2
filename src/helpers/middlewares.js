@@ -4,6 +4,9 @@ import Cart from 'models/cart';
 import Products from 'models/products';
 import { JWT_SECRET } from 'data/jwt';
 import { throwUnauthorizedAccess, throwError } from 'helpers/response';
+import debug from 'debug';
+
+const log = debug('milkicons_:middlewares');
 
 export function loadCartInfo(req, res, next) {
   const { cookie } = req.headers;

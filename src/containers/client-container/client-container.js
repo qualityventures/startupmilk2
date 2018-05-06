@@ -76,7 +76,7 @@ class ClientContainer extends React.PureComponent {
 export default withRouter(connect(
   (state, props) => {
     return {
-      cartItems: Object.keys(state.cart).length,
+      cartItems: state.cart.products_amount,
       role: state.user.role,
       logged_in: state.user.logged_in,
       pathname: props.location.pathname,

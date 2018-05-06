@@ -17,12 +17,19 @@
     height: 12px;
     line-height: 12px;
   }
+
+  &--grey .dot {
+    background: #999;
+  }
+
+  &--white .dot {
+    background: #FFF;
+  }
 }
 
 .dot {
   display: inline-block;
   font-size: 0;
-  background: #999;
   animation-name: loading-dots;
   animation-duration: 400ms;
   animation-iteration-count: infinite;

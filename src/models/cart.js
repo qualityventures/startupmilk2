@@ -10,9 +10,22 @@ const CartSchema = new Schema({
 }, { collection: 'carts', strict: true });
 
 CartSchema.methods.toJSON = function() {
-  return this.list.map((product) => {
-    return product.toJSON();
+  return {
+    total: this.getPrice(),
+    products: this.list.map((product) => {
+      return product.toJSON();
+    }),
+  };
+};
+
+CartSchema.methods.getPrice = function() {
+  let total = 0;
+
+  this.list.forEach((product) => {
+    total += product.price;
   });
+
+  return Math.floor(total * 100) / 100;
 };
 
 export default mongoose.model('Cart', CartSchema);

@@ -89,9 +89,12 @@ class FormInput extends React.PureComponent {
       placeholder: this.props.placeholder,
       onKeyDown: this.onKeyDown,
       onKeyUp: this.props.onKeyUp,
-      defaultValue: this.props.defaultValue,
       ref: this.setRef,
     };
+
+    if (this.props.defaultValue) {
+      props.defaultValue = this.props.defaultValue;
+    }
 
     if (this.props.name) {
       props.name = this.props.name;
