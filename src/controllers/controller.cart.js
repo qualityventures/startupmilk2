@@ -3,7 +3,7 @@
 import { throwError, returnObjectAsJSON } from 'helpers/response';
 import debug from 'debug';
 import Cart from 'models/cart';
-import { JWT_SECRET } from 'data/jwt';
+import { JWT_SECRET } from 'data/config.private';
 import jwt from 'jsonwebtoken';
 
 const log = debug(`${DEBUG_PREFIX}:controller.auth`);

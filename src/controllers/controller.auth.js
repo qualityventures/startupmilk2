@@ -1,11 +1,18 @@
-/* DEBUG_PREFIX */
+/* global DEBUG_PREFIX */
 
-import { throwError, returnObjectAsJSON, returnOkWithoutBody } from 'helpers/response';
+import { throwError, returnObjectAsJSON } from 'helpers/response';
 import { validateEmail, validatePassword } from 'helpers/validators';
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
 import debug from 'debug';
-import { JWT_SECRET } from 'data/jwt';
+import { JWT_SECRET } from 'data/config.private';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import sendmail from 'helpers/sendmail';
+import bcrypt from 'bcryptjs';
+
+const TEMPLATE_RECOVER = fs.readFileSync(path.join(__dirname, '..', 'email.templates', 'recover.html'), 'utf8');
 
 const log = debug(`${DEBUG_PREFIX}:controller.auth`);
 
@@ -74,10 +81,40 @@ export function authLogin(req, res) {
     });
 }
 
-export function authRegister(req, res) {
-  if (!validateUserData(req, res)) {
+export function authRecover(req, res) {
+  const { email } = req.body;
+  const validation = validateEmail(email);
+
+  if (validation !== true) {
+    throwError(res, validation);
     return;
   }
 
-  throwError(res, 'auth sign up');
+  User.findOne({ email })
+    .then((user) => {
+      if (user === null) {
+        throw new Error('Invalid username or password');
+      }
+
+      const password = crypto.randomBytes(8).toString('hex');
+      const hashed_password = bcrypt.hashSync(password, 8);
+      const html = TEMPLATE_RECOVER.replace(/%password%/gi, password);
+
+      return sendmail({
+        to: email,
+        subject: 'Your new password',
+        html,
+      }).then(() => { return { user, hashed_password }; });
+    })
+    .then(({ user, hashed_password }) => {
+      user.hashed_password = hashed_password;
+      return user.save();
+    })
+    .then(() => {
+      returnObjectAsJSON(res, { success: true });
+    })
+    .catch((err) => {
+      log(err);
+      throwError(res, 'Error while recovering password');
+    });
 }

@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { TITLE_BASE, TITLE_SEPARATOR } from 'data/config';
+import { TITLE_BASE, TITLE_SEPARATOR } from 'data/config.public';
 
 let _bundle_cache = {};
 let _bundle_updated = 0;

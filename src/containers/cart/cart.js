@@ -4,6 +4,7 @@ import { removeFromCart } from 'actions/cart';
 import { connect } from 'react-redux';
 import { Loader, Alert, Form, FormTitle, FormInput, FormButton, FormLabel } from 'components/ui';
 import { validateEmail, validatePassword } from 'helpers/validators';
+import apiFetch from 'helpers/api-fetch';
 import './cart.scss';
 
 class Cart extends React.PureComponent {
@@ -12,6 +13,7 @@ class Cart extends React.PureComponent {
     products_amount: PropTypes.number.isRequired,
     products_list: PropTypes.object.isRequired,
     removeFromCart: PropTypes.func.isRequired,
+    email: PropTypes.string.isRequired,
   }
 
   static defaultProps = {
@@ -25,8 +27,10 @@ class Cart extends React.PureComponent {
       page: 1,
       pages: this.getPages(props.products_amount),
       password_required: false,
+      password_recovered: false,
       loading: false,
       error: false,
+      stripe_token: false,
     };
 
     this.inputRefs = {};
@@ -34,8 +38,9 @@ class Cart extends React.PureComponent {
     this.removeProduct = this.removeProduct.bind(this);
     this.showNextPage = this.showNextPage.bind(this);
     this.showPrevPage = this.showPrevPage.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleRecover = this.handleRecover.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,7 +63,37 @@ class Cart extends React.PureComponent {
     return ((pages * 2) < total) ? (pages + 1) : pages;
   }
 
+  handleRecover() {
+    if (this.state.loading) {
+      return;
+    }
+
+    const email = this.inputRefs.email.value;
+    const validation = validateEmail(email);
+
+    if (validation !== true) {
+      this.setState({ error: validation });
+      this.inputRefs.email.focus();
+      return;
+    }
+
+    this.setState({ loading: true, error: false });
+
+    apiFetch('/api/auth/recover', {
+      method: 'POST',
+      payload: { email },
+    }).then((response) => {
+      this.setState({ loading: false, password_recovered: true });
+    }).catch((e) => {
+      this.setState({ loading: false, error: e || 'Something went wrong' });
+    });
+  }
+
   handleSubmit() {
+    if (this.state.loading) {
+      return;
+    }
+
     const values = {};
     let error = false;
     const validators = {
@@ -82,6 +117,7 @@ class Cart extends React.PureComponent {
 
       if (result !== true) {
         error = result;
+        e.focus();
       }
     });
 
@@ -90,8 +126,32 @@ class Cart extends React.PureComponent {
       return;
     }
 
+    if (!this.props.price_total && !this.state.stripe_token) {
+      console.log('get stripe token');
+    }
+    
     this.setState({ loading: true, error: false });
-    console.log(values);
+
+    apiFetch('/api/orders/', {
+      method: 'POST',
+      payload: {
+        email: values.email,
+        password: values.password || null,
+        stripe_token: this.state.stripe_token,
+      },
+    }).then((response) => {
+      console.log(response);
+      this.setState({ loading: false });
+    }).catch((e) => {
+      if (e === 'password_required') {
+        this.setState(
+          { loading: false, error: 'Password required', password_required: true },
+          this.handleSubmit
+        );
+      } else {
+        this.setState({ loading: false, error: e || 'Something went wrong' });
+      }
+    });
   }
 
   removeProduct(e) {
@@ -247,16 +307,39 @@ class Cart extends React.PureComponent {
       return null;
     }
 
-    return (
-      <FormLabel>
+    const ret = [
+      <FormLabel key="password">
         <FormInput
           placeholder="Password"
           type="password"
           name="password"
           setRef={this.setInputRef}
+          disabled={this.state.loading}
         />
-      </FormLabel>
-    );
+      </FormLabel>,
+    ];
+
+    if (!this.state.loading) {
+      if (!this.state.password_recovered) {
+        ret.push(
+          <FormLabel key="recover">
+            <div className="cart-popup__recover" onClick={this.handleRecover}>
+              Recover password
+            </div>
+          </FormLabel>
+        );
+      } else {
+        ret.push(
+          <FormLabel key="recover">
+            <div className="cart-popup__recovered">
+              New password was sent to your email
+            </div>
+          </FormLabel>
+        );
+      }
+    }
+
+    return ret;
   }
 
   render() {
@@ -283,6 +366,8 @@ class Cart extends React.PureComponent {
                 placeholder="Email"
                 type="email"
                 name="email"
+                defaultValue={this.props.email}
+                disabled={!!this.props.email || this.state.loading}
                 setRef={this.setInputRef}
               />
             </FormLabel>
@@ -333,6 +418,7 @@ export default connect(
       products_list: state.cart.products_list,
       price_total: state.cart.price_total,
       show_cart: state.app.show_cart,
+      email: state.user.data.email || '',
     };
   },
   (dispatch) => {

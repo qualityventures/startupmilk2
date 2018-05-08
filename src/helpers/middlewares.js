@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from 'models/user';
 import Cart from 'models/cart';
 import Products from 'models/products';
-import { JWT_SECRET } from 'data/jwt';
+import { JWT_SECRET } from 'data/config.private';
 import { throwUnauthorizedAccess, throwError } from 'helpers/response';
 import debug from 'debug';
 

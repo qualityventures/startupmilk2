@@ -1,4 +1,4 @@
-import { API_HOST } from 'data/config';
+import { API_HOST } from 'data/config.public';
 import 'isomorphic-fetch';
 
 export default function (endpoint, params = {}) {

@@ -6,7 +6,7 @@ import { getFileType } from 'helpers/files';
 import { validateProductUrl, validateProductName, validateProductCategory, validateProductDesc, validateProductPrice } from 'helpers/validators';
 import Products from 'models/products';
 import debug from 'debug';
-import { RESULTS_PER_PAGE } from 'data/config';
+import { RESULTS_PER_PAGE } from 'data/config.public';
 import CATEGORIES_LIST from 'data/categories';
 import crypto from 'crypto';
 import fs from 'fs';

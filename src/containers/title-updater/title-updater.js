@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setTitle } from 'actions/app';
-import { TITLE_BASE, TITLE_SEPARATOR } from 'data/config';
+import { TITLE_BASE, TITLE_SEPARATOR } from 'data/config.public';
 
 class TitleUpdater extends React.PureComponent {
   static propTypes = {

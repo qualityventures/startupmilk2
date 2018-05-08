@@ -1,3 +1,2 @@
-config.js
-mongo.js
-jwt.js
+config.public.js
+config.private.js

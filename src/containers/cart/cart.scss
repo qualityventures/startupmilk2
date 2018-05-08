@@ -69,6 +69,17 @@
     width: 45px;
   }
 
+  &__recover {
+    font-size: 12px;
+    text-align: right;
+    cursor: pointer;
+  }
+
+  &__recovered {
+    font-size: 12px;
+    text-align: right;
+  }
+
   &__product {
     position: relative;
 
