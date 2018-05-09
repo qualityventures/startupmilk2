@@ -6,7 +6,7 @@ import { JWT_SECRET } from 'data/config.private';
 import { throwUnauthorizedAccess, throwError } from 'helpers/response';
 import debug from 'debug';
 
-const log = debug('milkicons_:middlewares');
+const log = debug('matte.design:middlewares');
 
 export function loadCartInfo(req, res, next) {
   const { cookie } = req.headers;

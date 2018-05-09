@@ -1,4 +1,4 @@
-export const TITLE_BASE = 'milkicons_';
+export const TITLE_BASE = 'matte.design';
 export const TITLE_SEPARATOR = '|';
 export const API_HOST = 'https://matte.design/';
 export const RESULTS_PER_PAGE = 10;

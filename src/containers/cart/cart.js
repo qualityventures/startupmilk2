@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { removeFromCart } from 'actions/cart';
+import { removeFromCart, clearCart } from 'actions/cart';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Loader, Alert, Form, FormTitle, FormInput, FormButton, FormLabel } from 'components/ui';
 import { validateEmail, validatePassword } from 'helpers/validators';
 import apiFetch from 'helpers/api-fetch';
+import { userSignIn } from 'actions/user';
+import { tokenSet } from 'actions/token';
 import './cart.scss';
 
 class Cart extends React.PureComponent {
@@ -14,6 +17,10 @@ class Cart extends React.PureComponent {
     products_list: PropTypes.object.isRequired,
     removeFromCart: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
+    userSignIn: PropTypes.func.isRequired,
+    tokenSet: PropTypes.func.isRequired,
+    clearCart: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -31,6 +38,7 @@ class Cart extends React.PureComponent {
       loading: false,
       error: false,
       stripe_token: false,
+      success: false,
     };
 
     this.inputRefs = {};
@@ -140,17 +148,32 @@ class Cart extends React.PureComponent {
         stripe_token: this.state.stripe_token,
       },
     }).then((response) => {
-      console.log(response);
-      this.setState({ loading: false });
-    }).catch((e) => {
-      if (e === 'password_required') {
-        this.setState(
-          { loading: false, error: 'Password required', password_required: true },
-          this.handleSubmit
-        );
-      } else {
-        this.setState({ loading: false, error: e || 'Something went wrong' });
+      if (response.redirect) {
+        this.props.history.push(response.redirect);
       }
+
+      if (response.auth) {
+        this.props.tokenSet(response.auth.token);
+        this.props.userSignIn(response.auth.data);
+      }
+
+      if (response.success) {
+        this.props.clearCart();
+        this.setState({ loading: false, success: true });
+      } else {
+        const err_msg = response.err_msg || 'Something went wrong';
+
+        if (err_msg === 'password_required') {
+          this.setState(
+            { loading: false, error: 'Password required', password_required: true },
+            this.handleSubmit
+          );
+        } else {
+          this.setState({ loading: false, error: err_msg });
+        }
+      }
+    }).catch((e) => {
+      this.setState({ loading: false, error: e || 'Something went wrong' });
     });
   }
 
@@ -343,11 +366,35 @@ class Cart extends React.PureComponent {
   }
 
   render() {
+    if (this.state.success) {
+      return (
+        <div className="cart-popup__wrapper">
+          <div className="cart-popup__checkout">
+            <FormLabel>
+              <FormTitle>Check Out With a Card</FormTitle>
+            </FormLabel>
+            <FormLabel>
+              <div className="cart-popup__empty">
+                Your order details have been sent to the email address you provided
+              </div>
+            </FormLabel>
+          </div>
+        </div>
+      );
+    }
+
     if (!this.props.products_amount) {
       return (
         <div className="cart-popup__wrapper">
-          <div className="cart-popup__empty">
-            The cart is empty
+          <div className="cart-popup__checkout">
+            <FormLabel>
+              <FormTitle>Check Out With a Card</FormTitle>
+            </FormLabel>
+            <FormLabel>
+              <div className="cart-popup__empty">
+                Oops there is nothing in your cart
+              </div>
+            </FormLabel>
           </div>
         </div>
       );
@@ -367,7 +414,7 @@ class Cart extends React.PureComponent {
                 type="email"
                 name="email"
                 defaultValue={this.props.email}
-                disabled={!!this.props.email || this.state.loading}
+                disabled={!!this.props.email || this.state.loading || this.state.password_required}
                 setRef={this.setInputRef}
               />
             </FormLabel>
@@ -411,7 +458,7 @@ class Cart extends React.PureComponent {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   (state, props) => {
     return {
       products_amount: state.cart.products_amount,
@@ -424,6 +471,9 @@ export default connect(
   (dispatch) => {
     return {
       removeFromCart: (productId) => { dispatch(removeFromCart(productId)); },
+      userSignIn: (user) => { dispatch(userSignIn(user)); },
+      tokenSet: (token) => { dispatch(tokenSet(token)); },
+      clearCart: () => { dispatch(clearCart()); },
     };
   }
-)(Cart);
+)(Cart));

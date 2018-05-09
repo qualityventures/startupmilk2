@@ -36,7 +36,7 @@ class Container extends React.PureComponent {
       className += ' cart_button--visible';
     }
 
-    if (!cartItems) {
+    if (!showCart && !cartItems) {
       className += ' cart_button--empty';
     }
 
@@ -91,7 +91,7 @@ class Container extends React.PureComponent {
             <div className="container-wrapper">
               <div className="row align-items-lg-center">
                 <div className="col-10 col-lg-3 col-xl-2">
-                  <Link className="logo" to={logo_link}>milkicons_</Link>
+                  <Link className="logo" to={logo_link}>matte.design</Link>
                 </div>
                 {this.makeNavigation()}
                 {this.makeCart()}

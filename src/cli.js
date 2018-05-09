@@ -5,6 +5,7 @@ import { validatePassword, validateEmail } from 'helpers/validators';
 import User from 'models/user';
 import Products from 'models/products';
 import Cart from 'models/cart';
+import Order from 'models/order';
 import mongoose from 'mongoose';
 import readline from 'readline';
 import bcrypt from 'bcryptjs';
@@ -28,6 +29,10 @@ export function init() {
     })
     .then(() => {
       console.log('Cart init completed');
+      return Order.init();
+    })
+    .then(() => {
+      console.log('Order init completed');
       process.exit(1);
     })
     .catch((err) => {

@@ -28,7 +28,7 @@ import { tokenSet } from 'actions/token';
 import { setCartProducts } from 'actions/cart';
 import { loadUserData, loadCartInfo } from 'helpers/middlewares';
 
-const debug = require('debug')('milkicons_:ssr');
+const debug = require('debug')('matte.design:ssr');
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 

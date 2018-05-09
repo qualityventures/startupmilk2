@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 
 const CartSchema = new Schema({
   list: [{
-    type: Schema.Types.ObjectId, ref: 'Products',
+    type: Schema.Types.ObjectId,
+    ref: 'Products',
   }],
 }, { collection: 'carts', strict: true });
 

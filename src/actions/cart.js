@@ -6,6 +6,10 @@ export function setCartProducts({ products, total }) {
   return { type: CART_SET_PRODUCTS, products, total };
 }
 
+export function clearCart() {
+  return { type: CART_SET_PRODUCTS, products: [], total: 0 };
+}
+
 export function addToCart(product_id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
