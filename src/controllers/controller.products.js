@@ -66,7 +66,7 @@ export function getProducts(req, res) {
     query.category = category;
   }
 
-  if (req.userData.role !== 'admin') {
+  if (req.userData.role !== 'admin' || status === 'visible') {
     query.visible = true;
   } else {
     query.deleted = status === 'deleted';
