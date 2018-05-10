@@ -5,6 +5,8 @@ import { Form, Alert, FormInput, FormTitle, FormButton, FormLabel, Loader } from
 import { validatePassword, validateEmail } from 'helpers/validators';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
+import apiFetch from 'helpers/api-fetch';
+import './form-signin.scss';
 
 class FormSignIn extends React.PureComponent {
   static propTypes = {
@@ -23,12 +25,14 @@ class FormSignIn extends React.PureComponent {
     this.state = {
       loading: false,
       error: false,
+      password_recovered: false,
     };
 
     this.inputRefs = {};
 
     this.signIn = this.signIn.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
+    this.handleRecover = this.handleRecover.bind(this);
   }
 
   componentWillUnmount() {
@@ -37,6 +41,32 @@ class FormSignIn extends React.PureComponent {
 
   setInputRef(e, name) {
     this.inputRefs[name] = e;
+  }
+
+  handleRecover() {
+    if (this.state.loading) {
+      return;
+    }
+
+    const email = this.inputRefs.email.value;
+    const validation = validateEmail(email);
+
+    if (validation !== true) {
+      this.setState({ error: validation });
+      this.inputRefs.email.focus();
+      return;
+    }
+
+    this.setState({ loading: true, error: false });
+
+    apiFetch('api/auth/recover', {
+      method: 'POST',
+      payload: { email },
+    }).then((response) => {
+      this.setState({ loading: false, password_recovered: true });
+    }).catch((e) => {
+      this.setState({ loading: false, error: e || 'Something went wrong' });
+    });
   }
 
   signIn() {
@@ -148,6 +178,30 @@ class FormSignIn extends React.PureComponent {
     );
   }
 
+  makeRecover() {
+    if (this.state.loading) {
+      return null;
+    }
+    
+    if (!this.state.password_recovered) {
+      return (
+        <FormLabel>
+          <div className="signin__recover" onClick={this.handleRecover}>
+            Recover password
+          </div>
+        </FormLabel>
+      );
+    }
+
+    return (
+      <FormLabel>
+        <div className="signin__recovered">
+          New password was sent to your email
+        </div>
+      </FormLabel>
+    );
+  }
+
   render() {
     const disabled = this.state.loading || this.props.logged_in;
 
@@ -177,6 +231,8 @@ class FormSignIn extends React.PureComponent {
             onSubmit={this.signIn}
           />
         </FormLabel>
+
+        {this.makeRecover()}
 
         {this.makeLoader()}
         {this.makeButton()}

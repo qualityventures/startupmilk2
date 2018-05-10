@@ -1,10 +1,22 @@
 import RouteContact from './client-contact';
 import RouteFaq from './client-faq';
 import RouteLicense from './client-license';
+import RouteLogin from './client-login';
+import RouteDashboard from './client-dashboard';
 import { RouteClientProducts, fetchClientProducts } from './client-products';
 import { RouteClientProduct, fetchClientProduct } from './client-product';
 
 export default [
+  { path: '/dashboard',
+    key: 'dashboard',
+    exact: false,
+    component: RouteDashboard,
+  },
+  { path: '/login',
+    key: 'login',
+    exact: true,
+    component: RouteLogin,
+  },
   { path: '/contact',
     key: 'contact',
     exact: true,

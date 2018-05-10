@@ -177,12 +177,12 @@ export function createNewOrder(req, res) {
       req.cartData.list.forEach((product) => {
         items += TEMPLATE_ORDER_ITEM
           .replace(/%name%/gi, product.name)
-          .replace(/%price%/gi, product.price);
+          .replace(/%price%/gi, product.price ? `$${product.price}` : 'Free');
       });
 
       const html = TEMPLATE_ORDER
         .replace(/%items%/gi, items)
-        .replace(/%total%/gi, price)
+        .replace(/%total%/gi, price ? `$${price}` : 'Free')
         .replace(/%link%/gi, globals.link);
 
       sendmail({ to: email, subject: 'Your order details', html });

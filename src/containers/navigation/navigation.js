@@ -8,11 +8,13 @@ class Navigation extends React.PureComponent {
   static propTypes = {
     location: PropTypes.object.isRequired,
     role: PropTypes.string.isRequired,
+    logged_in: PropTypes.bool,
     type: PropTypes.string,
   }
 
   static defaultProps = {
     type: 'client',
+    logged_in: false,
   }
 
   makeAdminNavigation() {
@@ -40,7 +42,8 @@ class Navigation extends React.PureComponent {
 
   makeClientNavigation() {
     const { pathname } = this.props.location;
-    const { role } = this.props;
+    const { role, logged_in } = this.props;
+
     const list = [
       <NavigationLink
         key={'all'}
@@ -62,6 +65,26 @@ class Navigation extends React.PureComponent {
         />
       );
     });
+
+    if (logged_in) {
+      list.push(
+        <NavigationLink
+          key="dashboard"
+          to="/dashboard"
+          selected={!!pathname.match(/^\/dashboard/)}
+          content="My orders"
+        />
+      );
+    } else {
+      list.push(
+        <NavigationLink
+          key="signin"
+          to="/login"
+          selected={!!pathname.match(/^\/login/)}
+          content="Sign In"
+        />
+      );
+    }
 
     if (role === 'admin') {
       list.push(
