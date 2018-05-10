@@ -87,7 +87,7 @@ class Cart extends React.PureComponent {
 
     this.setState({ loading: true, error: false });
 
-    apiFetch('/api/auth/recover', {
+    apiFetch('api/auth/recover', {
       method: 'POST',
       payload: { email },
     }).then((response) => {
@@ -140,7 +140,7 @@ class Cart extends React.PureComponent {
     
     this.setState({ loading: true, error: false });
 
-    apiFetch('/api/orders/', {
+    apiFetch('api/orders/', {
       method: 'POST',
       payload: {
         email: values.email,
