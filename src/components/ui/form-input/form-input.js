@@ -53,7 +53,7 @@ class FormInput extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.defaultValue !== this.props.defaultValue) {
-      this.input_ref.value = this.props.defaultValue || '';
+      this.input_ref.value = this.props.defaultValue !== null ? this.props.defaultValue : '';
     }
   }
 
@@ -92,7 +92,7 @@ class FormInput extends React.PureComponent {
       ref: this.setRef,
     };
 
-    if (this.props.defaultValue) {
+    if (this.props.defaultValue !== null) {
       props.defaultValue = this.props.defaultValue;
     }
 

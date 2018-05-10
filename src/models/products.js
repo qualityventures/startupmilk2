@@ -48,7 +48,7 @@ const ProductsSchema = new Schema({
   },
 }, { collection: 'products', strict: true });
 
-ProductsSchema.methods.toJSON = function() {
+ProductsSchema.methods.toClientJSON = function() {
   const files = {};
 
   this.files.forEach((file) => {
@@ -58,8 +58,10 @@ ProductsSchema.methods.toJSON = function() {
   return {
     id: this._id,
     image: this.images[0] || null,
+    images: this.images,
     url: this.url,
     name: this.name,
+    desc: this.desc,
     price: this.price,
     files: Object.keys(files),
   };

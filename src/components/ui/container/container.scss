@@ -3827,7 +3827,9 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     flex-wrap: wrap;
     -webkit-box-pack: end;
     -ms-flex-pack: end;
+    flex-direction: column;
     justify-content: flex-end;
+    align-items: flex-end;
     padding: 12px;
     background: #FFFFFF;
     -webkit-box-shadow: 0 15px 20px 0 rgba(34, 28, 158, 0.12);

@@ -10,11 +10,11 @@ const CartSchema = new Schema({
   }],
 }, { collection: 'carts', strict: true });
 
-CartSchema.methods.toJSON = function() {
+CartSchema.methods.toClientJSON = function() {
   return {
     total: this.getPrice(),
     products: this.list.map((product) => {
-      return product.toJSON();
+      return product.toClientJSON();
     }),
   };
 };

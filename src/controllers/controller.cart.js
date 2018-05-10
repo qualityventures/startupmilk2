@@ -30,7 +30,7 @@ export function cartAddProduct(req, res) {
         return Cart.findById(cart._id).populate('list');
       })
       .then((cart) => {
-        returnObjectAsJSON(res, cart.toJSON());
+        returnObjectAsJSON(res, cart.toClientJSON());
       })
       .catch((err) => {
         const error = err && err.toString ? err.toString() : 'Error while adding product';
@@ -51,7 +51,7 @@ export function cartAddProduct(req, res) {
         jwt.sign({ id: cart._id }, JWT_SECRET, { expiresIn: 86400 * 365 }),
         { maxAge: 1000 * 86400 * 365 }
       );
-      returnObjectAsJSON(res, cart.toJSON());
+      returnObjectAsJSON(res, cart.toClientJSON());
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Error while adding product';
@@ -82,7 +82,7 @@ export function cartRemoveProduct(req, res) {
   }
 
   if (index === -1) {
-    returnObjectAsJSON(res, req.cartData.toJSON());
+    returnObjectAsJSON(res, req.cartData.toClientJSON());
     return;
   }
 
@@ -92,7 +92,7 @@ export function cartRemoveProduct(req, res) {
       return Cart.findById(cart._id).populate('list');
     })
     .then((cart) => {
-      returnObjectAsJSON(res, cart.toJSON());
+      returnObjectAsJSON(res, cart.toClientJSON());
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Error while removing product';

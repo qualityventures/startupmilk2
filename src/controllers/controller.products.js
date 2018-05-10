@@ -101,7 +101,7 @@ export function getProducts(req, res) {
         pages,
         total,
         products: products.map((product) => {
-          return product.toJSON();
+          return product.toClientJSON();
         }),
       });
     })
@@ -126,22 +126,7 @@ export function getProductByUrl(req, res) {
         throw new Error('Product not found');
       }
 
-      const files = {};
-
-      product.files.forEach((file) => {
-        files[file.type] = true;
-      });
-
-      returnObjectAsJSON(res, {
-        id: product._id,
-        image: product.images[0] || null,
-        images: product.images,
-        url: product.url,
-        name: product.name,
-        price: product.price,
-        desc: product.desc,
-        files: Object.keys(files),
-      });
+      returnObjectAsJSON(res, product.toClientJSON());
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Internal server error';
@@ -151,6 +136,7 @@ export function getProductByUrl(req, res) {
 }
 
 export function getProductById(req, res) {
+  console.log(req.productData);
   returnObjectAsJSON(res, req.productData);
 }
 
