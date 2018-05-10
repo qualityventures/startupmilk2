@@ -98,6 +98,7 @@ export function createNewOrder(req, res) {
   }
 
   if (price > 0) {
+    stripe = true;
     console.log('validate stripe token');
   }
 
@@ -162,8 +163,7 @@ export function createNewOrder(req, res) {
         return false;
       }
 
-      console.log('process stripe');
-      return true;
+      throw 'Stripe details are needed';
     })
     .then(() => {
       globals.order.completed = true;
