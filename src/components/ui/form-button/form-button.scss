@@ -4,9 +4,6 @@
   overflow-x: hidden;
   text-overflow: ellipsis;
   border-radius: 2px;
-  background-color: #1ddd9e;
-  box-shadow: 0 14px 20px 0 rgba(1, 10, 16, 0.07);
-  color: #FFF !important;
   text-align: center;
   font-family: SuisseBPIntl;
   font-size: 12px;
@@ -17,4 +14,15 @@
   text-transform: uppercase;
   cursor: pointer;
   display: block;
+
+  &--submit {
+    background-color: #1ddd9e;
+    box-shadow: 0 14px 20px 0 rgba(1, 10, 16, 0.07);
+    color: #FFF !important;
+  }
+
+  &--danger {
+    background-color: #f8d7da;
+    color: #721c24 !important;
+  }
 }

@@ -21,7 +21,7 @@ import './admin-products.scss';
 const DEFAULT_SEARCH = {
   page: 1,
   category: 'all',
-  status: 'all',
+  status: 'active',
   search: '',
   sort: '-created',
 };
@@ -52,6 +52,7 @@ class RouteAdminProducts extends React.PureComponent {
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleStatusChange = this.handleStatusChange.bind(this);
   }
 
   componentDidMount() {
@@ -109,6 +110,19 @@ class RouteAdminProducts extends React.PureComponent {
         const error = err && err.toString ? err.toString() : 'Bad response from server';
         this.setState({ error, loading: false });
       });
+  }
+
+  handleStatusChange(value) {
+    value = value || DEFAULT_SEARCH.status;
+
+    const { search } = this.state;
+
+    if (value === search.status) {
+      return;
+    }
+
+    const url = `/admin/products/?${makeArgs({ ...search, page: 1, search: '', status: value })}`;
+    this.props.history.push(url);
   }
 
   handleCategoryChange(value) {
@@ -224,14 +238,31 @@ class RouteAdminProducts extends React.PureComponent {
 
         <br />
 
-        <FormSelect
-          name="category"
-          placeholder="Any category..."
-          disabled={loading}
-          onChange={this.handleCategoryChange}
-          values={this.state.selectValues}
-          defaultValue={search.category}
-        />
+        <div className="admin-products__selectes">
+          <div className="admin-products__category">
+            <FormSelect
+              name="category"
+              placeholder="Any category..."
+              disabled={loading}
+              onChange={this.handleCategoryChange}
+              values={this.state.selectValues}
+              defaultValue={search.category}
+            />
+          </div>
+          <div className="admin-products__status">
+            <FormSelect
+              name="status"
+              placeholder="Status..."
+              disabled={loading}
+              onChange={this.handleStatusChange}
+              values={[
+                { value: 'active', title: 'Active products' },
+                { value: 'deleted', title: 'Deleted products' },
+              ]}
+              defaultValue={search.status}
+            />
+          </div>
+        </div>
       </Form>
     );
   }

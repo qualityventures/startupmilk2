@@ -9,18 +9,20 @@ class FormButton extends React.PureComponent {
     to: PropTypes.string,
     href: PropTypes.string,
     onClick: PropTypes.func,
+    type: PropTypes.oneOf(['submit', 'danger']),
   }
 
   static defaultProps = {
     onClick: null,
     to: null,
     href: null,
+    type: 'submit',
   }
 
   render() {
     let Component = 'div';
     const props = {
-      className: 'form__button',
+      className: `form__button form__button--${this.props.type}`,
       onClick: this.props.onClick,
     };
 

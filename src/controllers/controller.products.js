@@ -44,7 +44,7 @@ function validateProductData(req, res) {
 
 export function getProducts(req, res) {
   const query = {};
-  const { category, status, } = req.query;
+  const { category, status } = req.query;
   let { sort, search } = req.query;
   let page = Math.min(parseInt(req.query.page || 1, 10) || 1, 100);
   let pages = 0;
@@ -68,8 +68,8 @@ export function getProducts(req, res) {
 
   if (req.userData.role !== 'admin') {
     query.visible = true;
-  } else if (status === 'deleted') {
-    query.deleted = true;
+  } else {
+    query.deleted = status === 'deleted';
   }
 
   Products.count(query)
@@ -136,7 +136,6 @@ export function getProductByUrl(req, res) {
 }
 
 export function getProductById(req, res) {
-  console.log(req.productData);
   returnObjectAsJSON(res, req.productData);
 }
 
@@ -166,12 +165,15 @@ export function updateProduct(req, res) {
       product.desc = data.desc;
       product.category = data.category;
       product.deleted = data.deleted;
-      product.updateVisibility();
 
       return product.save();
     })
-    .then((savedProduct) => {
-      returnObjectAsJSON(res, savedProduct);
+    .then((product) => {
+      product.updateVisibility();
+      return product.save();
+    })
+    .then((product) => {
+      returnObjectAsJSON(res, product);
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Error while creating product';
@@ -247,8 +249,12 @@ export function addProductImage(req, res) {
 
       req.productData.images.push(image_path);
       req.productData.save()
-        .then((savedProduct) => {
-          returnObjectAsJSON(res, savedProduct.images);
+        .then((product) => {
+          product.updateVisibility();
+          return product.save();
+        })
+        .then((product) => {
+          returnObjectAsJSON(res, product.images);
         })
         .catch((err) => {
           const error = err && err.toString ? err.toString() : 'Error while saving image';
@@ -312,8 +318,12 @@ export function deleteProductImage(req, res) {
 
   req.productData.images = images;
   req.productData.save()
-    .then((savedProduct) => {
-      returnObjectAsJSON(res, savedProduct.images);
+    .then((product) => {
+      product.updateVisibility();
+      return product.save();
+    })
+    .then((product) => {
+      returnObjectAsJSON(res, product.images);
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Error while deleting image';
@@ -368,8 +378,12 @@ export function addProductFile(req, res) {
         name: filename,
       });
       req.productData.save()
-        .then((savedProduct) => {
-          returnObjectAsJSON(res, savedProduct.files);
+        .then((product) => {
+          product.updateVisibility();
+          return product.save();
+        })
+        .then((product) => {
+          returnObjectAsJSON(res, product.files);
         })
         .catch((err) => {
           const error = err && err.toString ? err.toString() : 'Error while saving file';
@@ -407,8 +421,12 @@ export function deleteProductFile(req, res) {
 
   req.productData.files = files;
   req.productData.save()
-    .then((savedProduct) => {
-      returnObjectAsJSON(res, savedProduct.files);
+    .then((product) => {
+      product.updateVisibility();
+      return product.save();
+    })
+    .then((product) => {
+      returnObjectAsJSON(res, product.files);
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Error while deleting file';

@@ -86,7 +86,7 @@ app.use((req, res) => {
   }
 
   if (req.cartData) {
-    store.dispatch(setCartProducts(req.cartData.toJSON()));
+    store.dispatch(setCartProducts(req.cartData.toClientJSON()));
   }
 
   if (is_admin) {

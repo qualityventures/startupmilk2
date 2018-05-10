@@ -5,6 +5,7 @@ import { validateProductUrl, validateProductName, validateProductCategory, valid
 import ImagesManager from 'components/images-manager';
 import FilesManager from 'components/files-manager';
 import CATEGORIES_LIST from 'data/categories';
+import apiFetch from 'helpers/api-fetch';
 
 class RouteAdminProductEdit extends React.PureComponent {
   static propTypes = {
@@ -31,6 +32,7 @@ class RouteAdminProductEdit extends React.PureComponent {
 
     this.inputRefs = {};
 
+    this.toggleDeleted = this.toggleDeleted.bind(this);
     this.updateProduct = this.updateProduct.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
   }
@@ -91,6 +93,35 @@ class RouteAdminProductEdit extends React.PureComponent {
         const error = err && err.toString ? err.toString() : 'Bad response from server';
         this.setState({ error, loading: false });
       });
+  }
+
+  toggleDeleted() {
+    const id = this.props.match.params.id;
+    const data = { ...this.state.data, deleted: !this.state.data.deleted };
+
+    if (this.state.loading) {
+      return;
+    }
+
+    this.setState({ loading: false, error: false });
+
+    apiFetch(`api/products/${id}`, {
+      method: 'PATCH',
+      payload: data,
+    }).then((product) => {
+      const newData = { ...this.state.data };
+
+      newData.url = product.url;
+      newData.name = product.name;
+      newData.price = product.price;
+      newData.desc = product.desc;
+      newData.category = product.category;
+      newData.deleted = product.deleted;
+
+      this.setState({ loading: false, data: newData });
+    }).catch((e) => {
+      this.setState({ loading: false, error: e || 'Something went wrong' });
+    });
   }
 
   updateProduct() {
@@ -165,6 +196,7 @@ class RouteAdminProductEdit extends React.PureComponent {
         newData.price = product.price;
         newData.desc = product.desc;
         newData.category = product.category;
+        newData.deleted = product.deleted;
 
         this.setState({ loading: false, success: true, data: newData });
       })
@@ -200,7 +232,23 @@ class RouteAdminProductEdit extends React.PureComponent {
     return <Loader />;
   }
 
-  makeButton() {
+  makeDeleteButton() {
+    const { deleted } = this.state.data;
+
+    if (this.state.loading) {
+      return null;
+    }
+
+    return (
+      <FormLabel>
+        <FormButton onClick={this.toggleDeleted} type={deleted ? 'submit' : 'danger'}>
+          {deleted ? 'Restore' : 'Delete'} product
+        </FormButton>
+      </FormLabel>
+    );
+  }
+
+  makeSaveButton() {
     if (this.state.loading) {
       return null;
     }
@@ -301,7 +349,8 @@ class RouteAdminProductEdit extends React.PureComponent {
         </FormLabel>
 
         {this.makeLoader()}
-        {this.makeButton()}
+        {this.makeSaveButton()}
+        {this.makeDeleteButton()}
 
         <FormLabel>
           <FormMisc>
