@@ -21,6 +21,7 @@ class Cart extends React.PureComponent {
     tokenSet: PropTypes.func.isRequired,
     clearCart: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
+    show_cart: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {
@@ -55,6 +56,16 @@ class Cart extends React.PureComponent {
     if (nextProps.products_amount !== this.props.products_amount) {
       const pages = this.getPages(nextProps.products_amount);
       this.setState({ pages, page: Math.min(this.state.page, pages) });
+    }
+
+    if (!nextProps.show_cart && this.props.show_cart) {
+      this.setState({
+        password_required: false,
+        password_recovered: false,
+        error: false,
+        success: false,
+        stripe_token: false,
+      });
     }
   }
 
