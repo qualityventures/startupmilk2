@@ -4,7 +4,7 @@ import {
 
 const initialState = {
   products_list: {},
-  products_amount: {},
+  products_amount: 0,
   price_total: 0,
 };
 
