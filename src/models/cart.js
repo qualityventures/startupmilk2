@@ -11,11 +11,17 @@ const CartSchema = new Schema({
 }, { collection: 'carts', strict: true });
 
 CartSchema.methods.toClientJSON = function() {
+  const products = [];
+
+  this.list.forEach((product) => {
+    if (!product.deleted) {
+      products.push(product.toClientJSON());
+    }
+  });
+
   return {
+    products,
     total: this.getPrice(),
-    products: this.list.map((product) => {
-      return product.toClientJSON();
-    }),
   };
 };
 
@@ -23,7 +29,9 @@ CartSchema.methods.getPrice = function() {
   let total = 0;
 
   this.list.forEach((product) => {
-    total += product.price;
+    if (!product.deleted) {
+      total += product.price;
+    }
   });
 
   return Math.floor(total * 100) / 100;

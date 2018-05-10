@@ -85,7 +85,15 @@ export function createNewOrder(req, res) {
     return;
   }
 
-  if (!req.cartData || !req.cartData.list || !req.cartData.list.length) {
+  let amount = 0;
+
+  if (req.cartData && req.cartData.list && req.cartData.list.length) {
+    req.cartData.list.forEach((product) => {
+      if (!product.deleted) ++amount;
+    });
+  }
+
+  if (!amount) {
     throwError(res, 'Your cart is empty');
     return;
   }
@@ -113,6 +121,14 @@ export function createNewOrder(req, res) {
         if (data.user) globals.user = data.user;
       }
 
+      const list = [];
+
+      req.cartData.list.forEach((product) => {
+        if (!product.deleted) {
+          list.push(product._id);
+        }
+      });
+
       // create new order
       return Order.create({
         email,
@@ -120,9 +136,7 @@ export function createNewOrder(req, res) {
         user: null,
         price,
         completed: false,
-        list: req.cartData.list.map((product) => {
-          return product._id;
-        }),
+        list,
       });
     })
     .then((order) => {
