@@ -13,3 +13,4 @@ export const ANALYTICS = [
     gtag('config', 'UA-111430722-2');
   </script>`,
 ];
+export const STRIPE_PUBLISHED_KEY = '';

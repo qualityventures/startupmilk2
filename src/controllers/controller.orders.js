@@ -2,7 +2,7 @@
 
 import { throwError, returnObjectAsJSON } from 'helpers/response';
 import debug from 'debug';
-import { JWT_SECRET } from 'data/config.private';
+import { JWT_SECRET, STRIPE_SECRET_KEY, DEV_MODE } from 'data/config.private';
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
 import Order from 'models/order';
@@ -12,6 +12,8 @@ import path from 'path';
 import crypto from 'crypto';
 import sendmail from 'helpers/sendmail';
 import bcrypt from 'bcryptjs';
+
+const stripe = require('stripe')(STRIPE_SECRET_KEY);
 
 const log = debug(`${DEBUG_PREFIX}:controller.orders`);
 
@@ -67,7 +69,7 @@ function checkEmail(req, email) {
         return;
       }
 
-      const data = { email: user.email, role: user.role };
+      const data = user.getClientJSON();
       const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
 
       resolve({ auth: { data, token }, user });
@@ -78,7 +80,7 @@ function checkEmail(req, email) {
 export function createNewOrder(req, res) {
   const email = req.body.email || '';
   const validation = validateEmail(email);
-  let stripe = false;
+  let stripe_token = false;
 
   if (validation !== true) {
     throwError(res, validation);
@@ -106,8 +108,12 @@ export function createNewOrder(req, res) {
   }
 
   if (price > 0) {
-    stripe = true;
-    console.log('validate stripe token');
+    stripe_token = req.body.stripe_token;
+
+    if (typeof stripe_token !== 'object' || !stripe_token.id) {
+      throwError(res, 'Invalid token');
+      return;
+    }
   }
 
   const globals = {};
@@ -132,7 +138,8 @@ export function createNewOrder(req, res) {
       // create new order
       return Order.create({
         email,
-        stripe: stripe || null,
+        stripe_token: stripe_token ? JSON.stringify(stripe_token) : null,
+        stripe_charge: null,
         user: null,
         price,
         completed: false,
@@ -173,16 +180,44 @@ export function createNewOrder(req, res) {
     })
     .then(() => {
       // do stripe
-      if (!stripe) {
-        return false;
+      if (!stripe_token) {
+        globals.order.completed = true;
+        globals.order.user = globals.user._id;
+        return globals.order.save();
       }
 
-      throw 'Stripe details are needed';
-    })
-    .then(() => {
-      globals.order.completed = true;
-      globals.order.user_id = globals.user._id;
-      return globals.order.save();
+      let products = '';
+
+      req.cartData.list.forEach((product) => {
+        if (products) {
+          products += ', ';
+        }
+        products += `${product.name} (${product.price ? `$${product.price}` : 'Free'})`;
+      });
+
+      return stripe.charges.create({
+        amount: Math.floor(price * 100),
+        currency: 'usd',
+        description: `Order #${globals.order._id}. ${products.trim()}`,
+        source: stripe_token.id,
+      })
+        .then((result) => {
+          if (!DEV_MODE && !result.livemode) {
+            throw 'Livemode required';
+          }
+
+          if (!result.paid) {
+            throw 'Insufficient available balance';
+          }
+
+          globals.order.completed = true;
+          globals.order.user = globals.user._id;
+          globals.order.stripe_charge = JSON.stringify(result);
+          return globals.order.save();
+        })
+        .catch((error) => {
+          throw (error && error.message) ? error.message : error;
+        });
     })
     .then((order) => {
       globals.link = `/dashboard/order/${order._id}`;
@@ -211,6 +246,7 @@ export function createNewOrder(req, res) {
       });
     })
     .catch((e) => {
+      log(e);
       returnObjectAsJSON(res, {
         success: false,
         auth: globals.auth || null,

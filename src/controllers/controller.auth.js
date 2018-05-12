@@ -70,7 +70,7 @@ export function authLogin(req, res) {
         return;
       }
 
-      const data = { email: user.email, role: user.role };
+      const data = user.getClientJSON();
       const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
 
       returnObjectAsJSON(res, { token, data });

@@ -101,6 +101,7 @@ export function renderHTML(content, state = {}, type = 'client') {
         <script src="/static/js/migrate.js"></script>
         <script src="/static/js/library.js"></script>
         <script src="/static/js/script.js"></script>
+        <script id="stripe-js" src="https://js.stripe.com/v3/"></script>
       </head>
       <body style="padding: 0px; margin: 0px;" class="no-js" id="top">
         <div id="react-root">${content}</div>

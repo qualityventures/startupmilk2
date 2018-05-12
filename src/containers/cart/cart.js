@@ -8,6 +8,9 @@ import { validateEmail, validatePassword } from 'helpers/validators';
 import apiFetch from 'helpers/api-fetch';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
+import { STRIPE_PUBLISHED_KEY } from 'data/config.public';
+import { StripeProvider, Elements } from 'react-stripe-elements';
+import PaymentsForm from './components/payments-form';
 import './cart.scss';
 
 class Cart extends React.PureComponent {
@@ -39,10 +42,12 @@ class Cart extends React.PureComponent {
       loading: false,
       error: false,
       stripe_token: false,
+      stripe_object: null,
       success: false,
     };
 
     this.inputRefs = {};
+    this.createStripeToken = null;
 
     this.removeProduct = this.removeProduct.bind(this);
     this.showNextPage = this.showNextPage.bind(this);
@@ -50,6 +55,13 @@ class Cart extends React.PureComponent {
     this.setInputRef = this.setInputRef.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleRecover = this.handleRecover.bind(this);
+    this.setStripeCreateToken = this.setStripeCreateToken.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      stripe_object: window.Stripe(STRIPE_PUBLISHED_KEY),
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,6 +83,10 @@ class Cart extends React.PureComponent {
 
   componentWillUnmount() {
     this.inputRefs = {};
+  }
+
+  setStripeCreateToken(func) {
+    this.createStripeToken = func;
   }
 
   setInputRef(e, name) {
@@ -145,8 +161,35 @@ class Cart extends React.PureComponent {
       return;
     }
 
-    if (!this.props.price_total && !this.state.stripe_token) {
-      console.log('get stripe token');
+    if (this.props.price_total && !this.state.stripe_token) {
+      if (!this.createStripeToken) {
+        this.setState({ error: 'Error loading stripe' });
+        return;
+      }
+      
+      this.setState({ loading: true });
+
+      this.createStripeToken()
+        .then((result) => {
+          if (result.error) {
+            this.setState({ loading: false, error: result.error.message });
+            return;
+          }
+
+          if (!result.token) {
+            this.setState({ loading: false, error: 'Something went wrong' });
+            return;
+          }
+
+          this.setState({
+            stripe_token: result.token,
+            loading: false,
+          }, this.handleSubmit);
+        })
+        .catch((err) => {
+          this.setState({ loading: false, error: err });
+        });
+      return;
     }
     
     this.setState({ loading: true, error: false });
@@ -336,6 +379,24 @@ class Cart extends React.PureComponent {
     );
   }
 
+  makePaymentsForm() {
+    if (!this.props.price_total) {
+      return null;
+    }
+
+    return (
+      <FormLabel>
+        <StripeProvider stripe={this.state.stripe_object}>
+          <Elements>
+            <PaymentsForm
+              setStripeCreateToken={this.setStripeCreateToken}
+            />
+          </Elements>
+        </StripeProvider>
+      </FormLabel>
+    );
+  }
+
   makePassword() {
     if (!this.state.password_required) {
       return null;
@@ -376,39 +437,34 @@ class Cart extends React.PureComponent {
     return ret;
   }
 
+  makeFormPlaceholder(text) {
+    return (
+      <div className="cart-popup__wrapper">
+        <div className="cart-popup__checkout">
+          <FormLabel>
+            <FormTitle>Check Out With a Card</FormTitle>
+          </FormLabel>
+          <FormLabel>
+            <div className="cart-popup__empty">
+              {text}
+            </div>
+          </FormLabel>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     if (this.state.success) {
-      return (
-        <div className="cart-popup__wrapper">
-          <div className="cart-popup__checkout">
-            <FormLabel>
-              <FormTitle>Check Out With a Card</FormTitle>
-            </FormLabel>
-            <FormLabel>
-              <div className="cart-popup__empty">
-                Your order details have been sent to the email address you provided
-              </div>
-            </FormLabel>
-          </div>
-        </div>
-      );
+      return this.makeFormPlaceholder('Your order details have been sent to the email address you provided');
     }
 
     if (!this.props.products_amount) {
-      return (
-        <div className="cart-popup__wrapper">
-          <div className="cart-popup__checkout">
-            <FormLabel>
-              <FormTitle>Check Out With a Card</FormTitle>
-            </FormLabel>
-            <FormLabel>
-              <div className="cart-popup__empty">
-                Oops there is nothing in your cart
-              </div>
-            </FormLabel>
-          </div>
-        </div>
-      );
+      return this.makeFormPlaceholder('Oops there is nothing in your cart');
+    }
+
+    if (this.props.price_total && !this.state.stripe_object) {
+      return this.makeFormPlaceholder('Initializing payments...');
     }
 
     return (
@@ -430,28 +486,7 @@ class Cart extends React.PureComponent {
               />
             </FormLabel>
             {this.makePassword()}
-            <FormLabel>
-              <FormInput
-                placeholder="Cart Number"
-                name="email"
-                type="cart"
-              />
-            </FormLabel>
-            <FormLabel>
-              <div className="cart-popup__exp">
-                <FormInput
-                  placeholder="EXP"
-                  name="exp"
-                />
-              </div>
-              <div className="cart-popup__cvc">
-                <FormInput
-                  placeholder="CVC"
-                  name="cvc"
-                  type="number"
-                />
-              </div>
-            </FormLabel>
+            {this.makePaymentsForm()}
             <FormLabel>
               {this.makePrice()}
             </FormLabel>

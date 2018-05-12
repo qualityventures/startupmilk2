@@ -114,7 +114,7 @@ export function loadUserData(req, res, next) {
         return;
       }
 
-      req.userData = { email: user.email, role: user.role };
+      req.userData = user.getClientJSON();
       req.jwtToken = token;
       
       next();

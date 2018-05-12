@@ -27,6 +27,14 @@ const UserSchema = new Schema({
   },
 }, { collection: 'users', strict: true });
 
+UserSchema.methods.getClientJSON = function() {
+  return {
+    email: this.email,
+    role: this.role,
+    _id: this._id,
+  };
+};
+
 UserSchema.methods.comparePassword = function(password) {
   return bcrypt.compareSync(password, this.hashed_password);
 };

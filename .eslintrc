@@ -53,7 +53,8 @@
     "react/forbid-prop-types": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "no-unused-vars": ["warn", { "args": "none", "vars": "all", "caughtErrors": "none" }],
-    "jsx-a11y/alt-text": "off"
+    "jsx-a11y/alt-text": "off",
+    "react/no-did-mount-set-state": "off"
   },
   plugins: [
     'react'

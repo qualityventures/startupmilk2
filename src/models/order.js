@@ -24,7 +24,10 @@ const OrderSchema = new Schema({
     required: true,
     default: false,
   },
-  stripe: {
+  stripe_token: {
+    type: String,
+  },
+  stripe_charge: {
     type: String,
   },
   created: {
