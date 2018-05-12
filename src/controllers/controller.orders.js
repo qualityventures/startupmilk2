@@ -220,7 +220,7 @@ export function createNewOrder(req, res) {
         });
     })
     .then((order) => {
-      globals.link = `/dashboard/order/${order._id}`;
+      globals.link = `https://matte.design/dashboard/order/${order._id}`;
 
       let items = '';
       req.cartData.list.forEach((product) => {
