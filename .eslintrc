@@ -54,7 +54,8 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "no-unused-vars": ["warn", { "args": "none", "vars": "all", "caughtErrors": "none" }],
     "jsx-a11y/alt-text": "off",
-    "react/no-did-mount-set-state": "off"
+    "react/no-did-mount-set-state": "off",
+    "jsx-a11y/label-has-for": "off"
   },
   plugins: [
     'react'

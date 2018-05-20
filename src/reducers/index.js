@@ -8,6 +8,7 @@ import user from './user';
 import products from './products';
 import product from './product';
 import cart from './cart';
+import modals from './modals';
 
 export default function (state = {}) {
   const reducer = combineReducers({
@@ -17,6 +18,7 @@ export default function (state = {}) {
     products,
     product,
     cart,
+    modals,
   });
 
   let composeEnhancers = compose;

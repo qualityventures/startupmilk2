@@ -52,7 +52,13 @@ ProductsSchema.methods.toClientJSON = function() {
   const files = {};
 
   this.files.forEach((file) => {
-    files[file.type] = true;
+    if (!file.types) {
+      return;
+    }
+
+    file.types.forEach((type) => {
+      files[type] = true;
+    });
   });
 
   return {

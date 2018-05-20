@@ -15,4 +15,8 @@ export default {
     color: '#00f',
     extensions: ['lrtemplate'],
   },
+  Archive: {
+    color: '#00f',
+    extensions: ['zip', '7z', 'tar', 'gz'],
+  },
 };

@@ -9,6 +9,7 @@ export { default as FormTitle } from './form-title';
 export { default as FormSelect } from './form-select';
 export { default as FormMisc } from './form-misc';
 export { default as FormSearch } from './form-search';
+export { default as FormCheckbox } from './form-checkbox';
 export { default as Form } from './form';
 export { default as Catalog } from './catalog';
 export { default as CatalogItem } from './catalog-item';

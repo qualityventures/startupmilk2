@@ -8,6 +8,11 @@ import debug from 'debug';
 
 const log = debug('matte.design:middlewares');
 
+export function loadOrderInfo(req, res, next) {
+  console.log('loadOrderInfo');
+  next();
+}
+
 export function loadCartInfo(req, res, next) {
   const { cookie } = req.headers;
   req.cartData = false;

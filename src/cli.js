@@ -38,13 +38,85 @@ export function init() {
     .catch((err) => {
       console.log(err);
       process.exit(1);
-    })
+    });
+}
+
+export function makeAdmin() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  rl.question('Email: ', (email) => {
+    User.findOne({ email })
+      .then((user) => {
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        if (user.role === 'admin') {
+          throw new Error('User is already an admin');
+        }
+
+        user.role = 'admin';
+        return user.save();
+      })
+      .then((user) => {
+        console.log('done');
+        process.exit(1);
+      })
+      .catch((e) => {
+        console.log(e);
+        process.exit(1);
+      });
+  });
+}
+
+export function changePassword() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  rl.question('Email: ', (email) => {
+    rl.question('Password: ', (pass1) => {
+      rl.question('Repeat password: ', (pass2) => {
+        User.findOne({ email })
+          .then((user) => {
+            if (!user) {
+              throw new Error('User not found');
+            }
+
+            if (pass1 !== pass2) {
+              throw new Error('Password doesnt match');
+            }
+
+            const pass_validation = validatePassword(pass1);
+
+            if (pass_validation !== true) {
+              throw new Error(pass_validation);
+            }
+
+            user.hashed_password = bcrypt.hashSync(pass1, 8);
+            return user.save();
+          })
+          .then((user) => {
+            console.log('done');
+            process.exit(1);
+          })
+          .catch((e) => {
+            console.log(e);
+            process.exit(1);
+          });
+      });
+    });
+  });
 }
 
 export function createAdminUser() {
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
   rl.question('Email: ', (email) => {

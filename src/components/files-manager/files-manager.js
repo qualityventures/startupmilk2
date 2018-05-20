@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Loader, Alert, Catalog, CatalogItem } from 'components/ui';
 import FORMATS_LIST from 'data/files';
+import { openModal } from 'actions/modals';
+import { connect } from 'react-redux';
 import './files-manager.scss';
 
 class FilesManager extends React.PureComponent {
   static propTypes = {
     productId: PropTypes.string.isRequired,
     files: PropTypes.array,
+    openModal: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -29,6 +32,8 @@ class FilesManager extends React.PureComponent {
     this.onUpload = this.onUpload.bind(this);
     this.toggleUpload = this.toggleUpload.bind(this);
     this.deleteFile = this.deleteFile.bind(this);
+    this.editTypes = this.editTypes.bind(this);
+    this.updateFiles = this.updateFiles.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -98,6 +103,36 @@ class FilesManager extends React.PureComponent {
     }
   }
 
+  updateFiles(files) {
+    this.setState({ files: [...files] });
+  }
+
+  editTypes(e) {
+    const file_id = e.target.getAttribute('file_id');
+    let data = null;
+
+    this.state.files.forEach((file) => {
+      if (file.file_id !== file_id) {
+        return;
+      }
+
+      data = file;
+    });
+
+    if (!data) {
+      return;
+    }
+
+    this.props.openModal({
+      type: 'EDIT_FILE_TYPES',
+      props: {
+        productId: this.props.productId,
+        file: data,
+        onUpdate: this.updateFiles,
+      },
+    });
+  }
+
   deleteFile(e) {
     if (this.state.loading) {
       return;
@@ -134,6 +169,8 @@ class FilesManager extends React.PureComponent {
   }
 
   makeFiles() {
+    const { productId } = this.props;
+    
     return this.state.files.map((file, index) => {
       const style = {};
 
@@ -141,18 +178,25 @@ class FilesManager extends React.PureComponent {
         style.color = FORMATS_LIST[file.type].color;
       }
 
-      const button = (
+      const buttons = [
+        <span key="types" file_id={file.file_id} onClick={this.editTypes} className="files-manager__small-button">
+          Formats
+        </span>,
         <span key="delete" file_id={file.file_id} onClick={this.deleteFile} className="files-manager__small-button">
           x
-        </span>
-      );
+        </span>,
+      ];
 
       return (
         <CatalogItem
           key={file.file_id}
-          smallButtons={button}
-          bigButton={<span style={style}>{file.type}</span>}
-          name={file.name}
+          smallButtons={buttons}
+          files={file.types}
+          bigButton={
+            <a href={`/api/download/${productId}/${file.file_id}`} style={style} target="_blank">
+              Download {file.name}
+            </a>
+          }
         />
       );
     });
@@ -192,4 +236,15 @@ class FilesManager extends React.PureComponent {
   }
 }
 
-export default FilesManager;
+export default connect(
+  (state, props) => {
+    return {
+
+    };
+  },
+  (dispatch) => {
+    return {
+      openModal: (data) => { return dispatch(openModal(data)); },
+    };
+  }
+)(FilesManager);

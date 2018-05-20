@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter, Route, Switch } from 'react-router';
 import { Container, Alert } from 'components/ui';
 import { connect } from 'react-redux';
+import Modals from 'containers/modals';
 import Navigation from 'containers/navigation';
 import FormSignIn from 'containers/form-signin';
 import routes from 'routes/admin';
@@ -52,6 +53,7 @@ class AdminContainer extends React.PureComponent {
   render() {
     return (
       <Container navigation={this.makeNavigation()}>
+        <Modals />
         {this.makeContent()}
       </Container>
     );

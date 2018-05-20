@@ -11,6 +11,7 @@ import {
   deleteProductImage,
   addProductFile,
   deleteProductFile,
+  updateProductFile,
 } from 'controllers/controller.products';
 
 const router = new Router();
@@ -38,6 +39,9 @@ router.route('/:id/files/')
 
 router.route('/:id/files/delete')
   .patch(checkAdminAccess, loadProductInfo, deleteProductFile);
+
+router.route('/:id/files/:file_id/formats')
+  .patch(checkAdminAccess, loadProductInfo, updateProductFile);
 
 router.route('/')
   .post(checkAdminAccess, createNewProduct);

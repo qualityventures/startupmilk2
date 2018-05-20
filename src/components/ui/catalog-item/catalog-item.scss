@@ -21,10 +21,14 @@
     overflow-x: hidden;
     text-overflow: ellipsis;
 
-    & div, & span {
+    & div, & span, & a {
+      position: static !important;
+      opacity: 1 !important;
       white-space: nowrap;
       overflow-x: hidden;
       text-overflow: ellipsis;
+      display: block;
+      background: transparent;
     }
   }
 

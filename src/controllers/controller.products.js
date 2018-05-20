@@ -10,6 +10,7 @@ import { RESULTS_PER_PAGE } from 'data/config.public';
 import CATEGORIES_LIST from 'data/categories';
 import crypto from 'crypto';
 import fs from 'fs';
+import FORMATS_LIST from 'data/files';
 
 const log = debug(`${DEBUG_PREFIX}:controller.products`);
 
@@ -373,7 +374,7 @@ export function addProductFile(req, res) {
 
       req.productData.files.push({
         file_id,
-        type: file_type,
+        types: [file_type],
         path: file_path,
         name: filename,
       });
@@ -418,6 +419,56 @@ export function deleteProductFile(req, res) {
 
   fs.unlinkSync(`${ROOT_PATH}/../uploads/${files[index].path}`);
   files.splice(index, 1);
+
+  req.productData.files = files;
+  req.productData.save()
+    .then((product) => {
+      product.updateVisibility();
+      return product.save();
+    })
+    .then((product) => {
+      returnObjectAsJSON(res, product.files);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while deleting file';
+      log(error);
+      throwError(res, error);
+    });
+}
+
+export function updateProductFile(req, res) {
+  const { formats } = req.body;
+  const { file_id } = req.params;
+  const files = [...req.productData.files];
+
+  if (!Array.isArray(formats)) {
+    throwError(res, 'Invalid formats format');
+    return;
+  }
+
+  const valid = [];
+
+  formats.forEach((format) => {
+    if (FORMATS_LIST[format] === undefined) {
+      return;
+    }
+
+    valid.push(format);
+  });
+
+  if (!valid.length) {
+    throwError(res, 'Formats list is empty');
+    return;
+  }
+
+  for (let i = 0; i < files.length; ++i) {
+    if (files[i].file_id !== file_id) {
+      continue;
+    }
+
+    files[i] = { ...files[i] };
+    files[i].types = valid;
+  }
 
   req.productData.files = files;
   req.productData.save()
