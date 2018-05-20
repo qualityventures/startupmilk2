@@ -254,3 +254,11 @@ export function createNewOrder(req, res) {
       });
     });
 }
+
+export function getMyOrders(req, res) {
+  throwError(res, 'getMyOrders');
+}
+
+export function getOrderDetails(req, res) {
+  throwError(res, 'getOrderDetails');
+}

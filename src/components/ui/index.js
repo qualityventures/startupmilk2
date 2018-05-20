@@ -14,3 +14,4 @@ export { default as Form } from './form';
 export { default as Catalog } from './catalog';
 export { default as CatalogItem } from './catalog-item';
 export { default as Paginator } from './paginator';
+export { default as Heading } from './heading';

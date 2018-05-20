@@ -144,3 +144,14 @@ export function checkAdminAccess(req, res, next) {
 
   next();
 }
+
+export function checkUserAccess(req, res, next) {
+  const { email } = req.userData;
+
+  if (!email) {
+    throwUnauthorizedAccess(res, 'Access denied');
+    return;
+  }
+
+  next();
+}

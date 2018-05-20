@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { loadProductInfo, loadOrderInfo } from 'helpers/middlewares';
+import {
+  loadProductInfo,
+  loadOrderInfo,
+  checkAdminAccess,
+  checkUserAccess,
+} from 'helpers/middlewares';
 import {
   downloadFile,
 } from 'controllers/controller.download';
@@ -7,9 +12,9 @@ import {
 const router = new Router();
 
 router.route('/:id/:file_id/:order_id')
-  .get(loadProductInfo, loadOrderInfo, downloadFile);
+  .get(checkUserAccess, loadProductInfo, loadOrderInfo, downloadFile);
 
 router.route('/:id/:file_id')
-  .get(loadProductInfo, downloadFile);
+  .get(checkAdminAccess, loadProductInfo, downloadFile);
 
 export default router;
