@@ -34,7 +34,7 @@ class RouteDashboardOrders extends React.PureComponent {
 
     this.setState({ error: false, loaded: false, loading: true });
 
-    apiFetch('/api/orders/my')
+    apiFetch('api/orders/my')
       .then((orders) => {
         this.setState({ loaded: true, loading: false, orders });
       })
