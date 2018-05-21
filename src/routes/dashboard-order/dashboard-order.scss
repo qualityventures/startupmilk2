@@ -1,7 +1,7 @@
 @import 'styles/variables.scss';
 @import 'styles/mixins.scss';
 
-.orders-list-order {
+.order-details {
   &__title {
     color: #1e1d25;
     text-align: left;
@@ -23,6 +23,5 @@
     position: relative;
     padding-bottom: 15px;
     margin-bottom: 15px;
-    border-bottom: 1px solid #CCC;
   }
 }

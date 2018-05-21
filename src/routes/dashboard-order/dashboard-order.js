@@ -4,6 +4,7 @@ import TitleUpdater from 'containers/title-updater';
 import apiFetch from 'helpers/api-fetch';
 import { Alert, Loader, Heading, Catalog, CatalogItem } from 'components/ui';
 import FORMATS_LIST from 'data/files';
+import './dashboard-order.scss';
 
 class RouteDashboardOrder extends React.PureComponent {
   static propTypes = {
@@ -75,7 +76,6 @@ class RouteDashboardOrder extends React.PureComponent {
     const products = [];
 
     order.products.forEach((product) => {
-      console.log(product);
       const downloads = [];
 
       product.downloads.forEach((download) => {
@@ -100,15 +100,13 @@ class RouteDashboardOrder extends React.PureComponent {
 
       products.push(
         <div className="order-details__product" key={product.id}>
-          <div>DETAILS</div>
+          <div>{product.name}</div>
           <Catalog>
             {downloads}
           </Catalog>
         </div>
       );
     });
-
-    console.log('makeOrder', order);
 
     return (
       <div className="order-details__wrapper">
