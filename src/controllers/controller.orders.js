@@ -5,6 +5,7 @@ import debug from 'debug';
 import { JWT_SECRET, STRIPE_SECRET_KEY, DEV_MODE } from 'data/config.private';
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
+import Counter from 'models/counter';
 import Order from 'models/order';
 import { validateEmail, validatePassword } from 'helpers/validators';
 import fs from 'fs';
@@ -69,7 +70,7 @@ function checkEmail(req, email) {
         return;
       }
 
-      const data = user.getClientJSON();
+      const data = user.toClientJSON();
       const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
 
       resolve({ auth: { data, token }, user });
@@ -127,6 +128,9 @@ export function createNewOrder(req, res) {
         if (data.user) globals.user = data.user;
       }
 
+      return Counter.increment('order_user_id');
+    })
+    .then((counter) => {
       const list = [];
 
       req.cartData.list.forEach((product) => {
@@ -137,6 +141,7 @@ export function createNewOrder(req, res) {
 
       // create new order
       return Order.create({
+        order_numeric_id: counter.next,
         email,
         stripe_token: stripe_token ? JSON.stringify(stripe_token) : null,
         stripe_charge: null,
@@ -230,6 +235,7 @@ export function createNewOrder(req, res) {
       });
 
       const html = TEMPLATE_ORDER
+        .replace(/%order_numeric_id%/gi, globals.order.order_numeric_id)
         .replace(/%items%/gi, items)
         .replace(/%total%/gi, price ? `$${price}` : 'Free')
         .replace(/%link%/gi, globals.link);
@@ -256,9 +262,32 @@ export function createNewOrder(req, res) {
 }
 
 export function getMyOrders(req, res) {
-  throwError(res, 'getMyOrders');
+  Order.find({
+    user: req.userData._id,
+    completed: true,
+  })
+    .sort('-created')
+    .populate('user')
+    .populate('list')
+    .then((orders) => {
+      const json = orders.map((order, index) => {
+        return { ...order.toClientJSON(), index };
+      });
+
+      returnObjectAsJSON(res, json);
+    })
+    .catch((e) => {
+      const error = e && e.toString ? e.toString() : 'Error while loading orders';
+      log(e);
+      throwError(res, error);
+    });
 }
 
 export function getOrderDetails(req, res) {
-  throwError(res, 'getOrderDetails');
+  if (req.userData.role !== 'admin' && req.userData.email !== req.orderData.email) {
+    throwError(res, 'Order not found');
+    return;
+  }
+
+  returnObjectAsJSON(res, req.orderData.toClientJSON());
 }
