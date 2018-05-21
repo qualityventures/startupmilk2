@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from 'models/user';
+import Order from 'models/order';
 import Cart from 'models/cart';
 import Products from 'models/products';
 import { JWT_SECRET } from 'data/config.private';
@@ -9,8 +10,29 @@ import debug from 'debug';
 const log = debug('matte.design:middlewares');
 
 export function loadOrderInfo(req, res, next) {
-  console.log('loadOrderInfo');
-  next();
+  const { order_id } = req.params;
+
+  if (!order_id || !order_id.match(/^[0-9a-z_-]+$/i)) {
+    throwError(res, 'Invalid order id');
+    return;
+  }
+
+  Order.findById(order_id)
+    .populate('user')
+    .populate('list')
+    .then((order) => {
+      if (order === null) {
+        throw new Error('Order not found');
+      }
+
+      req.orderData = order;
+      next();
+    })
+    .catch((e) => {
+      const error = e && e.toString ? e.toString() : 'Error while loading order';
+      log(e);
+      throwError(res, error);
+    });
 }
 
 export function loadCartInfo(req, res, next) {
@@ -43,16 +65,18 @@ export function loadCartInfo(req, res, next) {
     return;
   }
 
-  Cart.findById(payload.id).populate('list')
+  Cart.findById(payload.id)
+    .populate('list')
     .then((cart) => {
-      req.cartData = cart;
+      if (cart) {
+        req.cartData = cart;
+      }
       next();
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Internal server error';
       log(error);
       throwError(res, error);
-      next();
     });
 }
 
@@ -77,7 +101,6 @@ export function loadProductInfo(req, res, next) {
       const error = err && err.toString ? err.toString() : 'Internal server error';
       log(error);
       throwError(res, error);
-      next();
     });
 }
 
@@ -119,7 +142,7 @@ export function loadUserData(req, res, next) {
         return;
       }
 
-      req.userData = user.getClientJSON();
+      req.userData = user.toClientJSON();
       req.jwtToken = token;
       
       next();

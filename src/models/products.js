@@ -50,11 +50,18 @@ const ProductsSchema = new Schema({
 
 ProductsSchema.methods.toClientJSON = function() {
   const files = {};
+  const downloads = [];
 
   this.files.forEach((file) => {
     if (!file.types) {
       return;
     }
+
+    downloads.push({
+      name: file.name,
+      file_id: file.file_id,
+      types: file.types,
+    });
 
     file.types.forEach((type) => {
       files[type] = true;
@@ -70,6 +77,7 @@ ProductsSchema.methods.toClientJSON = function() {
     desc: this.desc,
     price: this.price,
     files: Object.keys(files),
+    downloads,
   };
 };
 

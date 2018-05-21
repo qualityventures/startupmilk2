@@ -2,6 +2,7 @@ import React from 'react';
 import TitleUpdater from 'containers/title-updater';
 import apiFetch from 'helpers/api-fetch';
 import { Alert, Loader, Heading } from 'components/ui';
+import OrdersList from 'components/orders-list';
 
 class RouteDashboardOrders extends React.PureComponent {
   static propTypes = {
@@ -63,8 +64,16 @@ class RouteDashboardOrders extends React.PureComponent {
       return null;
     }
 
-    console.log(this.state.orders);
-    return <div>ORDERS</div>;
+    if (!this.state.orders.length) {
+      return <Alert>There is no orders yet</Alert>;
+    }
+
+    return (
+      <OrdersList
+        list={this.state.orders}
+        link="/dashboard/order/:order_id"
+      />
+    );
   }
 
   render() {
