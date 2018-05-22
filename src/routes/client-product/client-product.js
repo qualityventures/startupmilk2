@@ -95,10 +95,10 @@ class RouteClientProduct extends React.PureComponent {
     if (data.images) {
       data.images.forEach((image) => {
         ret.push(
-          <div className="gallery-item" key={image}>
+          <div className="gallery-item" key={image.full}>
             <div
               className="gallery-photo"
-              style={{ backgroundImage: `url('${image}')` }}
+              style={{ backgroundImage: `url('${image.full}')` }}
             />
           </div>
         );

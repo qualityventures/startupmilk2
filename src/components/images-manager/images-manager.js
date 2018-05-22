@@ -175,7 +175,7 @@ class ImagesManager extends React.PureComponent {
 
       if (index > 0) {
         buttons.push(
-          <span key="up" image={image} direction="up" onClick={this.moveImage} className="images-manager__small-button">
+          <span key="up" image={image.full} direction="up" onClick={this.moveImage} className="images-manager__small-button">
             &lt;
           </span>
         );
@@ -183,22 +183,22 @@ class ImagesManager extends React.PureComponent {
 
       if (index < (this.state.images.length - 1)) {
         buttons.push(
-          <span key="down" image={image} direction="down" onClick={this.moveImage} className="images-manager__small-button">
+          <span key="down" image={image.full} direction="down" onClick={this.moveImage} className="images-manager__small-button">
             &gt;
           </span>
         );
       }
 
       buttons.push(
-        <span key="delete" image={image} onClick={this.deleteImage} className="images-manager__small-button">
+        <span key="delete" image={image.full} onClick={this.deleteImage} className="images-manager__small-button">
           x
         </span>
       );
 
       return (
         <CatalogItem
-          key={image}
-          backgroundImage={image}
+          key={image.full}
+          backgroundImage={image.preview}
           smallButtons={buttons}
         />
       );

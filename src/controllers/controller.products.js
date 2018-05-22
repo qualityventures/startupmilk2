@@ -11,6 +11,7 @@ import CATEGORIES_LIST from 'data/categories';
 import crypto from 'crypto';
 import fs from 'fs';
 import FORMATS_LIST from 'data/files';
+import makePreview from 'helpers/make-preview';
 
 const log = debug(`${DEBUG_PREFIX}:controller.products`);
 
@@ -222,6 +223,7 @@ export function addProductImage(req, res) {
   const image_dir = `/images/${String(req.productData._id).substr(0, 2)}`;
   const image_id = crypto.randomBytes(8).toString('hex');
   let image_path = `${image_dir}/${image_id}`;
+  let preview_path = `${image_dir}/${image_id}-preview`;
 
   if (!fs.existsSync(`${public_path}/${image_dir}`)) {
     fs.mkdirSync(`${public_path}/${image_dir}`);
@@ -234,6 +236,7 @@ export function addProductImage(req, res) {
     if (match) {
       ext = match[1].toLowerCase();
       image_path += `.${ext}`;
+      preview_path += `.${ext}`;
     }
 
     const file_path = `${public_path}/${image_path}`;
@@ -248,21 +251,33 @@ export function addProductImage(req, res) {
         return;
       }
 
-      req.productData.images.push(image_path);
-      req.productData.save()
-        .then((product) => {
-          product.updateVisibility();
-          return product.save();
-        })
-        .then((product) => {
-          returnObjectAsJSON(res, product.images);
-        })
-        .catch((err) => {
-          const error = err && err.toString ? err.toString() : 'Error while saving image';
-          log(error);
+      makePreview(`${public_path}/${image_path}`, `${public_path}/${preview_path}`, (err) => {
+        if (err) {
           fs.unlinkSync(file_path);
-          throwError(res, error);
+          throwError(res, err);
+          return;
+        }
+
+        req.productData.images.push({
+          full: image_path,
+          preview: preview_path,
         });
+
+        req.productData.save()
+          .then((product) => {
+            product.updateVisibility();
+            return product.save();
+          })
+          .then((product) => {
+            returnObjectAsJSON(res, product.images);
+          })
+          .catch((err) => {
+            const error = err && err.toString ? err.toString() : 'Error while saving image';
+            log(error);
+            fs.unlinkSync(file_path);
+            throwError(res, error);
+          });
+      });
     });
   });
 
@@ -272,7 +287,15 @@ export function addProductImage(req, res) {
 export function moveProductImage(req, res) {
   const { image, direction } = req.body;
   const images = [...req.productData.images];
-  const index = images.indexOf(image);
+  let index = -1;
+
+  for (let i = 0; i < images.length; ++i) {
+    images[i] = { ...images[i] };
+
+    if (images[i].full === image) {
+      index = i;
+    }
+  }
 
   if (index < 0) {
     throwError(res, 'Incorrect image');
@@ -281,11 +304,11 @@ export function moveProductImage(req, res) {
 
   if (direction === 'up' && index > 0) {
     const swap = images[index - 1];
-    images[index - 1] = image;
+    images[index - 1] = images[index];
     images[index] = swap;
   } else if (direction === 'down' && index < (images.length - 1)) {
     const swap = images[index + 1];
-    images[index + 1] = image;
+    images[index + 1] = images[index];
     images[index] = swap;
   } else {
     throwError(res, 'Unable to move image');
@@ -307,11 +330,14 @@ export function moveProductImage(req, res) {
 export function deleteProductImage(req, res) {
   const { image } = req.body;
   const images = [...req.productData.images];
-  const index = images.indexOf(image);
+  let index = -1;
 
-  if (index < 0) {
-    throwError(res, 'Incorrect image');
-    return;
+  for (let i = 0; i < images.length; ++i) {
+    images[i] = { ...images[i] };
+
+    if (images[i].full === image) {
+      index = i;
+    }
   }
 
   fs.unlinkSync(`${ROOT_PATH}/../public/${image}`);

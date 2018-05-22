@@ -70,7 +70,7 @@ ProductsSchema.methods.toClientJSON = function() {
 
   return {
     id: this._id,
-    image: this.images[0] || null,
+    image: this.images.length ? this.images[0].preview : null,
     images: this.images,
     url: this.url,
     name: this.name,
