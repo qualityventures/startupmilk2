@@ -225,8 +225,6 @@ export function createNewOrder(req, res) {
         });
     })
     .then((order) => {
-      globals.link = `https://matte.design/dashboard/order/${order._id}`;
-
       let items = '';
       req.cartData.list.forEach((product) => {
         items += TEMPLATE_ORDER_ITEM
@@ -238,7 +236,7 @@ export function createNewOrder(req, res) {
         .replace(/%order_numeric_id%/gi, globals.order.order_numeric_id)
         .replace(/%items%/gi, items)
         .replace(/%total%/gi, price ? `$${price}` : 'Free')
-        .replace(/%link%/gi, globals.link);
+        .replace(/%link%/gi, `https://matte.design/dashboard/order/${order._id}`);
 
       sendmail({ to: email, subject: 'Your order details', html });
 
@@ -248,7 +246,7 @@ export function createNewOrder(req, res) {
       returnObjectAsJSON(res, {
         success: true,
         auth: globals.auth || null,
-        redirect: globals.link,
+        redirect: `/dashboard/order/${order._id}`,
       });
     })
     .catch((e) => {
