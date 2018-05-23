@@ -65,12 +65,16 @@ class CatalogItem extends React.PureComponent {
 
   getThumbBackground() {
     const { backgroundImage, hoverAnimation } = this.props;
-    const style = {};
+    const style = {
+      backgroundColor: '#FFF',
+    };
 
     if (hoverAnimation && this.state.animation) {
       style.backgroundImage = `url('${hoverAnimation}')`;
     } else if (backgroundImage) {
       style.backgroundImage = `url('${backgroundImage}')`;
+    } else {
+      style.backgroundColor = '#ecedf0';
     }
 
     return style;
