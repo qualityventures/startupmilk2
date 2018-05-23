@@ -12,6 +12,7 @@ class CatalogItem extends React.PureComponent {
     bigButton: PropTypes.node,
     onBigButtonClick: PropTypes.func,
     backgroundImage: PropTypes.string,
+    hoverAnimation: PropTypes.string,
     price: PropTypes.number,
     name: PropTypes.string,
     files: PropTypes.array,
@@ -25,6 +26,7 @@ class CatalogItem extends React.PureComponent {
     bigButton: null,
     onBigButtonClick: null,
     backgroundImage: null,
+    hoverAnimation: null,
     price: null,
     name: null,
     files: null,
@@ -32,15 +34,75 @@ class CatalogItem extends React.PureComponent {
     showAddToCart: false,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      animation: false,
+    };
+
+    this.setThumbRef = this.setThumbRef.bind(this);
+    this.startAnimation = this.startAnimation.bind(this);
+    this.stopAnimation = this.stopAnimation.bind(this);
+    this.terminateAnimation = this.terminateAnimation.bind(this);
+
+    this.stop_timeout = false;
+    this.ref_thumb = false;
+  }
+
+  componentWillUnmount() {
+    this.ref_thumb = false;
+
+    if (this.stop_timeout) {
+      clearTimeout(this.stop_timeout);
+      this.stop_timeout = false;
+    }
+  }
+
+  setThumbRef(c) {
+    this.ref_thumb = c;
+  }
+
   getThumbBackground() {
-    const { backgroundImage } = this.props;
+    const { backgroundImage, hoverAnimation } = this.props;
     const style = {};
 
-    if (backgroundImage) {
+    if (hoverAnimation && this.state.animation) {
+      style.backgroundImage = `url('${hoverAnimation}')`;
+    } else if (backgroundImage) {
       style.backgroundImage = `url('${backgroundImage}')`;
     }
 
     return style;
+  }
+
+  startAnimation() {
+    if (this.stop_timeout) {
+      clearTimeout(this.stop_timeout);
+      this.stop_timeout = false;
+    }
+
+    if (!this.props.hoverAnimation || this.state.animation) {
+      return;
+    }
+
+    this.setState({ animation: true });
+  }
+
+  stopAnimation() {
+    if (this.stop_timeout) {
+      clearTimeout(this.stop_timeout);
+    }
+
+    this.stop_timeout = setTimeout(this.terminateAnimation, 200);
+  }
+
+  terminateAnimation() {
+    if (!this.state.animation) {
+      return;
+    }
+
+    this.setState({ animation: false });
   }
 
   makeThumbContent() {
@@ -156,17 +218,37 @@ class CatalogItem extends React.PureComponent {
     );
   }
 
+  makeAnimationPreload() {
+    const { hoverAnimation } = this.props;
+
+    if (!hoverAnimation) {
+      return null;
+    }
+
+    return (
+      <img
+        src={hoverAnimation}
+        className="catalog-item__animation-loader"
+      />
+    );
+  }
+
   render() {
     return (
-      <div className="catalog-item">
+      <div className="catalog-item" onMouseOver={this.startAnimation} onMouseOut={this.stopAnimation}>
         <div className="catalog-item-wrapper">
           <div className="catalog-item-overflow">
-            <div className="catalog-item-thumb" style={this.getThumbBackground()}>
+            <div
+              className="catalog-item-thumb"
+              style={this.getThumbBackground()}
+              ref={this.setThumbRef}
+            >
               {this.makeThumbContent()}
             </div>
 
             {this.makeDescription()}
             {this.makeMeta()}
+            {this.makeAnimationPreload()}
           </div>
         </div>
       </div>

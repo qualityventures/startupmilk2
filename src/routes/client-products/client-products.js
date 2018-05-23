@@ -130,6 +130,7 @@ class RouteClientProducts extends React.PureComponent {
           to={`/product/${product.url}`}
           files={product.files}
           backgroundImage={product.image}
+          hoverAnimation={product.animation}
           price={product.price}
           name={product.name}
           showAddToCart

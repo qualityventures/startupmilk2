@@ -182,6 +182,7 @@ class RouteAdminProducts extends React.PureComponent {
           to={`/admin/product/${product.id}`}
           files={product.files}
           backgroundImage={product.image}
+          hoverAnimation={product.animation}
           price={product.price}
           name={product.name}
         />

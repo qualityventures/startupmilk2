@@ -222,8 +222,10 @@ export function addProductImage(req, res) {
   const public_path = `${ROOT_PATH}/../public/`;
   const image_dir = `/images/${String(req.productData._id).substr(0, 2)}`;
   const image_id = crypto.randomBytes(8).toString('hex');
+  const preview_path = `${image_dir}/${image_id}-preview.png`;
   let image_path = `${image_dir}/${image_id}`;
-  let preview_path = `${image_dir}/${image_id}-preview`;
+  let resize_path = `${image_dir}/${image_id}`;
+  let animated = false;
 
   if (!fs.existsSync(`${public_path}/${image_dir}`)) {
     fs.mkdirSync(`${public_path}/${image_dir}`);
@@ -236,7 +238,12 @@ export function addProductImage(req, res) {
     if (match) {
       ext = match[1].toLowerCase();
       image_path += `.${ext}`;
-      preview_path += `.${ext}`;
+      resize_path += `.${ext}`;
+
+      if (ext === 'gif') {
+        animated = true;
+        resize_path += '[0]';
+      }
     }
 
     const file_path = `${public_path}/${image_path}`;
@@ -251,7 +258,7 @@ export function addProductImage(req, res) {
         return;
       }
 
-      makePreview(`${public_path}/${image_path}`, `${public_path}/${preview_path}`, (err) => {
+      makePreview(`${public_path}/${resize_path}`, `${public_path}/${preview_path}`, (err) => {
         if (err) {
           fs.unlinkSync(file_path);
           throwError(res, err);
@@ -259,6 +266,7 @@ export function addProductImage(req, res) {
         }
 
         req.productData.images.push({
+          animated,
           full: image_path,
           preview: preview_path,
         });
@@ -271,9 +279,9 @@ export function addProductImage(req, res) {
           .then((product) => {
             returnObjectAsJSON(res, product.images);
           })
-          .catch((err) => {
-            const error = err && err.toString ? err.toString() : 'Error while saving image';
-            log(error);
+          .catch((save_err) => {
+            const error = save_err && save_err.toString ? save_err.toString() : 'Error while saving image';
+            log(save_err);
             fs.unlinkSync(file_path);
             throwError(res, error);
           });
@@ -340,7 +348,14 @@ export function deleteProductImage(req, res) {
     }
   }
 
-  fs.unlinkSync(`${ROOT_PATH}/../public/${image}`);
+  if (index < 0) {
+    throwError(res, 'Incorrect image');
+    return;
+  }
+
+  fs.unlinkSync(`${ROOT_PATH}/../public/${images[index].full}`);
+  fs.unlinkSync(`${ROOT_PATH}/../public/${images[index].preview}`);
+
   images.splice(index, 1);
 
   req.productData.images = images;

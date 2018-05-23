@@ -3267,6 +3267,7 @@ input.search-input-button:hover {
   padding-top: 80.1369863014%;
   background: #ecedf0 50% 50% no-repeat;
   background-size: cover;
+  @include transition(background-image);
   -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
   transition: -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
   -o-transition: transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);

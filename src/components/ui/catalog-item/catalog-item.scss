@@ -3,6 +3,15 @@
 }
 
 .catalog-item {
+  &__animation-loader {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    top: 0px;
+    left: -9999px;
+    opacity: 0.01;
+  }
+
   &__big-button {
     cursor: pointer;
     position: absolute;

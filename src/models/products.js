@@ -68,9 +68,21 @@ ProductsSchema.methods.toClientJSON = function() {
     });
   });
 
+  let image = null;
+  let animation = null;
+
+  if (this.images.length) {
+    image = this.images[0].preview;
+
+    if (this.images[0].animated) {
+      animation = this.images[0].full;
+    }
+  }
+
   return {
     id: this._id,
-    image: this.images.length ? this.images[0].preview : null,
+    image,
+    animation,
     images: this.images,
     url: this.url,
     name: this.name,
