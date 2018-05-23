@@ -134,7 +134,7 @@ class Container extends React.PureComponent {
             <div className="row">
               <div className="col-6 col-lg-3 offset-lg-3">
                 <div className="copyright">
-                  <p>&copy; Copyright  Milk Icons — 2018</p>
+                  <p>&copy; Copyright matte.design — 2018</p>
                 </div>
               </div>
               <div className="col-6 col-lg-6">
