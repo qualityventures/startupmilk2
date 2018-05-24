@@ -1,6 +1,6 @@
 import gm from 'gm';
 
-const PREVIEW_SIZE = 200;
+const PREVIEW_SIZE = 300;
 
 export default function (image_path, preview_path, callback) {
   gm(image_path).size((err, size) => {
