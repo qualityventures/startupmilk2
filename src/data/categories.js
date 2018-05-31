@@ -1,7 +1,5 @@
 export default {
-  icons: 'Icons',
   'startup-kits': 'Startup kits',
-  illustrations: 'Illustrations',
+  icons: 'Icons',
   motion: 'Motion',
-  marketing: 'Marketing',
 };

@@ -1,22 +1,30 @@
 export default {
   Sketch: {
-    color: '#fad613',
+    color: '#ffab00',
     extensions: ['sketch'],
   },
-  PSD: {
-    color: '#325bb9',
+  Photoshop: {
+    color: '#00caff',
     extensions: ['psd'],
   },
+  AE: {
+    color: '#be6ad7',
+    extensions: ['aep'],
+  },
   AI: {
-    color: '#fa8513',
+    color: '#ff6d00',
     extensions: ['ai'],
   },
-  Lightroom: {
-    color: '#00f',
-    extensions: ['lrtemplate'],
+  Figma: {
+    color: '#9a00ff',
+    extensions: ['figma'],
+  },
+  XD: {
+    color: '#ff00be',
+    extensions: ['xd'],
   },
   Archive: {
-    color: '#00f',
+    color: '#333',
     extensions: ['zip', '7z', 'tar', 'gz'],
   },
 };
