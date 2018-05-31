@@ -163,7 +163,7 @@ class RouteClientProduct extends React.PureComponent {
             <div className="product-content-wrapper">
               <div className="product-description">
                 <h1>{data.name}</h1>
-                <p>{data.desc}</p>
+                <div dangerouslySetInnerHTML={{ __html: data.desc }} />
               </div>
               
               <div className="product-navigation">

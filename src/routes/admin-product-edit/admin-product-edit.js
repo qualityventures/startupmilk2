@@ -114,7 +114,8 @@ class RouteAdminProductEdit extends React.PureComponent {
       newData.url = product.url;
       newData.name = product.name;
       newData.price = product.price;
-      newData.desc = product.desc;
+      newData.desc_raw = product.desc_raw;
+      newData.desc_html = product.desc_html;
       newData.category = product.category;
       newData.deleted = product.deleted;
 
@@ -194,7 +195,8 @@ class RouteAdminProductEdit extends React.PureComponent {
         newData.url = product.url;
         newData.name = product.name;
         newData.price = product.price;
-        newData.desc = product.desc;
+        newData.desc_raw = product.desc_raw;
+        newData.desc_html = product.desc_html;
         newData.category = product.category;
         newData.deleted = product.deleted;
 
@@ -342,7 +344,7 @@ class RouteAdminProductEdit extends React.PureComponent {
             setRef={this.setInputRef}
             name="desc"
             placeholder="Product desc"
-            defaultValue={data.desc}
+            defaultValue={data.desc_raw}
             disabled={loading}
             multiline
           />

@@ -21,7 +21,11 @@ const ProductsSchema = new Schema({
     type: String,
     trim: true,
   },
-  desc: {
+  desc_raw: {
+    type: String,
+    trim: true,
+  },
+  desc_html: {
     type: String,
     trim: true,
   },
@@ -86,7 +90,7 @@ ProductsSchema.methods.toClientJSON = function() {
     images: this.images,
     url: this.url,
     name: this.name,
-    desc: this.desc,
+    desc: this.desc_html || this.desc_raw || this.desc,
     price: this.price,
     files: Object.keys(files),
     downloads,

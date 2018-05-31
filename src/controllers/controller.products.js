@@ -15,6 +15,16 @@ import makePreview from 'helpers/make-preview';
 
 const log = debug(`${DEBUG_PREFIX}:controller.products`);
 
+function processDesc(desc) {
+  desc = desc.replace(/[\r]/g, '');
+  desc = desc.replace(/^[\n]+/, '');
+  desc = desc.replace(/[\n]+$/, '');
+  desc = desc.replace(/[\n]+/g, '</p><p>');
+  desc = `<p>${desc}</p>`;
+
+  return desc;
+}
+
 function validateProductData(req, res) {
   const fields = {
     desc: validateProductDesc,
@@ -164,7 +174,8 @@ export function updateProduct(req, res) {
       product.name = data.name;
       product.url = data.url;
       product.price = data.price;
-      product.desc = data.desc;
+      product.desc_raw = data.desc;
+      product.desc_html = processDesc(data.desc);
       product.category = data.category;
       product.deleted = data.deleted;
 
@@ -196,6 +207,10 @@ export function createNewProduct(req, res) {
       if (product !== null) {
         throw new Error('Product with given url already exists');
       }
+
+      data.desc_raw = data.desc;
+      data.desc_html = processDesc(data.desc);
+      data.desc = null;
 
       return Products.create(data);
     })
