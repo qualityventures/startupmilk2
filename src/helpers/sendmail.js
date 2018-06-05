@@ -1,11 +1,16 @@
 import mailer from 'nodemailer';
-import { SMTP_FROM, SMTP_USER, SMTP_PASS } from 'data/config.private';
+import {
+  SMTP_FROM,
+  SMTP_USER,
+  SMTP_PASS,
+  SMTP_SERVICE,
+} from 'data/config.private';
 
 export default function (mail) {
   mail.from = SMTP_FROM;
 
   const smtpTransport = mailer.createTransport({
-    service: 'gmail',
+    service: SMTP_SERVICE,
     port: 465,
     secure: true,
     auth: {
