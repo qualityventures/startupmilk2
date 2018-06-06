@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadProduct } from 'actions/product';
-import { Loader, Alert } from 'components/ui';
+import { Loader, Alert, Catalog, CatalogItem, FormMisc } from 'components/ui';
 import TitleUpdater from 'containers/title-updater';
 import FORMATS_LIST from 'data/files';
 import CartButton from 'containers/cart-button';
@@ -146,6 +146,37 @@ class RouteClientProduct extends React.PureComponent {
     );
   }
 
+  makeRelated() {
+    const { related } = this.props.data;
+
+    if (!related.length) {
+      return null;
+    }
+
+    const ret = related.map((product) => {
+      return (
+        <CatalogItem
+          id={product.id}
+          key={product.id}
+          to={`/product/${product.url}`}
+          files={product.files}
+          backgroundImage={product.image}
+          hoverAnimation={product.animation}
+          price={product.price}
+          name={product.name}
+          showAddToCart
+        />
+      );
+    });
+
+    return (
+      <div>
+        <FormMisc>You may find interesting</FormMisc>
+        <Catalog>{ret}</Catalog>
+      </div>
+    );
+  }
+
   render() {
     const { error, loading, loaded, data } = this.props;
     let content = null;
@@ -156,27 +187,30 @@ class RouteClientProduct extends React.PureComponent {
       content = <Loader />;
     } else {
       content = (
-        <div className="product">
-          {this.makeGallery()}
+        <div>
+          <div className="product">
+            {this.makeGallery()}
 
-          <div className="product-content">
-            <div className="product-content-wrapper">
-              <div className="product-description">
-                <h1>{data.name}</h1>
-                <div dangerouslySetInnerHTML={{ __html: data.desc }} />
-              </div>
-              
-              <div className="product-navigation">
-                <CartButton
-                  productId={data.id}
-                  price={data.price}
-                  color="black"
-                />
-              </div>
+            <div className="product-content">
+              <div className="product-content-wrapper">
+                <div className="product-description">
+                  <h1>{data.name}</h1>
+                  <div dangerouslySetInnerHTML={{ __html: data.desc }} />
+                </div>
+                
+                <div className="product-navigation">
+                  <CartButton
+                    productId={data.id}
+                    price={data.price}
+                    color="black"
+                  />
+                </div>
 
-              {this.makeFiles()}
+                {this.makeFiles()}
+              </div>
             </div>
           </div>
+          {this.makeRelated()}
         </div>
       );
     }

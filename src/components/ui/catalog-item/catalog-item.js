@@ -45,6 +45,7 @@ class CatalogItem extends React.PureComponent {
     this.startAnimation = this.startAnimation.bind(this);
     this.stopAnimation = this.stopAnimation.bind(this);
     this.terminateAnimation = this.terminateAnimation.bind(this);
+    this.handleBigButtonClick = this.handleBigButtonClick.bind(this);
 
     this.stop_timeout = false;
     this.ref_thumb = false;
@@ -80,6 +81,14 @@ class CatalogItem extends React.PureComponent {
     return style;
   }
 
+  handleBigButtonClick(e) {
+    const { id, onBigButtonClick } = this.props;
+
+    if (onBigButtonClick) {
+      onBigButtonClick(id || e);
+    }
+  }
+
   startAnimation() {
     if (this.stop_timeout) {
       clearTimeout(this.stop_timeout);
@@ -110,12 +119,12 @@ class CatalogItem extends React.PureComponent {
   }
 
   makeThumbContent() {
-    const { to, bigButton, onBigButtonClick, smallButtons } = this.props;
+    const { to, bigButton, smallButtons } = this.props;
     const ret = [];
 
     if (bigButton) {
       ret.push(
-        <div key="big" className="catalog-item__big-button" onClick={onBigButtonClick}>
+        <div key="big" className="catalog-item__big-button" onClick={this.handleBigButtonClick}>
           {bigButton}
         </div>
       );

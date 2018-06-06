@@ -8,6 +8,7 @@ import { closeModal } from 'actions/modals';
 import ModalWrapper from 'components/modal-wrapper';
 import ModalsShadow from 'components/modals-shadow';
 import EditFileTypesModal from 'modals/edit-file-types';
+import ProductsSelectModal from 'modals/products-select';
 import styles from './modals.scss';
 
 const CSS_DURATION = parseInt(styles.duration.replace('ms', '').replace('s', '000'), 10) || 200;
@@ -23,6 +24,10 @@ class Modals extends React.PureComponent {
   static modals = {
     EDIT_FILE_TYPES: {
       component: EditFileTypesModal,
+      size: 'medium',
+    },
+    PRODUCTS_SELECT: {
+      component: ProductsSelectModal,
       size: 'medium',
     },
   }

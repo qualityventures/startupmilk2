@@ -1,15 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Alert, FormInput, FormMisc, FormSelect, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
-import { validateProductUrl, validateProductName, validateProductCategory, validateProductPrice, validateProductDesc } from 'helpers/validators';
+import {
+  Form,
+  Alert,
+  FormInput,
+  FormMisc,
+  FormSelect,
+  FormTitle,
+  FormButton,
+  FormLabel,
+  Loader, 
+  Catalog,
+  CatalogItem,
+} from 'components/ui';
+import {
+  validateProductUrl,
+  validateProductName,
+  validateProductCategory,
+  validateProductPrice,
+  validateProductDesc,
+} from 'helpers/validators';
+import { openModal } from 'actions/modals';
 import ImagesManager from 'components/images-manager';
 import FilesManager from 'components/files-manager';
 import CATEGORIES_LIST from 'data/categories';
+import { connect } from 'react-redux';
 import apiFetch from 'helpers/api-fetch';
 
 class RouteAdminProductEdit extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object.isRequired,
+    openModal: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -34,6 +55,8 @@ class RouteAdminProductEdit extends React.PureComponent {
 
     this.toggleDeleted = this.toggleDeleted.bind(this);
     this.updateProduct = this.updateProduct.bind(this);
+    this.updateRelatedProducts = this.updateRelatedProducts.bind(this);
+    this.selectRelatedProducts = this.selectRelatedProducts.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
   }
 
@@ -122,6 +145,48 @@ class RouteAdminProductEdit extends React.PureComponent {
       this.setState({ loading: false, data: newData });
     }).catch((e) => {
       this.setState({ loading: false, error: e || 'Something went wrong' });
+    });
+  }
+
+  updateRelatedProducts(list) {
+    const id = this.props.match.params.id;
+
+    if (this.state.loading) {
+      return;
+    }
+
+    this.setState({ loading: false, error: false });
+
+    apiFetch(`api/products/${id}/related`, {
+      method: 'POST',
+      payload: { related: list },
+    }).then((product) => {
+      const newData = { ...this.state.data };
+
+      newData.related = [...product.related];
+
+      this.setState({ loading: false, data: newData });
+    }).catch((e) => {
+      this.setState({ loading: false, error: e || 'Something went wrong' });
+    });
+  }
+
+  selectRelatedProducts() {
+    const selected = [];
+
+    this.state.data.related.forEach((product) => {
+      selected.push(String(product._id));
+    });
+
+    this.props.openModal({
+      type: 'PRODUCTS_SELECT',
+      props: {
+        name: `${this.state.data.name} Related`,
+        selected,
+        exclude: [this.props.match.params.id],
+        action: 'Update related',
+        onUpdate: this.updateRelatedProducts,
+      },
     });
   }
 
@@ -262,6 +327,55 @@ class RouteAdminProductEdit extends React.PureComponent {
     );
   }
 
+  makeRelatedList() {
+    const { related } = this.state.data;
+
+    if (!related.length) {
+      return null;
+    }
+
+    const ret = [];
+
+    related.forEach((product) => {
+      const files = {};
+      let image = null;
+      let animation = null;
+
+      product.files.forEach((file) => {
+        if (!file.types) {
+          return;
+        }
+
+        file.types.forEach((type) => {
+          files[type] = true;
+        });
+      });
+
+      if (product.images.length) {
+        image = product.images[0].preview;
+
+        if (product.images[0].animated) {
+          animation = product.images[0].full;
+        }
+      }
+
+      ret.push(
+        <CatalogItem
+          id={product._id}
+          key={product._id}
+          files={Object.keys(files)}
+          backgroundImage={image}
+          hoverAnimation={animation}
+          price={product.price}
+          name={product.name}
+          to={`/admin/product/${product._id}`}
+        />
+      );
+    });
+
+    return ret;
+  }
+
   render() {
     const { loading, loaded, error, data } = this.state;
 
@@ -379,9 +493,36 @@ class RouteAdminProductEdit extends React.PureComponent {
             files={data.files}
           />
         </FormLabel>
+
+        <FormLabel>
+          <FormMisc>
+            Related items
+          </FormMisc>
+        </FormLabel>
+
+        <FormLabel>
+          <Catalog>
+            {this.makeRelatedList()}
+            <CatalogItem
+              bigButton={this.state.loading ? <Loader /> : <span>Select related</span>}
+              onBigButtonClick={this.selectRelatedProducts}
+            />
+          </Catalog>
+        </FormLabel>
       </Form>
     );
   }
 }
 
-export default RouteAdminProductEdit;
+export default connect(
+  (state, props) => {
+    return {
+
+    };
+  },
+  (dispatch) => {
+    return {
+      openModal: (data) => { return dispatch(openModal(data)); },
+    };
+  }
+)(RouteAdminProductEdit);

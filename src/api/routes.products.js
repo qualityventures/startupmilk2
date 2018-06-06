@@ -12,6 +12,7 @@ import {
   addProductFile,
   deleteProductFile,
   updateProductFile,
+  updateProductRelated,
 } from 'controllers/controller.products';
 
 const router = new Router();
@@ -48,5 +49,8 @@ router.route('/')
 
 router.route('/:id')
   .patch(checkAdminAccess, updateProduct);
+
+router.route('/:id/related/')
+  .post(checkAdminAccess, loadProductInfo, updateProductRelated);
 
 export default router;

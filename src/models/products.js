@@ -46,6 +46,10 @@ const ProductsSchema = new Schema({
   images: [
 
   ],
+  related: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Products',
+  }],
   created: {
     type: Date,
     default: Date.now,
@@ -55,6 +59,19 @@ const ProductsSchema = new Schema({
 ProductsSchema.methods.toClientJSON = function() {
   const files = {};
   const downloads = [];
+  const related = [];
+
+  this.related.forEach((item) => {
+    if (typeof item !== 'object') {
+      return;
+    }
+
+    if (!item.visible) {
+      return;
+    }
+
+    related.push(item.toClientJSON());
+  });
 
   this.files.forEach((file) => {
     if (!file.types) {
@@ -84,7 +101,7 @@ ProductsSchema.methods.toClientJSON = function() {
   }
 
   return {
-    id: this._id,
+    id: String(this._id),
     image,
     animation,
     images: this.images,
@@ -94,6 +111,7 @@ ProductsSchema.methods.toClientJSON = function() {
     price: this.price,
     files: Object.keys(files),
     downloads,
+    related,
   };
 };
 

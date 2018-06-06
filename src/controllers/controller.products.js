@@ -12,6 +12,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import FORMATS_LIST from 'data/files';
 import makePreview from 'helpers/make-preview';
+import mongoose from 'mongoose';
 
 const log = debug(`${DEBUG_PREFIX}:controller.products`);
 
@@ -61,6 +62,7 @@ export function getProducts(req, res) {
   let page = Math.min(parseInt(req.query.page || 1, 10) || 1, 100);
   let pages = 0;
   let total = 0;
+  let per_page = RESULTS_PER_PAGE;
 
   if (['-created', 'price'].indexOf(sort) === -1) {
     sort = '-created';
@@ -78,6 +80,10 @@ export function getProducts(req, res) {
     query.category = category;
   }
 
+  if (req.userData.role === 'admin' && req.query.rpp) {
+    per_page = parseInt(req.query.rpp, 10) || RESULTS_PER_PAGE;
+  }
+
   if (req.userData.role !== 'admin' || status === 'visible') {
     query.visible = true;
   } else {
@@ -88,8 +94,8 @@ export function getProducts(req, res) {
     .then((data) => {
       total = data || 0;
 
-      pages = Math.max(Math.floor(total / RESULTS_PER_PAGE), 1);
-      if ((pages * RESULTS_PER_PAGE) < total) {
+      pages = Math.max(Math.floor(total / per_page), 1);
+      if ((pages * per_page) < total) {
         ++pages;
       }
 
@@ -99,8 +105,8 @@ export function getProducts(req, res) {
 
       return Products.find(query)
         .sort(sort)
-        .limit(RESULTS_PER_PAGE)
-        .skip(RESULTS_PER_PAGE * (page - 1))
+        .limit(per_page)
+        .skip(per_page * (page - 1))
         .exec();
     })
     .then((products) => {
@@ -133,6 +139,7 @@ export function getProductByUrl(req, res) {
   }
 
   Products.findOne({ url, visible: true })
+    .populate('related')
     .then((product) => {
       if (product === null) {
         throw new Error('Product not found');
@@ -537,6 +544,63 @@ export function updateProductFile(req, res) {
     })
     .catch((err) => {
       const error = err && err.toString ? err.toString() : 'Error while deleting file';
+      log(error);
+      throwError(res, error);
+    });
+}
+
+export function updateProductRelated(req, res) {
+  const { related } = req.body;
+
+  if (!Array.isArray(related)) {
+    throwError(res, 'Invalid related format');
+    return;
+  }
+
+  if (!related.length) {
+    req.productData.related = [];
+    req.productData.save()
+      .then((product) => {
+        returnObjectAsJSON(res, product);
+      })
+      .catch((err) => {
+        const error = err && err.toString ? err.toString() : 'Error while updating related';
+        log(error);
+        throwError(res, error);
+      });
+
+    return;
+  }
+
+  const query = [];
+
+  related.forEach((id) => {
+    if (!id.match(/^[0-9a-z_]{10,40}$/i)) {
+      return;
+    }
+
+    query.push(mongoose.Types.ObjectId(id));
+  });
+
+  Products.find({ visible: true, _id: { $in: query } })
+    .then((products) => {
+      const ids = [];
+
+      products.forEach((product) => {
+        ids.push(product._id);
+      });
+
+      req.productData.related = ids;
+      return req.productData.save();
+    })
+    .then((product) => {
+      return Products.findById(product._id).populate('related');
+    })
+    .then((product) => {
+      returnObjectAsJSON(res, product);
+    })
+    .catch((err) => {
+      const error = err && err.toString ? err.toString() : 'Error while updating related';
       log(error);
       throwError(res, error);
     });

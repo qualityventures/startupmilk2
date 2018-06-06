@@ -89,6 +89,7 @@ export function loadProductInfo(req, res, next) {
   }
 
   Products.findById(id)
+    .populate('related')
     .then((product) => {
       if (product === null) {
         throw new Error('Product not found');
