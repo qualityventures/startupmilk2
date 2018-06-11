@@ -4027,12 +4027,16 @@ a.button-add.button-dark:before, a.button-add:hover:before {
 }
 
 .cart_button {
+  border-radius: 100px;
+  padding-left: 26px;
+  padding-right: 9px;
+  background: #1E1D25;
   white-space: nowrap;
   height: 40px;
   line-height: 36px;
   display: block;
   font-size: 12px;
-  color: #382828 !important;
+  color: #FFF !important;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: .2px;
@@ -4043,7 +4047,8 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   z-index: 99999;
   opacity: 1;
   visibility: visible;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: visibility 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (max-width: 1199px) {
     right: 15px;
@@ -4056,12 +4061,12 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   & span {
     display: inline-block;
     border-radius: 50%;
-    background: #2180f8;
+    background: #FFF;
     width: 24px;
     height: 24px;
     line-height: 24px;
     margin-left: 15px;
-    color: #FFF;
+    color: #1E1D25;
     font-weight: bold;
   }
 
@@ -4075,14 +4080,14 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   }
 
   .header-fixed & {
-    padding-right: 40px;
+    margin-right: 40px;
 
     @media (max-width: 991px) {
-      padding-right: 40px;
+      margin-right: 40px;
     }
 
     @media (max-width: 767px) {
-      padding-right: 20px;
+      margin-right: 20px;
     }
   }
 }
@@ -4094,11 +4099,10 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   left: 0px;
   right: 0px;
   background: rgba(#333, .9);
-  z-index: 9999;
+  z-index: 99999;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   &--visible {
-    z-index: 9999;
     opacity: 1;
   }
 
@@ -4110,33 +4114,29 @@ a.button-add.button-dark:before, a.button-add:hover:before {
 }
 
 .cart_container {
-  position: absolute;
-  right: 40px;
-  width: 394px;
-  max-width: 90vw;
-  top: 80px;
+  position: fixed;
+  width: 474px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  background: #FFF;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-  @media (max-width: 1199px) {
-    right: 40px;
-  }
-
-  @media (max-width: 991px) {
-    right: 10px;
-  }
-  
-  @media (max-width: 767px) {
-    top: 50px;
-  }
+  @include nice_scroll_y();
 
   &--visible {
-    z-index: 999999;
+    z-index: 9999999;
     opacity: 1;
+    transform: translateX(0px);
   }
 
   &--hidden {
     z-index: -1;
     visibility: hidden;
     opacity: 0;
+    transform: translateX(100%);
+  }
+
+  @media (max-width: 474px) {
+    width: 100vw;
   }
 }

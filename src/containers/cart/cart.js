@@ -8,6 +8,7 @@ import { validateEmail, validatePassword } from 'helpers/validators';
 import apiFetch from 'helpers/api-fetch';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
+import { hideCart } from 'actions/app';
 import { STRIPE_PUBLISHED_KEY } from 'data/config.public';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import PaymentsForm from './components/payments-form';
@@ -25,6 +26,7 @@ class Cart extends React.PureComponent {
     clearCart: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     show_cart: PropTypes.bool.isRequired,
+    hideCart: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -35,8 +37,7 @@ class Cart extends React.PureComponent {
     super(props);
 
     this.state = {
-      page: 1,
-      pages: this.getPages(props.products_amount),
+      show_payments_step: false,
       password_required: false,
       password_recovered: false,
       loading: false,
@@ -49,9 +50,9 @@ class Cart extends React.PureComponent {
     this.inputRefs = {};
     this.createStripeToken = null;
 
+    this.showPaymentsStep = this.showPaymentsStep.bind(this);
+    this.hidePaymentsStep = this.hidePaymentsStep.bind(this);
     this.removeProduct = this.removeProduct.bind(this);
-    this.showNextPage = this.showNextPage.bind(this);
-    this.showPrevPage = this.showPrevPage.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleRecover = this.handleRecover.bind(this);
@@ -59,15 +60,14 @@ class Cart extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.setState({
-      stripe_object: window.Stripe(STRIPE_PUBLISHED_KEY),
-    });
+    if (window.Stripe) {
+      this.setState({ stripe_object: window.Stripe(STRIPE_PUBLISHED_KEY) });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.products_amount !== this.props.products_amount) {
-      const pages = this.getPages(nextProps.products_amount);
-      this.setState({ pages, page: Math.min(this.state.page, pages) });
+    if (!nextProps.price_total && this.props.price_total) {
+      this.setState({ show_payments_step: false });
     }
 
     if (!nextProps.show_cart && this.props.show_cart) {
@@ -93,9 +93,12 @@ class Cart extends React.PureComponent {
     this.inputRefs[name] = e;
   }
 
-  getPages(total) {
-    const pages = Math.max(Math.floor(total / 2), 1);
-    return ((pages * 2) < total) ? (pages + 1) : pages;
+  showPaymentsStep() {
+    this.setState({ show_payments_step: true });
+  }
+
+  hidePaymentsStep() {
+    this.setState({ show_payments_step: false });
   }
 
   handleRecover() {
@@ -239,268 +242,351 @@ class Cart extends React.PureComponent {
     }
   }
 
-  showNextPage() {
-    const next = Math.min(this.state.pages, this.state.page + 1);
-
-    if (next !== this.state.page) {
-      this.setState({ page: next });
-    }
-  }
-
-  showPrevPage() {
-    const prev = Math.max(1, this.state.page - 1);
-
-    if (prev !== this.state.page) {
-      this.setState({ page: prev });
-    }
-  }
-
-  makePrice() {
-    if (this.props.price_total) {
-      return (
-        <div>
-          <div className="cart-popup__price">${this.props.price_total}</div>
-          <div className="cart-popup__total">Total</div>
-        </div>
-      );
-    }
+  // makePrice() {
+  //   if (this.props.price_total) {
+  //     return (
+  //       <div>
+  //         <div className="cart-popup__price">${this.props.price_total}</div>
+  //         <div className="cart-popup__total">Total</div>
+  //       </div>
+  //     );
+  //   }
     
-    return (<div><div className="cart-popup__price">Free!</div></div>);
-  }
+  //   return (<div><div className="cart-popup__price">Free!</div></div>);
+  // }
 
-  makePrevButton() {
-    if (this.state.page === 1) {
-      return null;
+  // makeProducts() {
+  //   const { products_list } = this.props;
+
+  //   return Object.keys(products_list).map((product_id) => {
+  //     const product = products_list[product_id];
+
+  //     return (
+  //       <div key={product_id} className="cart-popup__product-wrapper">
+  //         <div className="cart-popup__product">
+  //           <div className="cart-popup__product-image-wrapper">
+  //             <div
+  //               className="cart-popup__product-image"
+  //               style={{
+  //                 backgroundImage: `url('${product.image}')`,
+  //               }}
+  //             />
+  //           </div>
+
+  //           <div className="cart-popup__product-name">
+  //             {product.name}
+  //           </div>
+
+  //           <div className="cart-popup__product-price">
+  //             {product.price ? `$${product.price}` : 'Free!'}
+  //           </div>
+
+  //           <div
+  //             className="cart-popup__product-remove"
+  //             onClick={this.removeProduct}
+  //             product_id={product_id}
+  //           />
+  //         </div>
+  //       </div>
+  //     );
+  //   });
+  // }
+
+  // makeSubmit() {
+  //   if (this.state.loading) {
+  //     return null;
+  //   }
+
+  //   return (
+  //     <FormLabel>
+  //       <div className="cart-popup__submit">
+  //         <FormButton onClick={this.handleSubmit}>
+  //           Submit
+  //         </FormButton>
+  //       </div>
+  //     </FormLabel>
+  //   );
+  // }
+
+  // makeLoader() {
+  //   if (!this.state.loading) {
+  //     return null;
+  //   }
+
+  //   return (
+  //     <FormLabel>
+  //       <div className="cart-popup__loader">
+  //         <Loader color="white" />
+  //       </div>
+  //     </FormLabel>
+  //   );
+  // }
+
+  // makeError() {
+  //   if (!this.state.error) {
+  //     return null;
+  //   }
+
+  //   return (
+  //     <FormLabel>
+  //       <Alert type="danger">{this.state.error}</Alert>
+  //     </FormLabel>
+  //   );
+  // }
+
+  // makePaymentsForm() {
+  //   if (!this.props.price_total) {
+  //     return null;
+  //   }
+
+  //   return (
+  //     <FormLabel>
+  //       <StripeProvider stripe={this.state.stripe_object}>
+  //         <Elements>
+  //           <PaymentsForm
+  //             setStripeCreateToken={this.setStripeCreateToken}
+  //           />
+  //         </Elements>
+  //       </StripeProvider>
+  //     </FormLabel>
+  //   );
+  // }
+
+  // makePassword() {
+  //   if (!this.state.password_required) {
+  //     return null;
+  //   }
+
+  //   const ret = [
+  //     <FormLabel key="password">
+  //       <FormInput
+  //         placeholder="Password"
+  //         type="password"
+  //         name="password"
+  //         setRef={this.setInputRef}
+  //         disabled={this.state.loading}
+  //       />
+  //     </FormLabel>,
+  //   ];
+
+  //   if (!this.state.loading) {
+  //     if (!this.state.password_recovered) {
+  //       ret.push(
+  //         <FormLabel key="recover">
+  //           <div className="cart-popup__recover" onClick={this.handleRecover}>
+  //             Recover password
+  //           </div>
+  //         </FormLabel>
+  //       );
+  //     } else {
+  //       ret.push(
+  //         <FormLabel key="recover">
+  //           <div className="cart-popup__recovered">
+  //             New password was sent to your email
+  //           </div>
+  //         </FormLabel>
+  //       );
+  //     }
+  //   }
+
+  //   return ret;
+  // }
+
+  makeCartTitle() {
+    let className = 'cart-popup__title';
+    let back = null;
+    let close = null;
+
+    if (this.state.show_payments_step) {
+      back = <div className="cart-popup__back" onClick={this.hidePaymentsStep} />;
+    }
+    if (!this.state.show_payments_step) {
+      close = <div className="cart-popup__close" onClick={this.props.hideCart} />;
+    }
+
+    if (this.state.show_payments_step) {
+      className += ' cart-popup__title--with-padding';
     }
 
     return (
-      <div
-        className="cart-popup__page-prev"
-        onClick={this.showPrevPage}
-      />
+      <div className={className}>
+        {back}
+        {this.state.show_payments_step ? 'Checkout' : 'Cart'}
+        {close}
+      </div>
     );
   }
 
-  makeNextButton() {
-    if (this.state.page === this.state.pages) {
+  makePlaceholder(content) {
+    return (
+      <div className="cart-popup__placeholder-wrapper">
+        <div className="cart-popup__placeholder">
+          {content}
+        </div>
+      </div>
+    );
+  }
+
+  makeProductsList() {
+    if (this.state.show_payments_step) {
       return null;
     }
 
-    return (
-      <div
-        className="cart-popup__page-next"
-        onClick={this.showNextPage}
-      />
-    );
-  }
-
-  makeProducts() {
-    const { products_list, products_amount } = this.props;
-    const { page } = this.state;
-    const keys = Object.keys(products_list);
+    const { products_list } = this.props;
     const ret = [];
 
-    for (let i = ((page - 1) * 2); i < Math.min(products_amount, (page * 2)); ++i) {
-      const product_id = keys[i];
+    Object.keys(products_list).forEach((product_id) => {
       const product = products_list[product_id];
 
       ret.push(
-        <div key={product_id} className="cart-popup__product-wrapper">
-          <div className="cart-popup__product">
-            <div className="cart-popup__product-image-wrapper">
-              <div
-                className="cart-popup__product-image"
-                style={{
-                  backgroundImage: `url('${product.image}')`,
-                }}
-              />
-            </div>
+        <div key={product_id} className="cart-popup__product">
+          <div
+            className="cart-popup__product-image"
+            style={{
+              backgroundImage: `url('${product.image}')`,
+            }}
+          />
 
-            <div className="cart-popup__product-name">
-              {product.name}
-            </div>
+          <div
+            className="cart-popup__product-remove"
+            onClick={this.removeProduct}
+            product_id={product_id}
+          />
 
-            <div className="cart-popup__product-price">
-              {product.price ? `$${product.price}` : 'Free!'}
-            </div>
+          <div className="cart-popup__product-shadow" />
 
-            <div
-              className="cart-popup__product-remove"
-              onClick={this.removeProduct}
-              product_id={product_id}
-            />
+          <div
+            className="cart-popup__product-big-button"
+            onClick={this.removeProduct}
+            product_id={product_id}
+          >
+            Remove
           </div>
+
+          <div className="cart-popup__product-title">
+            {product.name}
+          </div>
+
+          <div className="cart-popup__product-price">
+            {product.price ? `$${product.price}` : 'Free!'}
+          </div>
+        </div>
+      );
+    });
+
+    return (
+      <div key="products" className="cart-popup__products">
+        {ret}
+      </div>
+    );
+  }
+
+  makeCheckout() {
+    const { products_amount, price_total } = this.props;
+
+    let price = null;
+    let button = null;
+    let loader = null;
+
+    if (price_total) {
+      price = (
+        <div className="cart-popup__price-total">
+          <div className="cart-popup__price-total-amount">${price_total}</div>
+          <div className="cart-popup__price-total-text">Total</div>
+        </div>
+      );
+    } else {
+      price = (
+        <div className="cart-popup__price-free">
+          Free
         </div>
       );
     }
 
-    return ret;
-  }
-
-  makeSubmit() {
     if (this.state.loading) {
-      return null;
-    }
-
-    return (
-      <FormLabel>
-        <div className="cart-popup__submit">
-          <FormButton onClick={this.handleSubmit}>
-            Submit
-          </FormButton>
+      loader = <Loader />;
+    } else if (this.state.show_payments_step || !price_total) {
+      button = (
+        <div className="cart-popup__button cart-popup__button--get" onClick={this.handleSubmit}>
+          {price_total ? 'Confirm & Pay' : 'Get freebies'}
         </div>
-      </FormLabel>
-    );
-  }
-
-  makeLoader() {
-    if (!this.state.loading) {
-      return null;
-    }
-
-    return (
-      <FormLabel>
-        <div className="cart-popup__loader">
-          <Loader color="white" />
+      );
+    } else {
+      button = (
+        <div className="cart-popup__button cart-popup__button--proceed" onClick={this.showPaymentsStep}>
+          Proceed to checkout
         </div>
-      </FormLabel>
-    );
-  }
-
-  makeError() {
-    if (!this.state.error) {
-      return null;
+      );
     }
 
     return (
-      <FormLabel>
-        <Alert type="danger">{this.state.error}</Alert>
-      </FormLabel>
-    );
-  }
-
-  makePaymentsForm() {
-    if (!this.props.price_total) {
-      return null;
-    }
-
-    return (
-      <FormLabel>
-        <StripeProvider stripe={this.state.stripe_object}>
-          <Elements>
-            <PaymentsForm
-              setStripeCreateToken={this.setStripeCreateToken}
-            />
-          </Elements>
-        </StripeProvider>
-      </FormLabel>
-    );
-  }
-
-  makePassword() {
-    if (!this.state.password_required) {
-      return null;
-    }
-
-    const ret = [
-      <FormLabel key="password">
-        <FormInput
-          placeholder="Password"
-          type="password"
-          name="password"
-          setRef={this.setInputRef}
-          disabled={this.state.loading}
-        />
-      </FormLabel>,
-    ];
-
-    if (!this.state.loading) {
-      if (!this.state.password_recovered) {
-        ret.push(
-          <FormLabel key="recover">
-            <div className="cart-popup__recover" onClick={this.handleRecover}>
-              Recover password
-            </div>
-          </FormLabel>
-        );
-      } else {
-        ret.push(
-          <FormLabel key="recover">
-            <div className="cart-popup__recovered">
-              New password was sent to your email
-            </div>
-          </FormLabel>
-        );
-      }
-    }
-
-    return ret;
-  }
-
-  makeFormPlaceholder(text) {
-    return (
-      <div className="cart-popup__wrapper">
-        <div className="cart-popup__checkout">
-          <FormLabel>
-            <FormTitle>Check Out With a Card</FormTitle>
-          </FormLabel>
-          <FormLabel>
-            <div className="cart-popup__empty">
-              {text}
-            </div>
-          </FormLabel>
-        </div>
+      <div key="checkout" className="cart-popup__checkout">
+        {price}
+        {loader}
+        {button}
       </div>
     );
   }
 
   render() {
+    let content = null;
+
     if (this.state.success) {
-      return this.makeFormPlaceholder('Your order details have been sent to the email address you provided');
-    }
-
-    if (!this.props.products_amount) {
-      return this.makeFormPlaceholder('Oops there is nothing in your cart');
-    }
-
-    if (this.props.price_total && !this.state.stripe_object) {
-      return this.makeFormPlaceholder('Initializing payments...');
+      content = this.makePlaceholder('Your order details have been sent to the email address you provided');
+    } else if (!this.props.products_amount) {
+      content = this.makePlaceholder('Your cart looks empty. Try to add something from our amazing products');
+    } else if (this.props.price_total && !this.state.stripe_object) {
+      content = this.makePlaceholder('Initializing payments...');
+    } else {
+      content = [
+        this.makeProductsList(),
+        <div key="spring" className="cart-popup__spring" />,
+        <div key="bottom_separator" className="cart-popup__separator" />,
+        this.makeCheckout(),
+      ];
     }
 
     return (
-      <div className="cart-popup__wrapper">
-        <div className="cart-popup__checkout">
-          <Form>
-            <FormLabel>
-              <FormTitle>Check Out With a Card</FormTitle>
-            </FormLabel>
-            {this.makeError()}
-            <FormLabel>
-              <FormInput
-                placeholder="Email"
-                type="email"
-                name="email"
-                defaultValue={this.props.email}
-                disabled={!!this.props.email || this.state.loading || this.state.password_required}
-                setRef={this.setInputRef}
-              />
-            </FormLabel>
-            {this.makePassword()}
-            {this.makePaymentsForm()}
-            <FormLabel>
-              {this.makePrice()}
-            </FormLabel>
-            {this.makeSubmit()}
-            {this.makeLoader()}
-          </Form>
-        </div>
-        <div className="cart-popup__products">
-          {this.makeProducts()}
-          {this.makePrevButton()}
-          {this.makeNextButton()}
-        </div>
+      <div className="cart-popup">
+        {this.makeCartTitle()}
+        {content}
       </div>
     );
+
+    // return (
+    //   <div className="cart-popup__wrapper">
+    //     <div className="cart-popup__checkout">
+    //       <Form>
+    //         <FormLabel>
+    //           <FormTitle>Check Out With a Cart</FormTitle>
+    //         </FormLabel>
+    //         {this.makeError()}
+    //         <FormLabel>
+    //           <FormInput
+    //             placeholder="Email"
+    //             type="email"
+    //             name="email"
+    //             defaultValue={this.props.email}
+    //             disabled={!!this.props.email || this.state.loading || this.state.password_required}
+    //             setRef={this.setInputRef}
+    //           />
+    //         </FormLabel>
+    //         {this.makePassword()}
+    //         {this.makePaymentsForm()}
+    //         <FormLabel>
+    //           {this.makePrice()}
+    //         </FormLabel>
+    //         {this.makeSubmit()}
+    //         {this.makeLoader()}
+    //       </Form>
+    //     </div>
+    //     <div className="cart-popup__products">
+    //       {this.makeProducts()}
+    //       {this.makePrevButton()}
+    //       {this.makeNextButton()}
+    //     </div>
+    //   </div>
+    // );
   }
 }
 
@@ -520,6 +606,7 @@ export default withRouter(connect(
       userSignIn: (user) => { dispatch(userSignIn(user)); },
       tokenSet: (token) => { dispatch(tokenSet(token)); },
       clearCart: () => { dispatch(clearCart()); },
+      hideCart: () => { dispatch(hideCart()); },
     };
   }
 )(Cart));
