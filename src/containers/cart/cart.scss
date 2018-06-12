@@ -1,5 +1,8 @@
+$padding_x: 30px;
+$padding_y: 40px;
+
 .cart-popup {
-  padding: 40px 60px;
+  padding: $padding_x $padding_y;
   position: relative;
   position: relative;
   display: flex;
@@ -9,7 +12,7 @@
   min-height: 100%;
 
   @media (max-width: 474px) {
-    padding: 20px 30px;
+    padding: ($padding_x / 2) ($padding_y / 2);
   }
 
   &__title {
@@ -76,15 +79,15 @@
   }
 
   &__separator {
-    width: calc(100% + 120px);
+    width: calc(100% + (#{$padding_y} * 2));
     height: 1px;
     background: #ECEDF0;
     padding: 0px;
-    margin: 40px -60px;
+    margin: $padding_x (-1 * $padding_y);
 
     @media (max-width: 474px) {
-      width: calc(100% + 60px);
-      margin: 20px -30px;
+      width: calc(100% + #{$padding_y});
+      margin: 20px -1 * ($padding_y / 2);
     }
   }
 
@@ -155,6 +158,7 @@
 
   &__products {
     width: 100%;
+    margin-bottom: 10px;
   }
 
   &__product {
@@ -205,7 +209,7 @@
     &-big-button {
       position: absolute;
       top: 41px;
-      left: 23px;
+      left: 32px;
       width: 109px;
       height: 40px;
       line-height: 38px;
@@ -275,84 +279,6 @@
     }
   }
 
-
-  /*&__stripe_input {
-    box-sizing: border-box;
-    border: 1px solid #2180f8;
-    height: 36px;
-    width: 100%;
-    outline: none;
-    resize: none;
-    font-size: 14px;
-    font-style: normal;
-    letter-spacing: normal;
-    font-stretch: normal;
-    font-variant: normal;
-    font-weight: normal;
-    border-radius: 2px;
-    padding: 9px 19px;
-    color: #333;
-    background: #FFF;
-  }
-
-  &__empty {
-    padding: 10px 20px;
-    text-align: center;
-    color: #FFF;
-  }
-
-  &__products {
-    background: #181a20;
-    padding: 40px 24px 20px 24px;
-    color: #FFF;
-    position: relative;
-  }
-
-  &__price {
-    text-align: right;
-    height: 24px;
-    line-height: 24px;
-    font-size: 18px;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: -0.6px;
-  }
-
-  &__total {
-    text-align: right;
-    height: 11px;
-    line-height: 11px;
-    font-size: 10px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: 2px;
-  }
-
-  &__exp {
-    display: inline-block;
-    width: 110px;
-    padding-right: 11px;
-  }
-
-  &__cvc {
-    display: inline-block;
-    width: 110px;
-  }
-
-  &__submit {
-    width: 142px;
-    margin-left: auto;
-  }
-
-  &__loader {
-    margin-left: auto;
-    width: 45px;
-  }
-
   &__recover {
     font-size: 12px;
     text-align: right;
@@ -364,106 +290,112 @@
     text-align: right;
   }
 
-  &__product {
-    position: relative;
+  &__error {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
-    &-wrapper {
+  &__email {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  &__card {
+    width: 100%;
+    margin-bottom: 40px;
+    background: #FFFFFF;
+    border: 1px solid #F2F3F7;
+    box-shadow: 0 3px 5px -2px rgba(34,28,158,0.08);
+    border-radius: 6px;
+    padding: 20px;
+
+    &-icons {
+      height: 24px;
+      line-height: 24px;
+      margin-bottom: 40px;
+      vertical-align: top;
+    }
+
+    &-icon {
+      width: 51px;
+      height: 24px;
+      line-height: 22px;
       display: inline-block;
-      width: 50%;
-
-      &:nth-child(even) {
-        padding-left: 7.5px;
-      }
-
-      &:nth-child(odd) {
-        padding-right: 7.5px;
-      }
-    }
-
-    &-image-wrapper {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      margin-bottom: 11px;
-    }
-
-    &-image {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
+      margin-right: 5px;
+      border: 1px solid #F2F3F7;
+      box-shadow: 0 1px 5px -2px rgba(34,28,158,0.08);
+      border-radius: 4px;
       background-position: 50% 50%;
-      background-size: cover;
+      background-repeat: no-repeat;
+
+      &--mc {
+        background-image: url('./media/card-mc.svg');
+        background-size: auto 12px;
+      }
+
+      &--visa {
+        background-image: url('./media/card-visa.svg');
+        background-size: auto 10px;
+      }
+
+      &--amex {
+        background-image: url('./media/card-amex.svg');
+        background-size: auto 15px;
+      }
     }
 
-    &-name {
-      float: left;
-      width: 90px;
-      overflow-x: hidden;
-      text-overflow: ellipsis;
-      height: 25px;
-      line-height: 25px;
-      font-size: 12px;
-      font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.67;
-      letter-spacing: 0.2px;
-      text-align: left;
+    &-number {
+      margin-bottom: 33px;
+      position: relative;
     }
 
-    &-price {
-      float: right;
-      height: 25px;
-      padding: 0px 8px;
-      line-height: 25px;
-      border-radius: 12.5px;
-      background-color: #050505;
-      font-size: 11px;
-      font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
-      letter-spacing: 0.3px;
-    }
-
-    &-remove {
+    &-lock {
+      width: 10px;
+      height: 12px;
       position: absolute;
-      width: 18px;
-      height: 18px;
-      background-image: url('./media/x.svg');
-      background-size: 20px 20px;
-      top: -9px;
-      right: -9px;
-      cursor: pointer;
+      top: 10px;
+      right: 0px;
+      background-image: url('./media/icon-lock.svg');
+      background-position: 50% 50%;
+      background-size: 10px auto;
+      background-repeat: no-repeat;
+    }
+
+    &-extra {
+      height: 36px;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    &-exp {
+      width: 100px;
+    }
+
+    &-cvc {
+      width: 60px;
     }
   }
 
-  &__page-prev {
-    left: 0px;
-    top: 50%;
-    margin-top: -20px;
-    margin-left: -10px;
-    width: 22px;
-    height: 22px;
-    position: absolute;
-    cursor: pointer;
-    background-position: 50% 50%;
-    background-size: 22px 22px;
-    background-image: url('./media/page-prev.png');
+  &__stripe_input {
+    box-sizing: border-box;
+    border: 0px solid #ECEDF0;
+    border-bottom: 1px solid #ECEDF0;
+    height: 36px;
+    line-height: 35px;
+    width: 100%;
+    outline: none;
+    resize: none;
+    font-size: 14px;
+    font-style: normal;
+    letter-spacing: normal;
+    font-stretch: normal;
+    font-variant: normal;
+    font-weight: normal;
+    border-radius: 2px;
+    padding: 9px 0px;
+    color: #828286;
+    background: #FFF;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
-  &__page-next {
-    right: 0px;
-    top: 50%;
-    margin-top: -20px;
-    margin-right: -10px;
-    width: 22px;
-    height: 22px;
-    position: absolute;
-    cursor: pointer;
-    background-position: 50% 50%;
-    background-size: 22px 22px;
-    background-image: url('./media/page-next.png');
-  }*/
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { removeFromCart, clearCart } from 'actions/cart';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Loader, Alert, Form, FormTitle, FormInput, FormButton, FormLabel } from 'components/ui';
+import { Loader, Alert, Form, FormTitle, FormMisc, FormInput, FormButton, FormLabel } from 'components/ui';
 import { validateEmail, validatePassword } from 'helpers/validators';
 import apiFetch from 'helpers/api-fetch';
 import { userSignIn } from 'actions/user';
@@ -242,155 +242,108 @@ class Cart extends React.PureComponent {
     }
   }
 
-  // makePrice() {
-  //   if (this.props.price_total) {
-  //     return (
-  //       <div>
-  //         <div className="cart-popup__price">${this.props.price_total}</div>
-  //         <div className="cart-popup__total">Total</div>
-  //       </div>
-  //     );
-  //   }
-    
-  //   return (<div><div className="cart-popup__price">Free!</div></div>);
-  // }
+  makePassword() {
+    if (!this.state.password_required) {
+      return null;
+    }
 
-  // makeProducts() {
-  //   const { products_list } = this.props;
+    const ret = [
+      <FormLabel key="password">
+        <FormInput
+          placeholder="Password"
+          type="password"
+          name="password"
+          setRef={this.setInputRef}
+          disabled={this.state.loading}
+          onSubmit={this.handleSubmit}
+        />
+      </FormLabel>,
+    ];
 
-  //   return Object.keys(products_list).map((product_id) => {
-  //     const product = products_list[product_id];
+    if (!this.state.loading) {
+      if (!this.state.password_recovered) {
+        ret.push(
+          <FormLabel key="recover">
+            <div className="cart-popup__recover" onClick={this.handleRecover}>
+              Recover password
+            </div>
+          </FormLabel>
+        );
+      } else {
+        ret.push(
+          <FormLabel key="recover">
+            <div className="cart-popup__recovered">
+              New password was sent to your email
+            </div>
+          </FormLabel>
+        );
+      }
+    }
 
-  //     return (
-  //       <div key={product_id} className="cart-popup__product-wrapper">
-  //         <div className="cart-popup__product">
-  //           <div className="cart-popup__product-image-wrapper">
-  //             <div
-  //               className="cart-popup__product-image"
-  //               style={{
-  //                 backgroundImage: `url('${product.image}')`,
-  //               }}
-  //             />
-  //           </div>
+    return ret;
+  }
 
-  //           <div className="cart-popup__product-name">
-  //             {product.name}
-  //           </div>
+  makeError() {
+    if (!this.state.error) {
+      return null;
+    }
 
-  //           <div className="cart-popup__product-price">
-  //             {product.price ? `$${product.price}` : 'Free!'}
-  //           </div>
+    return (
+      <div className="cart-popup__error" key="error">
+        <Alert type="danger">
+          {this.state.error}
+        </Alert>
+      </div>
+    );
+  }
 
-  //           <div
-  //             className="cart-popup__product-remove"
-  //             onClick={this.removeProduct}
-  //             product_id={product_id}
-  //           />
-  //         </div>
-  //       </div>
-  //     );
-  //   });
-  // }
+  makeCardInput() {
+    if (!this.state.show_payments_step && !(this.props.price_total && this.props.products_amount === 1)) {
+      return null;
+    }
 
-  // makeSubmit() {
-  //   if (this.state.loading) {
-  //     return null;
-  //   }
+    return (
+      <div className="cart-popup__card" key="card">
+        <FormLabel>
+          <StripeProvider stripe={this.state.stripe_object}>
+            <Elements>
+              <PaymentsForm
+                setStripeCreateToken={this.setStripeCreateToken}
+              />
+            </Elements>
+          </StripeProvider>
+        </FormLabel>
+      </div>
+    );
+  }
 
-  //   return (
-  //     <FormLabel>
-  //       <div className="cart-popup__submit">
-  //         <FormButton onClick={this.handleSubmit}>
-  //           Submit
-  //         </FormButton>
-  //       </div>
-  //     </FormLabel>
-  //   );
-  // }
+  makeEmail() {
+    if (this.props.price_total && this.props.products_amount !== 1 && !this.state.show_payments_step) {
+      return null;
+    }
 
-  // makeLoader() {
-  //   if (!this.state.loading) {
-  //     return null;
-  //   }
-
-  //   return (
-  //     <FormLabel>
-  //       <div className="cart-popup__loader">
-  //         <Loader color="white" />
-  //       </div>
-  //     </FormLabel>
-  //   );
-  // }
-
-  // makeError() {
-  //   if (!this.state.error) {
-  //     return null;
-  //   }
-
-  //   return (
-  //     <FormLabel>
-  //       <Alert type="danger">{this.state.error}</Alert>
-  //     </FormLabel>
-  //   );
-  // }
-
-  // makePaymentsForm() {
-  //   if (!this.props.price_total) {
-  //     return null;
-  //   }
-
-  //   return (
-  //     <FormLabel>
-  //       <StripeProvider stripe={this.state.stripe_object}>
-  //         <Elements>
-  //           <PaymentsForm
-  //             setStripeCreateToken={this.setStripeCreateToken}
-  //           />
-  //         </Elements>
-  //       </StripeProvider>
-  //     </FormLabel>
-  //   );
-  // }
-
-  // makePassword() {
-  //   if (!this.state.password_required) {
-  //     return null;
-  //   }
-
-  //   const ret = [
-  //     <FormLabel key="password">
-  //       <FormInput
-  //         placeholder="Password"
-  //         type="password"
-  //         name="password"
-  //         setRef={this.setInputRef}
-  //         disabled={this.state.loading}
-  //       />
-  //     </FormLabel>,
-  //   ];
-
-  //   if (!this.state.loading) {
-  //     if (!this.state.password_recovered) {
-  //       ret.push(
-  //         <FormLabel key="recover">
-  //           <div className="cart-popup__recover" onClick={this.handleRecover}>
-  //             Recover password
-  //           </div>
-  //         </FormLabel>
-  //       );
-  //     } else {
-  //       ret.push(
-  //         <FormLabel key="recover">
-  //           <div className="cart-popup__recovered">
-  //             New password was sent to your email
-  //           </div>
-  //         </FormLabel>
-  //       );
-  //     }
-  //   }
-
-  //   return ret;
-  // }
+    return (
+      <div key="email" className="cart-popup__email">
+        <FormLabel>
+          <FormInput
+            placeholder="Email"
+            type="email"
+            name="email"
+            defaultValue={this.props.email}
+            disabled={!!this.props.email || this.state.loading || this.state.password_required}
+            onSubmit={this.handleSubmit}
+            setRef={this.setInputRef}
+          />
+        </FormLabel>
+        {this.makePassword()}
+        <FormLabel>
+          <FormMisc>
+            We will send goods to this email
+          </FormMisc>
+        </FormLabel>
+      </div>
+    );
+  }
 
   makeCartTitle() {
     let className = 'cart-popup__title';
@@ -539,7 +492,10 @@ class Cart extends React.PureComponent {
       content = this.makePlaceholder('Initializing payments...');
     } else {
       content = [
+        this.makeError(),
         this.makeProductsList(),
+        this.makeCardInput(),
+        this.makeEmail(),
         <div key="spring" className="cart-popup__spring" />,
         <div key="bottom_separator" className="cart-popup__separator" />,
         this.makeCheckout(),
@@ -552,41 +508,6 @@ class Cart extends React.PureComponent {
         {content}
       </div>
     );
-
-    // return (
-    //   <div className="cart-popup__wrapper">
-    //     <div className="cart-popup__checkout">
-    //       <Form>
-    //         <FormLabel>
-    //           <FormTitle>Check Out With a Cart</FormTitle>
-    //         </FormLabel>
-    //         {this.makeError()}
-    //         <FormLabel>
-    //           <FormInput
-    //             placeholder="Email"
-    //             type="email"
-    //             name="email"
-    //             defaultValue={this.props.email}
-    //             disabled={!!this.props.email || this.state.loading || this.state.password_required}
-    //             setRef={this.setInputRef}
-    //           />
-    //         </FormLabel>
-    //         {this.makePassword()}
-    //         {this.makePaymentsForm()}
-    //         <FormLabel>
-    //           {this.makePrice()}
-    //         </FormLabel>
-    //         {this.makeSubmit()}
-    //         {this.makeLoader()}
-    //       </Form>
-    //     </div>
-    //     <div className="cart-popup__products">
-    //       {this.makeProducts()}
-    //       {this.makePrevButton()}
-    //       {this.makeNextButton()}
-    //     </div>
-    //   </div>
-    // );
   }
 }
 

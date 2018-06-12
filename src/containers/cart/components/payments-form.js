@@ -13,6 +13,9 @@ const STRIPE_STYLE = {
     fontSize: '14px',
     fontFamily: 'SuisseBPIntl',
   },
+  '::placeholder': {
+    color: '#828286',
+  },
 };
 
 class PaymentsForm extends React.PureComponent {
@@ -36,23 +39,31 @@ class PaymentsForm extends React.PureComponent {
   render() {
     return (
       <div>
-        <FormLabel>
+        <div className="cart-popup__card-icons">
+          <div className="cart-popup__card-icon cart-popup__card-icon--mc" />
+          <div className="cart-popup__card-icon cart-popup__card-icon--visa" />
+          <div className="cart-popup__card-icon cart-popup__card-icon--amex" />
+        </div>
+
+        <div className="cart-popup__card-number">
           <div className="cart-popup__stripe_input">
             <CardNumberElement style={STRIPE_STYLE} />
           </div>
-        </FormLabel>
-        <FormLabel>
-          <div className="cart-popup__exp">
+          <div className="cart-popup__card-lock" />
+        </div>
+
+        <div className="cart-popup__card-extra">
+          <div className="cart-popup__card-exp">
             <div className="cart-popup__stripe_input">
               <CardExpiryElement style={STRIPE_STYLE} />
             </div>
           </div>
-          <div className="cart-popup__cvc">
+          <div className="cart-popup__card-cvc">
             <div className="cart-popup__stripe_input">
               <CardCVCElement style={STRIPE_STYLE} />
             </div>
           </div>
-        </FormLabel>
+        </div>
       </div>
     );
   }
