@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { removeFromCart, clearCart } from 'actions/cart';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Loader, Alert, Form, FormTitle, FormMisc, FormInput, FormButton, FormLabel } from 'components/ui';
+import { Loader, Alert, FormMisc, FormInput, FormLabel } from 'components/ui';
 import { validateEmail, validatePassword } from 'helpers/validators';
 import apiFetch from 'helpers/api-fetch';
 import { userSignIn } from 'actions/user';
@@ -458,7 +458,7 @@ class Cart extends React.PureComponent {
 
     if (this.state.loading) {
       loader = <Loader />;
-    } else if (this.state.show_payments_step || !price_total) {
+    } else if (this.state.show_payments_step || !price_total || products_amount === 1) {
       button = (
         <div className="cart-popup__button cart-popup__button--get" onClick={this.handleSubmit}>
           {price_total ? 'Confirm & Pay' : 'Get freebies'}

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormLabel } from 'components/ui';
 import {
   injectStripe,
   CardNumberElement,
