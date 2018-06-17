@@ -2936,8 +2936,7 @@ input.search-input-button:hover {
   justify-content: center;
 }
 
-.menu-primary > li.current-menu-parent, .menu-primary > li.current-menu-item {
-  margin-left: 8px;
+.menu-primary > li {
   margin-right: 8px;
 }
 
@@ -2945,7 +2944,6 @@ input.search-input-button:hover {
   background-color: #D5D7DD;
   border-color: #D5D7DD;
   color: #ffffff;
-  padding: 0 33px;
 }
 
 .menu-primary > li:hover > ul {
@@ -3840,7 +3838,7 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   .menu-primary > li {
     margin-bottom: 3px;
   }
-  .menu-primary > li.current-menu-parent, .menu-primary > li.current-menu-item {
+  .menu-primary > li {
     margin-left: 0;
     margin-right: 0;
   }
@@ -4022,7 +4020,7 @@ a.button-add.button-dark:before, a.button-add:hover:before {
 
 .navigation {
   @media (max-width: 1199px ) and(min-width: 991px) {
-    padding-right: 75px;
+    padding-right: 130px;
   }
 }
 
