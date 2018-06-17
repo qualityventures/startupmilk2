@@ -56,16 +56,12 @@ if (NODE_ENV === 'dev') {
   app.use(logger('dev'));
 }
 
-var corsOptions = {
-  origin: 'http://example.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
 app.use(cors({
   origin: [
     'http://localhost:3020',
     'http://localhost:3019',
     'https://matte.design/',
+    'https://js.stripe.com',
   ],
   optionsSuccessStatus: 200,
   methods: 'GET,POST,PUT,DELETE',
