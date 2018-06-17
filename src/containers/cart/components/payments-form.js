@@ -11,9 +11,10 @@ const STRIPE_STYLE = {
   base: {
     fontSize: '14px',
     fontFamily: 'SuisseBPIntl',
-  },
-  '::placeholder': {
-    color: '#828286',
+    fontWeight: 'normal',
+    '::placeholder': {
+      color: '#828286',
+    },
   },
 };
 
