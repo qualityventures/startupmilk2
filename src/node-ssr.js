@@ -27,6 +27,7 @@ import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
 import { setCartProducts } from 'actions/cart';
 import { loadUserData, loadCartInfo } from 'helpers/middlewares';
+import cors from 'cors';
 
 const debug = require('debug')('matte.design:ssr');
 require('es6-promise').polyfill();
@@ -55,6 +56,22 @@ if (NODE_ENV === 'dev') {
   app.use(logger('dev'));
 }
 
+var corsOptions = {
+  origin: 'http://example.com',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors({
+  origin: [
+    'http://localhost:3020',
+    'http://localhost:3019',
+    'https://matte.design/',
+  ],
+  optionsSuccessStatus: 200,
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
 app.use(compression());
 app.use(busboy({ immediate: false, limits: { fileSize: 200 * 1024 * 1024 } }));
 app.use(bodyParser.json());
