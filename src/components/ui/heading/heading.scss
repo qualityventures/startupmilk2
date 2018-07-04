@@ -4,5 +4,8 @@
   font-size: 24px;
   font-weight: 400;
   line-height: 1.17;
-  margin-bottom: 30px;
+
+  &--with-margin-bottom {
+    margin-bottom: 30px;
+  }
 }

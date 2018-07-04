@@ -121,7 +121,6 @@ class Container extends React.PureComponent {
                 <div className="footer-sub-navigation">
                   <nav>
                     <ul className="menu-tertiary">
-                      <li><Component to="/faq" href="/faq">F.A.Q</Component></li>
                       <li><Component to="/license" href="/license">License</Component></li>
                       <li><Component to="/contact" href="/contact">Contact</Component></li>
                     </ul>
@@ -129,9 +128,7 @@ class Container extends React.PureComponent {
                 </div>
               </div>
               <div className="col-6 col-lg-3">
-                <div className="footer-content">
-                  <p>Price is VAT exclusive. For customers in the EU, a VAT will be added unless a valid EU VAT code is provided.</p>
-                </div>
+                <div className="footer-content" />
               </div>
             </div>
             <div className="row">

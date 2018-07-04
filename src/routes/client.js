@@ -1,5 +1,4 @@
 import RouteContact from './client-contact';
-import RouteFaq from './client-faq';
 import RouteLicense from './client-license';
 import RouteLogin from './client-login';
 import RouteDashboard from './client-dashboard';
@@ -26,11 +25,6 @@ export default [
     key: 'license',
     exact: true,
     component: RouteLicense,
-  },
-  { path: '/faq',
-    key: 'faq',
-    exact: true,
-    component: RouteFaq,
   },
   { path: '/product/:url',
     key: 'user-product',
