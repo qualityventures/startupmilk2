@@ -7,10 +7,9 @@ Unchartd landing
 ```
 npm i
 npm i node-sass
-cp src/data/config.default.js src/data/config.js
-cp src/data/mongo.default.js src/data/mongo.js
-cp src/data/jwt.default.js src/data/jwt.js
-edit jwt.js config.js mongo.js
+cp src/data/config.private.default.js src/data/config.private.js
+cp src/data/config.public.default.js src/data/config.public.js
+edit (if needed) config.public.js config.private.js
 npm run cli init
 ```
 
