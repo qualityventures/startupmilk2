@@ -21,6 +21,16 @@ class ExtraFintechStartup extends React.PureComponent {
     return ret;
   }
 
+  makeFlags() {
+    const ret = [];
+
+    for (let i = 1; i <= 30; ++i) {
+      ret.push(<span className={`efs__flag efs__flag--${i}`} key={i} />);
+    }
+
+    return ret;
+  }
+
   render() {
     return (
       <div className="efs__container">
@@ -138,7 +148,7 @@ class ExtraFintechStartup extends React.PureComponent {
           <div className="efs__card-spring" />
 
           <div className="efs__card-flags">
-            FLAGS
+            {this.makeFlags()}
           </div>
         </div>
 

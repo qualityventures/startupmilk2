@@ -336,14 +336,74 @@
       flex-wrap: wrap;
       justify-content: space-between;
     }
+
+    &-flags {
+      flex-grow: 1;
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  }
+
+  &__flag {
+    display: inline-block;
+    width: 48px;
+    height: 32px;
+    margin-top: 38px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 48px 32px;
+    margin-right: 38px;
+
+    &:nth-child(6n) {
+      margin-right: 0px;
+    }
+
+    &--1 { background-image: url('./media/icons/flag/1.svg'); }
+    &--2 { background-image: url('./media/icons/flag/2.svg'); }
+    &--3 { background-image: url('./media/icons/flag/3.svg'); }
+    &--4 { background-image: url('./media/icons/flag/4.svg'); }
+    &--5 { background-image: url('./media/icons/flag/5.svg'); }
+    &--6 { background-image: url('./media/icons/flag/6.svg'); }
+    &--7 { background-image: url('./media/icons/flag/7.svg'); }
+    &--8 { background-image: url('./media/icons/flag/8.svg'); }
+    &--9 { background-image: url('./media/icons/flag/9.svg'); }
+    &--10 { background-image: url('./media/icons/flag/10.svg'); }
+    &--11 { background-image: url('./media/icons/flag/11.svg'); }
+    &--12 { background-image: url('./media/icons/flag/12.svg'); }
+    &--13 { background-image: url('./media/icons/flag/13.svg'); }
+    &--14 { background-image: url('./media/icons/flag/14.svg'); }
+    &--15 { background-image: url('./media/icons/flag/15.svg'); }
+    &--16 { background-image: url('./media/icons/flag/16.svg'); }
+    &--17 { background-image: url('./media/icons/flag/17.svg'); }
+    &--18 { background-image: url('./media/icons/flag/18.svg'); }
+    &--19 { background-image: url('./media/icons/flag/19.svg'); }
+    &--20 { background-image: url('./media/icons/flag/20.svg'); }
+    &--21 { background-image: url('./media/icons/flag/21.svg'); }
+    &--22 { background-image: url('./media/icons/flag/22.svg'); }
+    &--23 { background-image: url('./media/icons/flag/23.svg'); }
+    &--24 { background-image: url('./media/icons/flag/24.svg'); }
+    &--25 { background-image: url('./media/icons/flag/25.svg'); }
+    &--26 { background-image: url('./media/icons/flag/26.svg'); }
+    &--27 { background-image: url('./media/icons/flag/27.svg'); }
+    &--28 { background-image: url('./media/icons/flag/28.svg'); }
+    &--29 { background-image: url('./media/icons/flag/29.svg'); }
+    &--30 { background-image: url('./media/icons/flag/30.svg'); }
   }
 
   &__icon {
     display: inline-block;
-    height: 80px;
-    width: 120px;
+    height: 72px;
+    width: 72px;
+    margin-top: 8px;
     background-position: 50% 50%;
     background-repeat: no-repeat;
+    margin-right: 64px;
+
+    &:nth-child(4n) {
+      margin-right: 0px;
+    }
 
     &--1 {
       background-image: url('./media/icons/categories/1.svg');
