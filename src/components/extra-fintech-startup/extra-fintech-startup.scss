@@ -1,0 +1,332 @@
+.efs {
+  &__container {
+    width: 1320px;
+    min-height: 8316px;
+    position: relative;
+    background-image: url('./media/bg-top.png'), url('./media/bg-bottom.png');
+    background-position: 50% 45%, 50% 97%;
+    background-repeat: no-repeat, no-repeat;
+  }
+
+  &__box {
+    position: absolute;
+    background: #FFF;
+    padding-left: 80px;
+    padding-top: 72px;
+    padding-bottom: 76px;
+
+    &--big {
+      top: 1339px;
+      width: 1320px;
+      height: 640px;
+      padding-right: 600px;
+      background-color: #FFF;
+      background-image: url('./media/bg-box.png');
+      background-position: 50% 100%;
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    &--1 {
+      width: 300px;
+      height: 300px;
+      top: 2019px;
+      left: 400px - 60px;
+    }
+
+    &--2 {
+      width: 640px;
+      height: 640px;
+      top: 2359px;
+      left: 740px - 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    &--3 {
+      width: 300px;
+      height: 480px;
+      top: 3039px;
+      left: 400px - 60px;
+    }
+
+    &--4 {
+      width: 300px;
+      height: 300px;
+      top: 3379px;
+      left: 1080px - 60px;
+    }
+
+    &--5 {
+      width: 300px;
+      height: 300px;
+      top: 4059px;
+      left: 740px - 60px;
+    }
+
+    &--6 {
+      width: 300px;
+      height: 640px;
+      top: 4399px;
+      left: 0px;
+    }
+
+    &--7 {
+      width: 640px;
+      height: 300px;
+      top: 4739px;
+      left: 740px - 60px;
+    }
+
+    &--8 {
+      width: 300px;
+      height: 300px;
+      top: 5419px;
+      left: 400px - 60px;
+    }
+
+    &--9 {
+      width: 640px;
+      height: 300px;
+      top: 5759px;
+      left: 400px - 60px;
+    }
+
+    &-list {
+      vertical-align: top;
+    }
+
+    &-big-title {
+      color: rgb(51, 58, 76);
+      height: 96px;
+      line-height: 96px;
+      font-size: 60px;
+      font-weight: 400;
+      letter-spacing: 1px;
+
+      & > span {
+        font-size: 20px;
+      }
+    }
+
+    &-normal-title {
+      color: rgb(51, 58, 76);
+      max-width: 364px;
+      min-height: 96px;
+      line-height: 96px / 2;
+      font-size: 38px;
+      font-weight: 400;
+    }
+
+    &-desc {
+      display: inline-block;
+      text-transform: uppercase;
+      width: 130px + 48px;
+      height: 41px;
+      line-height: 20.5px;
+      letter-spacing: 1px;
+      font-weight: 600;
+      font-size: 15px;
+      color: rgb(159, 163, 176);
+    }
+
+    &-seaparator {
+      display: block;
+      height: 59px;
+    }
+  }
+
+  &__phone {
+    position: absolute;
+    width: 316px;
+    height: 591px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 316px 591px;
+
+    &--1 {
+      background-image: url('./media/phone-1.png');
+      top: 2043px;
+      left: 0px;
+    }
+
+    &--2 {
+      background-image: url('./media/phone-2.png');
+      top: 2384px;
+      left: 392px - 60px;
+    }
+
+    &--3 {
+      background-image: url('./media/phone-3.png');
+      top: 3404px;
+      left: 392px - 60px;
+    }
+
+    &--4 {
+      background-image: url('./media/phone-4.png');
+      top: 3744px;
+      left: 0px;
+    }
+
+    &--5 {
+      background-image: url('./media/phone-5.png');
+      top: 4084px;
+      left: 1072px - 60px;
+    }
+
+    &--6 {
+      background-image: url('./media/phone-6.png');
+      top: 4424px;
+      left: 392px - 60px;
+    }
+
+    &--7 {
+      background-image: url('./media/phone-7.png');
+      top: 5104px;
+      left: 732px - 60px;
+    }
+
+    &--8 {
+      background-image: url('./media/phone-8.png');
+      top: 5444px;
+      left: 0px;
+    }
+
+    &--9 {
+      background-image: url('./media/phone-9.png');
+      top: 5784px;
+      left: 1073px - 60px;
+    }
+
+    &--10 {
+      background-image: url('./media/phone-10.png');
+      top: 6123px;
+      left: 392px - 60px;
+    }
+  }
+
+  &__big-phone {
+    position: absolute;
+    top: 1281px;
+    left: 822px - 60px;
+    background-image: url('./media/phone-big.png');
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    width: 468px;
+    height: 698px;
+  }
+
+  &__watch {
+    background-image: url('./media/bg-circle.png');
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: auto 973px;
+    width: 100%;
+    height: 1339px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-button {
+      display: block;
+      width: 160px;
+      height: 58px;
+      line-height: 58px;
+      text-align: center;
+      color: #FFF;
+      cursor: pointer;
+      background-image: url('./media/watch-button.png');
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 160px 58px;
+
+      &:active, &:hover {
+        color: #FFF;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &__card {
+    position: absolute;
+    width: 640px;
+    height: 640px;
+    padding: 76px 80px 80px 80px;
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+
+    &--1 {
+      top: 6779px;
+      left: 0px;
+    }
+
+    &--2 {
+      top: 6779px;
+      left: 740px - 60px;
+    }
+
+    &--3 {
+      top: 7459px;
+      left: 0px;
+    }
+
+    &-title {
+      line-height: 46px;
+      min-height: 46px;
+      max-width: 316px;
+      color: rgb(51, 58, 76);
+      font-size: 38px;
+      font-weight: 400;
+      margin-bottom: 25px;
+      flex-grow: 1;
+      flex-shrink: 0;
+    }
+
+    &-desc {
+      line-height: 32px;
+      color: rgb(171, 175, 186);
+      font-size: 22px;
+      flex-grow: 1;
+      flex-shrink: 0;
+    }
+
+    &-spring {
+      flex-grow: 999;
+      flex-shrink: 1;
+    }
+
+    &-line {
+      flex-grow: 1;
+      flex-shrink: 0;
+      height: 1px;
+      background-color: rgba(164, 169, 179, 0.2);
+      margin-bottom: 64px;
+    }
+
+    &-info {
+      flex-grow: 1;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      color: rgb(172, 176, 188);
+      line-height: 20.5px;
+      font-size: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &-1, &-2 {
+        height: 41px;
+      }
+
+      &-2 {
+        text-align: right;
+      }
+    }
+  }
+}

@@ -43,7 +43,7 @@ class Content extends React.PureComponent {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-12" style={props.style}>
+          <div className="col-12">
             <div {...props}>
               {this.props.children}
             </div>
