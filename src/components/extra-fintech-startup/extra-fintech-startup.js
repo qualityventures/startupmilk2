@@ -11,6 +11,16 @@ class ExtraFintechStartup extends React.PureComponent {
 
   }
 
+  makeIcons() {
+    const ret = [];
+
+    for (let i = 1; i <= 16; ++i) {
+      ret.push(<span className={`efs__icon efs__icon--${i}`} key={i} />);
+    }
+
+    return ret;
+  }
+
   render() {
     return (
       <div className="efs__container">
@@ -118,7 +128,7 @@ class ExtraFintechStartup extends React.PureComponent {
           <div className="efs__card-spring" />
 
           <div className="efs__card-icons">
-            ICONS
+            {this.makeIcons()}
           </div>
         </div>
 

@@ -328,5 +328,101 @@
         text-align: right;
       }
     }
+
+    &-icons {
+      flex-grow: 1;
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  }
+
+  &__icon {
+    display: inline-block;
+    height: 80px;
+    width: 120px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+
+    &--1 {
+      background-image: url('./media/icons/categories/1.svg');
+      background-size: auto 44.6px;
+    }
+
+    &--2 {
+      background-image: url('./media/icons/categories/2.svg');
+      background-size: 45px auto;
+    }
+
+    &--3 {
+      background-image: url('./media/icons/categories/3.svg');
+      background-size: 48px auto;
+    }
+
+    &--4 {
+      background-image: url('./media/icons/categories/4.svg');
+      background-size: 40px auto;
+    }
+
+    &--5 {
+      background-image: url('./media/icons/categories/5.svg');
+      background-size: 37px auto;
+    }
+
+    &--6 {
+      background-image: url('./media/icons/categories/6.svg');
+      background-size: 47px auto;
+    }
+
+    &--7 {
+      background-image: url('./media/icons/categories/7.svg');
+      background-size: 40px auto;
+    }
+
+    &--8 {
+      background-image: url('./media/icons/categories/8.svg');
+      background-size: 32.6px auto;
+    }
+
+    &--9 {
+      background-image: url('./media/icons/categories/9.svg');
+      background-size: 42px auto;
+    }
+
+    &--10 {
+      background-image: url('./media/icons/categories/10.svg');
+      background-size: 45px auto;
+    }
+
+    &--11 {
+      background-image: url('./media/icons/categories/11.svg');
+      background-size: 43.4px auto;
+    }
+
+    &--12 {
+      background-image: url('./media/icons/categories/12.svg');
+      background-size: 32.5px auto;
+    }
+
+    &--13 {
+      background-image: url('./media/icons/categories/13.svg');
+      background-size: 39px auto;
+    }
+
+    &--14 {
+      background-image: url('./media/icons/categories/14.svg');
+      background-size: 40px auto;
+    }
+
+    &--15 {
+      background-image: url('./media/icons/categories/15.svg');
+      background-size: 47px auto;
+    }
+
+    &--16 {
+      background-image: url('./media/icons/categories/16.svg');
+      background-size: 15.4px auto;
+    }
   }
 }
