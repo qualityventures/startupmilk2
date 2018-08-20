@@ -1,8 +1,14 @@
 import RouteAdminProducts from './admin-products';
 import RouteAdminProductEdit from './admin-product-edit';
 import RouteAdminProductCreate from './admin-product-create';
+import RouteAdminExport from './admin-export';
 
 export default [
+  { path: '/admin/export',
+    key: 'admin-export',
+    exact: true,
+    component: RouteAdminExport,
+  },
   { path: '/admin/product/create',
     key: 'admin-product-create',
     exact: true,

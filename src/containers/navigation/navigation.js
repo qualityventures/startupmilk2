@@ -21,21 +21,24 @@ class Navigation extends React.PureComponent {
     const { pathname } = this.props.location;
     const list = [
       <NavigationLink
-        key={'products'}
+        key="products"
         to="/admin/products"
         selected={pathname === '/admin/' || pathname === '/admin/products'}
         content="Products"
       />,
-    ];
-
-    list.push(
+      <NavigationLink
+        key="export"
+        to="/admin/export"
+        selected={pathname === '/admin/export'}
+        content="Export"
+      />,
       <NavigationLink
         key="landing"
         href="/"
         selected={false}
         content="Back to matte.design"
-      />
-    );
+      />,
+    ];
 
     return list;
   }

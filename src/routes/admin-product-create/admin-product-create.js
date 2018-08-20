@@ -1,9 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Alert, FormInput, FormSelect, FormMisc, FormTitle, FormButton, FormLabel, Loader } from 'components/ui';
-import { validateProductUrl, validateProductName, validateProductCategory, validateProductPrice, validateProductDesc } from 'helpers/validators';
+import {
+  Form,
+  Alert,
+  FormInput,
+  FormSelect,
+  FormMisc,
+  FormTitle,
+  FormButton,
+  FormLabel,
+  Loader,
+} from 'components/ui';
+import {
+  validateProductUrl,
+  validateProductName,
+  validateProductCategory,
+  validateProductPrice,
+  validateProductDesc,
+  validateProductDisplay,
+  validateProductYoutube,
+} from 'helpers/validators';
 import { withRouter } from 'react-router-dom';
 import CATEGORIES_LIST from 'data/categories';
+import DISPLAY_LIST from 'data/products-display';
 
 class RouteAdminProductCreate extends React.PureComponent {
   static propTypes = {
@@ -22,8 +41,11 @@ class RouteAdminProductCreate extends React.PureComponent {
       loading: false,
       error: false,
       auto_url_enabled: true,
-      selectValues: Object.keys(CATEGORIES_LIST).map((key) => {
+      categoriesValues: Object.keys(CATEGORIES_LIST).map((key) => {
         return { value: key, title: CATEGORIES_LIST[key] };
+      }),
+      displayValues: Object.keys(DISPLAY_LIST).map((key) => {
+        return { value: key, title: DISPLAY_LIST[key] };
       }),
     };
 
@@ -69,6 +91,8 @@ class RouteAdminProductCreate extends React.PureComponent {
       category: validateProductCategory,
       url: validateProductUrl,
       name: validateProductName,
+      display: validateProductDisplay,
+      youtube: validateProductYoutube,
     };
     const data = {};
     let success = true;
@@ -232,10 +256,30 @@ class RouteAdminProductCreate extends React.PureComponent {
         <FormLabel>
           <FormSelect
             setRef={this.setInputRef}
+            name="display"
+            placeholder="Display as..."
+            disabled={loading}
+            values={this.state.displayValues}
+            defaultValue="normal"
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormInput
+            setRef={this.setInputRef}
+            name="youtube"
+            placeholder="Youtube link"
+            disabled={loading}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormSelect
+            setRef={this.setInputRef}
             name="category"
             placeholder="Select category..."
             disabled={loading}
-            values={this.state.selectValues}
+            values={this.state.categoriesValues}
           />
         </FormLabel>
 

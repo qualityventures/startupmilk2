@@ -32,6 +32,15 @@ const ProductsSchema = new Schema({
   price: {
     type: Number,
   },
+  display: {
+    type: String,
+    trim: true,
+    default: 'normal',
+  },
+  youtube: {
+    type: String,
+    default: '',
+  },
   deleted: {
     type: Boolean,
     default: false,
@@ -109,6 +118,8 @@ ProductsSchema.methods.toClientJSON = function() {
     name: this.name,
     desc: this.desc_html || this.desc_raw || this.desc,
     price: this.price,
+    display: this.display,
+    youtube: this.youtube,
     files: Object.keys(files),
     downloads,
     related,

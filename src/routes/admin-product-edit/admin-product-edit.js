@@ -19,11 +19,14 @@ import {
   validateProductCategory,
   validateProductPrice,
   validateProductDesc,
+  validateProductDisplay,
+  validateProductYoutube,
 } from 'helpers/validators';
 import { openModal } from 'actions/modals';
 import ImagesManager from 'components/images-manager';
 import FilesManager from 'components/files-manager';
 import CATEGORIES_LIST from 'data/categories';
+import DISPLAY_LIST from 'data/products-display';
 import { connect } from 'react-redux';
 import apiFetch from 'helpers/api-fetch';
 
@@ -46,8 +49,11 @@ class RouteAdminProductEdit extends React.PureComponent {
       loaded: false,
       data: {},
       error: false,
-      selectValues: Object.keys(CATEGORIES_LIST).map((key) => {
+      categoriesValues: Object.keys(CATEGORIES_LIST).map((key) => {
         return { value: key, title: CATEGORIES_LIST[key] };
+      }),
+      displayValues: Object.keys(DISPLAY_LIST).map((key) => {
+        return { value: key, title: DISPLAY_LIST[key] };
       }),
     };
 
@@ -200,6 +206,8 @@ class RouteAdminProductEdit extends React.PureComponent {
       category: validateProductCategory,
       url: validateProductUrl,
       name: validateProductName,
+      display: validateProductDisplay,
+      youtube: validateProductYoutube,
     };
 
     this.setState({ loading: false, error: false, success: false });
@@ -445,10 +453,31 @@ class RouteAdminProductEdit extends React.PureComponent {
         <FormLabel>
           <FormSelect
             setRef={this.setInputRef}
+            name="display"
+            placeholder="Display as..."
+            disabled={loading}
+            values={this.state.displayValues}
+            defaultValue={data.display}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormInput
+            setRef={this.setInputRef}
+            name="youtube"
+            placeholder="Youtube link"
+            defaultValue={data.youtube}
+            disabled={loading}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormSelect
+            setRef={this.setInputRef}
             name="category"
             placeholder="Select category..."
             disabled={loading}
-            values={this.state.selectValues}
+            values={this.state.categoriesValues}
             defaultValue={data.category}
           />
         </FormLabel>
@@ -467,6 +496,12 @@ class RouteAdminProductEdit extends React.PureComponent {
         {this.makeLoader()}
         {this.makeSaveButton()}
         {this.makeDeleteButton()}
+
+        <FormLabel>
+          <FormMisc>
+            Display
+          </FormMisc>
+        </FormLabel>
 
         <FormLabel>
           <FormMisc>

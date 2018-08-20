@@ -3,7 +3,15 @@
 
 import { throwError, returnObjectAsJSON } from 'helpers/response';
 import { getFileType } from 'helpers/files';
-import { validateProductUrl, validateProductName, validateProductCategory, validateProductDesc, validateProductPrice } from 'helpers/validators';
+import {
+  validateProductUrl,
+  validateProductName,
+  validateProductCategory,
+  validateProductDesc,
+  validateProductPrice,
+  validateProductDisplay,
+  validateProductYoutube,
+} from 'helpers/validators';
 import Products from 'models/products';
 import debug from 'debug';
 import { RESULTS_PER_PAGE } from 'data/config.public';
@@ -33,6 +41,8 @@ function validateProductData(req, res) {
     category: validateProductCategory,
     url: validateProductUrl,
     name: validateProductName,
+    display: validateProductDisplay,
+    youtube: validateProductYoutube,
   };
   const data = {};
   const keys = Object.keys(fields);
@@ -185,6 +195,8 @@ export function updateProduct(req, res) {
       product.desc_html = processDesc(data.desc);
       product.category = data.category;
       product.deleted = data.deleted;
+      product.youtube = data.youtube;
+      product.display = data.display;
 
       return product.save();
     })

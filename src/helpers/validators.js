@@ -1,4 +1,5 @@
 import CATEGORIES_LIST from 'data/categories';
+import DISPLAY_LIST from 'data/products-display';
 
 export function validateEmail(email) {
   if (!email) {
@@ -119,5 +120,17 @@ export function validateProductName(name) {
     return 'The name contains invalid symbols';
   }
 
+  return true;
+}
+
+export function validateProductDisplay(display) {
+  if (!display || typeof display !== 'string') return 'Invalid dipslay';
+  if (DISPLAY_LIST[display] === undefined) return 'The category is invalid';
+  return true;
+}
+
+export function validateProductYoutube(youtube) {
+  if (typeof youtube !== 'string') return 'Invalid youtube link';
+  if (youtube && !youtube.match(/^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[0-9a-z_-]+$/gi)) return 'Invalid youtube link';
   return true;
 }
