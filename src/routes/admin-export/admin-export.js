@@ -20,7 +20,7 @@ class RouteAdminExport extends React.PureComponent {
   }
 
   handleDownloadCSVEmails() {
-    console.log('handleDownloadCSVEmails');
+    window.open('/api/export/csv-emails', '_blank');
   }
   
   render() {
