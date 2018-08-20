@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Content,
   Loader,
   Alert,
   FormTitle,
@@ -270,7 +271,7 @@ class RouteAdminProducts extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <Content>
         <FormTitle>
           Products list
           <div className="admin-products__create">
@@ -285,7 +286,7 @@ class RouteAdminProducts extends React.PureComponent {
         {this.makeProducts()}
         {this.makeLoader()}
         {this.makePaginator()}
-      </div>
+      </Content>
     );
   }
 }

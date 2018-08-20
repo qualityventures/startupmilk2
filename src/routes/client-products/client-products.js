@@ -6,6 +6,7 @@ import areEqual from 'helpers/are-equal';
 import { makeArgs, getArgs } from 'helpers/args';
 import { loadProducts } from 'actions/products';
 import {
+  Content,
   Loader,
   Alert,
   Form,
@@ -197,7 +198,7 @@ class RouteClientProducts extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <Content>
         <TitleUpdater title="" />
         <div className="title">
           <h1>Premium design resources to speed up your creative workflow</h1>
@@ -210,7 +211,7 @@ class RouteClientProducts extends React.PureComponent {
         {this.makeProducts()}
         {this.makeLoader()}
         {this.makePaginator()}
-      </div>
+      </Content>
     );
   }
 }

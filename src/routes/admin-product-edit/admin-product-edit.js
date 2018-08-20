@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Content,
   Form,
   Alert,
   FormInput,
@@ -390,161 +391,167 @@ class RouteAdminProductEdit extends React.PureComponent {
     if (!loaded) {
       if (error) {
         return (
-          <Form>
-            <FormTitle>Edit product</FormTitle>
-            <Alert type="danger">{error}</Alert>
-          </Form>
+          <Content>
+            <Form>
+              <FormTitle>Edit product</FormTitle>
+              <Alert type="danger">{error}</Alert>
+            </Form>
+          </Content>
         );
       }
 
       return (
-        <Form>
-          <FormTitle>Edit product</FormTitle>
-          <Loader />
-        </Form>
+        <Content>
+          <Form>
+            <FormTitle>Edit product</FormTitle>
+            <Loader />
+          </Form>
+        </Content>
       );
     }
 
     return (
-      <Form>
-        <FormTitle>Edit: {data.name}</FormTitle>
-        {this.makeSuccess()}
-        {this.makeError()}
+      <Content>
+        <Form>
+          <FormTitle>Edit: {data.name}</FormTitle>
+          {this.makeSuccess()}
+          {this.makeError()}
 
-        <FormLabel>
-          <FormMisc>
-            Basic details
-          </FormMisc>
-        </FormLabel>
+          <FormLabel>
+            <FormMisc>
+              Basic details
+            </FormMisc>
+          </FormLabel>
 
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onSubmit={this.updateProduct}
-            name="name"
-            placeholder="Product name"
-            defaultValue={data.name}
-            disabled={loading}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onSubmit={this.updateProduct}
-            name="url"
-            placeholder="Product url"
-            defaultValue={data.url}
-            disabled={loading}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onSubmit={this.updateProduct}
-            name="price"
-            placeholder="Product price"
-            defaultValue={data.price}
-            disabled={loading}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormSelect
-            setRef={this.setInputRef}
-            name="display"
-            placeholder="Display as..."
-            disabled={loading}
-            values={this.state.displayValues}
-            defaultValue={data.display}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            name="youtube"
-            placeholder="Youtube link"
-            defaultValue={data.youtube}
-            disabled={loading}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormSelect
-            setRef={this.setInputRef}
-            name="category"
-            placeholder="Select category..."
-            disabled={loading}
-            values={this.state.categoriesValues}
-            defaultValue={data.category}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            name="desc"
-            placeholder="Product desc"
-            defaultValue={data.desc_raw}
-            disabled={loading}
-            multiline
-          />
-        </FormLabel>
-
-        {this.makeLoader()}
-        {this.makeSaveButton()}
-        {this.makeDeleteButton()}
-
-        <FormLabel>
-          <FormMisc>
-            Display
-          </FormMisc>
-        </FormLabel>
-
-        <FormLabel>
-          <FormMisc>
-            Images
-          </FormMisc>
-        </FormLabel>
-
-        <FormLabel>
-          <ImagesManager
-            productId={this.props.match.params.id}
-            images={data.images}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormMisc>
-            Files
-          </FormMisc>
-        </FormLabel>
-
-        <FormLabel>
-          <FilesManager
-            productId={this.props.match.params.id}
-            files={data.files}
-          />
-        </FormLabel>
-
-        <FormLabel>
-          <FormMisc>
-            Related items
-          </FormMisc>
-        </FormLabel>
-
-        <FormLabel>
-          <Catalog>
-            {this.makeRelatedList()}
-            <CatalogItem
-              bigButton={this.state.loading ? <Loader /> : <span>Select related</span>}
-              onBigButtonClick={this.selectRelatedProducts}
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              onSubmit={this.updateProduct}
+              name="name"
+              placeholder="Product name"
+              defaultValue={data.name}
+              disabled={loading}
             />
-          </Catalog>
-        </FormLabel>
-      </Form>
+          </FormLabel>
+
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              onSubmit={this.updateProduct}
+              name="url"
+              placeholder="Product url"
+              defaultValue={data.url}
+              disabled={loading}
+            />
+          </FormLabel>
+
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              onSubmit={this.updateProduct}
+              name="price"
+              placeholder="Product price"
+              defaultValue={data.price}
+              disabled={loading}
+            />
+          </FormLabel>
+
+          <FormLabel>
+            <FormSelect
+              setRef={this.setInputRef}
+              name="display"
+              placeholder="Display as..."
+              disabled={loading}
+              values={this.state.displayValues}
+              defaultValue={data.display}
+            />
+          </FormLabel>
+
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              name="youtube"
+              placeholder="Youtube link"
+              defaultValue={data.youtube}
+              disabled={loading}
+            />
+          </FormLabel>
+
+          <FormLabel>
+            <FormSelect
+              setRef={this.setInputRef}
+              name="category"
+              placeholder="Select category..."
+              disabled={loading}
+              values={this.state.categoriesValues}
+              defaultValue={data.category}
+            />
+          </FormLabel>
+
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              name="desc"
+              placeholder="Product desc"
+              defaultValue={data.desc_raw}
+              disabled={loading}
+              multiline
+            />
+          </FormLabel>
+
+          {this.makeLoader()}
+          {this.makeSaveButton()}
+          {this.makeDeleteButton()}
+
+          <FormLabel>
+            <FormMisc>
+              Display
+            </FormMisc>
+          </FormLabel>
+
+          <FormLabel>
+            <FormMisc>
+              Images
+            </FormMisc>
+          </FormLabel>
+
+          <FormLabel>
+            <ImagesManager
+              productId={this.props.match.params.id}
+              images={data.images}
+            />
+          </FormLabel>
+
+          <FormLabel>
+            <FormMisc>
+              Files
+            </FormMisc>
+          </FormLabel>
+
+          <FormLabel>
+            <FilesManager
+              productId={this.props.match.params.id}
+              files={data.files}
+            />
+          </FormLabel>
+
+          <FormLabel>
+            <FormMisc>
+              Related items
+            </FormMisc>
+          </FormLabel>
+
+          <FormLabel>
+            <Catalog>
+              {this.makeRelatedList()}
+              <CatalogItem
+                bigButton={this.state.loading ? <Loader /> : <span>Select related</span>}
+                onBigButtonClick={this.selectRelatedProducts}
+              />
+            </Catalog>
+          </FormLabel>
+        </Form>
+      </Content>
     );
   }
 }

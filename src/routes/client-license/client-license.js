@@ -1,6 +1,6 @@
 import React from 'react';
 import TitleUpdater from 'containers/title-updater';
-import { FormLabel, Heading } from 'components/ui';
+import { Content, FormLabel, Heading } from 'components/ui';
 
 class RouteClientLicense extends React.PureComponent {
   static propTypes = {
@@ -13,7 +13,7 @@ class RouteClientLicense extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <Content>
         <TitleUpdater title="License" />
         <FormLabel>
           Here’s a breakdown of what you get when you purchase design resources from Matte.
@@ -41,7 +41,7 @@ class RouteClientLicense extends React.PureComponent {
             <li>- There are items where components such as, but not limited to, fonts, photographs, and illustrations are sourced by their creator from a third-party in which different license terms may apply.</li>
           </ul>
         </FormLabel>
-      </div>
+      </Content>
     );
   }
 }

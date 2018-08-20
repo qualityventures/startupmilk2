@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadProduct } from 'actions/product';
-import { Loader, Alert, Catalog, CatalogItem, FormMisc } from 'components/ui';
+import { Loader, Alert, Catalog, CatalogItem, FormMisc, Content } from 'components/ui';
 import TitleUpdater from 'containers/title-updater';
 import FORMATS_LIST from 'data/files';
 import CartButton from 'containers/cart-button';
+import ExtraFintechStartup from 'components/extra-fintech-startup';
 
 function fetchClientProduct(location, store, match) {
   const state = store.getState().product;
@@ -177,6 +178,30 @@ class RouteClientProduct extends React.PureComponent {
     );
   }
 
+  makeExtraContent() {
+    const { error, loaded, data } = this.props;
+
+    if (!loaded || error) {
+      return null;
+    }
+
+    let Component = null;
+
+    if (data.display === 'fintech') {
+      Component = ExtraFintechStartup;
+    }
+
+    if (!Component) {
+      return null;
+    }
+
+    return (
+      <Content background={false} boxShadow={false} withPadding={false}>
+        <Component data={data} />
+      </Content>
+    );
+  }
+
   render() {
     const { error, loading, loaded, data } = this.props;
     let content = null;
@@ -218,7 +243,8 @@ class RouteClientProduct extends React.PureComponent {
     return (
       <div>
         <TitleUpdater title={this.getTitle()} />
-        {content}
+        <Content>{content}</Content>
+        {this.makeExtraContent()}
       </div>
     );
   }

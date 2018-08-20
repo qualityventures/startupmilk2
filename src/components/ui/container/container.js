@@ -105,13 +105,7 @@ class Container extends React.PureComponent {
 
         <div className="header-global-bottom" />
         <div className="spanning">
-          <div className="container">
-            <div className="row">
-              <div className="col-12">
-                <div className="content">{this.props.children}</div>
-              </div>
-            </div>
-          </div>
+          {this.props.children}
         </div>
 
         <footer className="footer-global">

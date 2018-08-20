@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Content,
   Form,
   Alert,
   FormInput,
@@ -210,92 +211,94 @@ class RouteAdminProductCreate extends React.PureComponent {
     const { loading } = this.state;
 
     return (
-      <Form>
-        <FormTitle>New product</FormTitle>
-        {this.makeSuccess()}
-        {this.makeError()}
+      <Content>
+        <Form>
+          <FormTitle>New product</FormTitle>
+          {this.makeSuccess()}
+          {this.makeError()}
 
-        <FormLabel>
-          <FormMisc>
-            Basic details
-          </FormMisc>
-        </FormLabel>
+          <FormLabel>
+            <FormMisc>
+              Basic details
+            </FormMisc>
+          </FormLabel>
 
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onKeyUp={this.urlAutoFill}
-            onSubmit={this.createProduct}
-            name="name"
-            placeholder="Product name"
-            disabled={loading}
-          />
-        </FormLabel>
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              onKeyUp={this.urlAutoFill}
+              onSubmit={this.createProduct}
+              name="name"
+              placeholder="Product name"
+              disabled={loading}
+            />
+          </FormLabel>
 
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onSubmit={this.createProduct}
-            onKeyUp={this.disableUrlAutoFill}
-            name="url"
-            placeholder="Product url"
-            disabled={loading}
-          />
-        </FormLabel>
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              onSubmit={this.createProduct}
+              onKeyUp={this.disableUrlAutoFill}
+              name="url"
+              placeholder="Product url"
+              disabled={loading}
+            />
+          </FormLabel>
 
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            onSubmit={this.createProduct}
-            name="price"
-            placeholder="Product price"
-            disabled={loading}
-          />
-        </FormLabel>
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              onSubmit={this.createProduct}
+              name="price"
+              placeholder="Product price"
+              disabled={loading}
+            />
+          </FormLabel>
 
-        <FormLabel>
-          <FormSelect
-            setRef={this.setInputRef}
-            name="display"
-            placeholder="Display as..."
-            disabled={loading}
-            values={this.state.displayValues}
-            defaultValue="normal"
-          />
-        </FormLabel>
+          <FormLabel>
+            <FormSelect
+              setRef={this.setInputRef}
+              name="display"
+              placeholder="Display as..."
+              disabled={loading}
+              values={this.state.displayValues}
+              defaultValue="normal"
+            />
+          </FormLabel>
 
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            name="youtube"
-            placeholder="Youtube link"
-            disabled={loading}
-          />
-        </FormLabel>
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              name="youtube"
+              placeholder="Youtube link"
+              disabled={loading}
+            />
+          </FormLabel>
 
-        <FormLabel>
-          <FormSelect
-            setRef={this.setInputRef}
-            name="category"
-            placeholder="Select category..."
-            disabled={loading}
-            values={this.state.categoriesValues}
-          />
-        </FormLabel>
+          <FormLabel>
+            <FormSelect
+              setRef={this.setInputRef}
+              name="category"
+              placeholder="Select category..."
+              disabled={loading}
+              values={this.state.categoriesValues}
+            />
+          </FormLabel>
 
-        <FormLabel>
-          <FormInput
-            setRef={this.setInputRef}
-            name="desc"
-            placeholder="Product desc"
-            disabled={loading}
-            multiline
-          />
-        </FormLabel>
+          <FormLabel>
+            <FormInput
+              setRef={this.setInputRef}
+              name="desc"
+              placeholder="Product desc"
+              disabled={loading}
+              multiline
+            />
+          </FormLabel>
 
-        {this.makeLoader()}
-        {this.makeButton()}
-      </Form>
+          {this.makeLoader()}
+          {this.makeButton()}
+        </Form>
+      </Content>
     );
   }
 }

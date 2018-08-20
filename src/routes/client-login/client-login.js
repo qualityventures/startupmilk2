@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TitleUpdater from 'containers/title-updater';
 import { connect } from 'react-redux';
-import { Alert } from 'components/ui';
+import { Content, Alert } from 'components/ui';
 import { withRouter } from 'react-router';
 import FormSignIn from 'containers/form-signin';
 
@@ -32,11 +32,10 @@ class RouteClientLogin extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <Content>
         <TitleUpdater title="Sign In" />
-
         {this.makeContent()}
-      </div>
+      </Content>
     );
   }
 }

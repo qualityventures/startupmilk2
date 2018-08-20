@@ -2,6 +2,7 @@ import React from 'react';
 import {
   FormTitle,
   FormButton,
+  Content,
 } from 'components/ui';
 
 class RouteAdminExport extends React.PureComponent {
@@ -25,12 +26,10 @@ class RouteAdminExport extends React.PureComponent {
   
   render() {
     return (
-      <div>
-        <FormTitle>
-          Export
-        </FormTitle>
+      <Content>
+        <FormTitle>Export</FormTitle>
         <FormButton onClick={this.handleDownloadCSVEmails}>Download CSV emails</FormButton>
-      </div>
+      </Content>
     );
   }
 }

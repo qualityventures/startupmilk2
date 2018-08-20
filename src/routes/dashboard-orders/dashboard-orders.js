@@ -1,7 +1,7 @@
 import React from 'react';
 import TitleUpdater from 'containers/title-updater';
 import apiFetch from 'helpers/api-fetch';
-import { Alert, Loader, Heading } from 'components/ui';
+import { Alert, Loader, Content, Heading } from 'components/ui';
 import OrdersList from 'components/orders-list';
 
 class RouteDashboardOrders extends React.PureComponent {
@@ -78,13 +78,13 @@ class RouteDashboardOrders extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <Content>
         <TitleUpdater title="My orders" />
         <Heading>My orders</Heading>
         {this.makeError()}
         {this.makeLoader()}
         {this.makeOrders()}
-      </div>
+      </Content>
     );
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TitleUpdater from 'containers/title-updater';
 import apiFetch from 'helpers/api-fetch';
-import { Alert, Loader, Heading, Catalog, CatalogItem } from 'components/ui';
+import { Content, Alert, Loader, Heading, Catalog, CatalogItem } from 'components/ui';
 import FORMATS_LIST from 'data/files';
 import './dashboard-order.scss';
 
@@ -123,13 +123,13 @@ class RouteDashboardOrder extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <Content>
         <TitleUpdater title="My orders" />
         <Heading>Order details</Heading>
         {this.makeError()}
         {this.makeLoader()}
         {this.makeOrder()}
-      </div>
+      </Content>
     );
   }
 }
