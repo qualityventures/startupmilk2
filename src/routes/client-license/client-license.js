@@ -15,6 +15,7 @@ class RouteClientLicense extends React.PureComponent {
     return (
       <Content>
         <TitleUpdater title="License" />
+        <Heading>License</Heading>
         <FormLabel>
           Here’s a breakdown of what you get when you purchase design resources from Matte.
         </FormLabel>

@@ -1,6 +1,6 @@
 import React from 'react';
 import TitleUpdater from 'containers/title-updater';
-import { Content } from 'components/ui';
+import { Content, Heading, FormLabel } from 'components/ui';
 
 class RouteClientContact extends React.PureComponent {
   static propTypes = {
@@ -15,8 +15,10 @@ class RouteClientContact extends React.PureComponent {
     return (
       <Content>
         <TitleUpdater title="Contacts" />
-
-        RouteClientContact
+        <Heading>Contacts</Heading>
+        <FormLabel>
+          <a href="mailto:support@matte.design">support@matte.design</a>
+        </FormLabel>
       </Content>
     );
   }
