@@ -35,6 +35,9 @@ class ExtraFintechStartup extends React.PureComponent {
     return (
       <div className="efs__container">
         <div className="efs__watch">
+          <div className="efs__watch-title">
+            Crafted especially for fintech startups
+          </div>
           <a className="efs__watch-button" href={this.props.data.youtube || ''} target="_blank">
             Watch Video
           </a>
