@@ -35,9 +35,15 @@ class ExtraFintechStartup extends React.PureComponent {
     return (
       <div className="efs__container">
         <div className="efs__watch">
+          <div className="efs__watch-icons">
+            <div className="efs__watch-icon efs__watch-icon--sketch" />
+            <div className="efs__watch-icon efs__watch-icon--apple" />
+          </div>
+          
           <div className="efs__watch-title">
             Crafted especially for fintech startups
           </div>
+
           <a className="efs__watch-button" href={this.props.data.youtube || ''} target="_blank">
             Watch Video
           </a>
@@ -110,7 +116,7 @@ class ExtraFintechStartup extends React.PureComponent {
         </div>
 
         <div className="efs__box efs__box--8">
-          <div className="efs__box-big-title">128<span>MB</span></div>
+          <div className="efs__box-big-title">400<span>MB</span></div>
           <div className="efs__box-list">
             <div className="efs__box-desc">Total<br />size</div>
           </div>
@@ -159,7 +165,7 @@ class ExtraFintechStartup extends React.PureComponent {
           <div className="efs__card-title">Overview</div>
 
           <div className="efs__card-desc">
-            Hero Kit – is a best way to build your own fintech app.
+            Fintech Kit – is a best way to build your own fintech app.
             Simple and user-friendly design build especially for Iphone X.
           </div>
 
@@ -172,7 +178,7 @@ class ExtraFintechStartup extends React.PureComponent {
             </div>
 
             <div className="efs__card-info-2">
-              123 MB<br />in 3 files
+              400 MB<br />in 3 files
             </div>
           </div>
         </div>
