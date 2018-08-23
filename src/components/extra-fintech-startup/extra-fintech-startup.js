@@ -123,10 +123,7 @@ class ExtraFintechStartup extends React.PureComponent {
         </div>
 
         <div className="efs__box efs__box--9">
-          <div className="efs__box-big-title">375x812</div>
-          <div className="efs__box-list">
-            <div className="efs__box-desc">Mocks<br />resolution</div>
-          </div>
+          <div className="efs__box-normal-title">UI Interactions Included in After Effects</div>
         </div>
 
         <div className="efs__big-phone" />
@@ -165,8 +162,7 @@ class ExtraFintechStartup extends React.PureComponent {
           <div className="efs__card-title">Overview</div>
 
           <div className="efs__card-desc">
-            Fintech Kit – is a best way to build your own fintech app.
-            Simple and user-friendly design build especially for Iphone X.
+            Fintech Kit – the best way to build your own fintech app.
           </div>
 
           <div className="efs__card-spring" />
