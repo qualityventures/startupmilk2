@@ -61,7 +61,7 @@ class ExtraFintechStartup extends React.PureComponent {
             <div className="efs__box-seaparator" />
             <div className="efs__box-desc">Input<br />Fields</div>
             <div className="efs__box-desc">Charts &amp;<br />Graphs</div>
-            <div className="efs__box-desc">Eschange<br />screens</div>
+            <div className="efs__box-desc">Exchange<br />screens</div>
           </div>
         </div>
 
