@@ -51,7 +51,7 @@ class ExtraFintechStartup extends React.PureComponent {
 
         <div className="efs__box efs__box--big">
           <div className="efs__box-normal-title">
-            Use it like constructor and build your fintech app in a few clicks
+            Use it like constructor<br />and build your fintech<br />app in a few clicks
           </div>
 
           <div className="efs__box-list">
@@ -73,7 +73,7 @@ class ExtraFintechStartup extends React.PureComponent {
         </div>
 
         <div className="efs__box efs__box--2">
-          <div className="efs__box-normal-title">Easy customizable and flexible</div>
+          <div className="efs__box-normal-title">Easy customizable<br />and flexible</div>
           <div className="efs__box-list">
             <div className="efs__box-desc">Well<br />organized</div>
             <div className="efs__box-desc">Build for<br />iPhone X</div>
@@ -123,7 +123,7 @@ class ExtraFintechStartup extends React.PureComponent {
         </div>
 
         <div className="efs__box efs__box--9">
-          <div className="efs__box-normal-title">UI Interactions Included in After Effects</div>
+          <div className="efs__box-normal-title">UI Interactions<br />Included in After Effects</div>
         </div>
 
         <div className="efs__big-phone" />
@@ -139,7 +139,7 @@ class ExtraFintechStartup extends React.PureComponent {
         <div className="efs__phone efs__phone--10" />
 
         <div className="efs__card efs__card--1">
-          <div className="efs__card-title">16 category icons included</div>
+          <div className="efs__card-title">16 category icons<br />included</div>
 
           <div className="efs__card-spring" />
 
@@ -149,7 +149,7 @@ class ExtraFintechStartup extends React.PureComponent {
         </div>
 
         <div className="efs__card efs__card--2">
-          <div className="efs__card-title">196 country flags included</div>
+          <div className="efs__card-title">196 country flags<br />included</div>
 
           <div className="efs__card-spring" />
 
