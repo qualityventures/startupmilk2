@@ -69,7 +69,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(compression());
-app.use(busboy({ immediate: false, limits: { fileSize: 200 * 1024 * 1024 } }));
+app.use(busboy({ immediate: false, limits: { fileSize: 1024 * 1024 * 1024 } }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
