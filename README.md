@@ -10,6 +10,7 @@ npm i node-sass
 cp src/data/config.private.default.js src/data/config.private.js
 cp src/data/config.public.default.js src/data/config.public.js
 edit (if needed) config.public.js config.private.js
+brew install GraphicsMagick
 npm run cli init
 ```
 
