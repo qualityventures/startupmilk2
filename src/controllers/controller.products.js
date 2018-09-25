@@ -28,7 +28,7 @@ function processDesc(desc) {
   desc = desc.replace(/[\r]/g, '');
   desc = desc.replace(/^[\n]+/, '');
   desc = desc.replace(/[\n]+$/, '');
-  desc = desc.replace(/[\n]+/g, '</p><p>');
+  desc = desc.replace(/[\n]/g, '<br/>');
   desc = `<p>${desc}</p>`;
 
   return desc;
