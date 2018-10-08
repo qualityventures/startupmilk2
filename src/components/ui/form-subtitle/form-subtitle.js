@@ -1,24 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './form.scss';
+import './form-subtitle.scss';
 
-class Form extends React.PureComponent {
+class FormSubtitle extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    className: PropTypes.string,
   }
 
   static defaultProps = {
-    className: '',
+
   }
 
   render() {
     return (
-      <div className={`${this.props.className} form__wrapper`}>
+      <div className="form__subtitle">
         {this.props.children}
       </div>
     );
   }
 }
 
-export default Form;
+export default FormSubtitle;

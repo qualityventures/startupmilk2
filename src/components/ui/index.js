@@ -6,6 +6,7 @@ export { default as FormButton } from './form-button';
 export { default as FormInput } from './form-input';
 export { default as FormLabel } from './form-label';
 export { default as FormTitle } from './form-title';
+export { default as FormSubtitle } from './form-subtitle';
 export { default as FormSelect } from './form-select';
 export { default as FormMisc } from './form-misc';
 export { default as FormSearch } from './form-search';

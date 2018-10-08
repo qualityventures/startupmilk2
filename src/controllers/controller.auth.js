@@ -12,15 +12,23 @@ import crypto from 'crypto';
 import sendmail from 'helpers/sendmail';
 import bcrypt from 'bcryptjs';
 
+const TEMPLATE_NEW_USER = fs.readFileSync(path.join(__dirname, '..', 'email.templates', 'new_user.html'), 'utf8');
 const TEMPLATE_RECOVER = fs.readFileSync(path.join(__dirname, '..', 'email.templates', 'recover.html'), 'utf8');
 
 const log = debug(`${DEBUG_PREFIX}:controller.auth`);
 
 function validateUserData(req, res) {
-  const { email, password } = req.body;
+  const { email, password, confirm } = req.body;
 
   const email_validation = validateEmail(email);
   const password_validation = validatePassword(password);
+
+  if (confirm) {
+    if (confirm !== password) {
+      throwError(res, 'Passwords does not match the confirm password.');
+      return false;
+    }
+  }
 
   if (email_validation !== true) {
     throwError(res, email_validation);
@@ -33,6 +41,52 @@ function validateUserData(req, res) {
   }
 
   return true;
+}
+
+export function authRegister(req, res) {
+  if (!validateUserData(req, res)) {
+    return;
+  }
+  const { email, password } = req.body;
+  const hashed_password = bcrypt.hashSync(password, 8);
+  const html = TEMPLATE_NEW_USER.replace(/%password%/gi, password).replace(/%email%/gi, email);
+
+  User.create({
+    email,
+    role: 'customer',
+    hashed_password,
+  })
+    .then((user) => {
+      if (user === null) {
+        throwError(res, 'Invalid username or password');
+        return;
+      }
+
+      if (!user.comparePassword(password)) {
+        throwError(res, 'Invalid username or password');
+        return;
+      }
+
+      if (!JWT_SECRET) {
+        log('Invalid JWT_SECRET');
+        throwError(res, 'Internal server error');
+        return;
+      }
+
+      const data = user.toClientJSON();
+      const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
+      returnObjectAsJSON(res, { token, data });
+    })
+    .then((user) => {
+      return sendmail({
+        to: email,
+        subject: 'Your account details',
+        html,
+      });
+    })
+    .catch((e) => {
+      throwError(res, e.errmsg);
+    });
 }
 
 let __last_attempt = 0;

@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { Content, Alert } from 'components/ui';
 import { withRouter } from 'react-router';
 import FormSignIn from 'containers/form-signin';
+import FormSignUp from 'containers/form-signup';
+import './client-login.scss';
 
 class RouteClientLogin extends React.PureComponent {
   static propTypes = {
@@ -22,7 +24,15 @@ class RouteClientLogin extends React.PureComponent {
     }
   }
 
-  makeContent() {
+  makeSignUp() {
+    if (!this.props.logged_in) {
+      return <FormSignUp />;
+    }
+
+    return <Alert>You have successfully logged in</Alert>;
+  }
+
+  makeSignIn() {
     if (!this.props.logged_in) {
       return <FormSignIn />;
     }
@@ -33,8 +43,15 @@ class RouteClientLogin extends React.PureComponent {
   render() {
     return (
       <Content>
-        <TitleUpdater title="Sign In" />
-        {this.makeContent()}
+        <TitleUpdater title="Sign In / Sign Up" />
+        <div className="clearfix">
+          <div className="md-col-6 sm-col sm-col-12 signin-container">
+            {this.makeSignIn()}
+          </div>
+          <div className="md-col-6 sm-col sm-col-12 signup-container">
+            {this.makeSignUp()}
+          </div>
+        </div>
       </Content>
     );
   }

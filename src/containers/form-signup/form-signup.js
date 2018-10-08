@@ -5,10 +5,9 @@ import { Form, Alert, FormInput, FormTitle, FormSubtitle, FormButton, FormLabel,
 import { validatePassword, validateEmail } from 'helpers/validators';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
-import apiFetch from 'helpers/api-fetch';
-import './form-signin.scss';
+import './form-signup.scss';
 
-class FormSignIn extends React.PureComponent {
+class FormSignUp extends React.PureComponent {
   static propTypes = {
     logged_in: PropTypes.bool.isRequired,
     userSignIn: PropTypes.func.isRequired,
@@ -30,9 +29,8 @@ class FormSignIn extends React.PureComponent {
 
     this.inputRefs = {};
 
-    this.signIn = this.signIn.bind(this);
+    this.signUp = this.signUp.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
-    this.handleRecover = this.handleRecover.bind(this);
   }
 
   componentWillUnmount() {
@@ -43,42 +41,18 @@ class FormSignIn extends React.PureComponent {
     this.inputRefs[name] = e;
   }
 
-  handleRecover() {
-    if (this.state.loading) {
-      return;
-    }
-
-    const email = this.inputRefs.email.value;
-    const validation = validateEmail(email);
-
-    if (validation !== true) {
-      this.setState({ error: validation });
-      this.inputRefs.email.focus();
-      return;
-    }
-
-    this.setState({ loading: true, error: false });
-
-    apiFetch('api/auth/recover', {
-      method: 'POST',
-      payload: { email },
-    }).then((response) => {
-      this.setState({ loading: false, password_recovered: true });
-    }).catch((e) => {
-      this.setState({ loading: false, error: e || 'Something went wrong' });
-    });
-  }
-
-  signIn() {
+  signUp() {
     const ref_email = this.inputRefs.email || null;
     const ref_password = this.inputRefs.password || null;
+    const ref_confirm = this.inputRefs.confirm || null;
 
-    if (!ref_email || !ref_password) {
+    if (!ref_email || !ref_password || !ref_confirm) {
       return;
     }
 
     const email = ref_email.value;
     const password = ref_password.value;
+    const confirm = ref_confirm.value;
 
     this.setState({ loading: false, error: false });
 
@@ -97,9 +71,14 @@ class FormSignIn extends React.PureComponent {
       return;
     }
 
+    if (password !== confirm) {
+      this.setState({ error: 'Passwords does not match the confirm password.' });
+      return;
+    }
+
     this.setState({ loading: true });
 
-    fetch('/api/auth/login', {
+    fetch('/api/auth/register', {
       credentials: 'include',
       mode: 'cors',
       method: 'POST',
@@ -109,6 +88,7 @@ class FormSignIn extends React.PureComponent {
       body: JSON.stringify({
         email,
         password,
+        confirm,
       }),
     })
       .then((response) => {
@@ -172,40 +152,21 @@ class FormSignIn extends React.PureComponent {
     }
 
     return (
-      <FormButton onClick={this.signIn}>
-        <img className="mr1" src="/assets/signin.svg" />
-        Sign In
-      </FormButton>
+      <FormLabel>
+        <FormButton onClick={this.signUp}>
+          <img className="mr1" src="/assets/signin.svg" />
+          Sign Up
+        </FormButton>
+      </FormLabel>
     );
   }
-
-  makeRecover() {
-    if (this.state.loading) {
-      return null;
-    }
-    
-    if (!this.state.password_recovered) {
-      return (
-        <div className="ml2 signin__recover" onClick={this.handleRecover}>
-          Forgot Password?
-        </div>
-      );
-    }
-
-    return (
-      <div className="signin__recovered">
-        New password was sent to your email
-      </div>
-    );
-  }
-
   render() {
     const disabled = this.state.loading || this.props.logged_in;
 
     return (
       <Form>
-        <FormTitle>Sign In</FormTitle>
-        <FormSubtitle>If you already have account</FormSubtitle>
+        <FormTitle>Sign Up</FormTitle>
+        <FormSubtitle>If you’re a new customer</FormSubtitle>
         {this.makeSuccess()}
         {this.makeError()}
 
@@ -213,9 +174,9 @@ class FormSignIn extends React.PureComponent {
           <FormInput
             setRef={this.setInputRef}
             name="email"
-            placeholder="Email"
+            placeholder="Your email"
             disabled={disabled}
-            onSubmit={this.signIn}
+            onSubmit={this.signUp}
           />
         </FormLabel>
 
@@ -226,12 +187,22 @@ class FormSignIn extends React.PureComponent {
             type="password"
             placeholder="Password"
             disabled={disabled}
-            onSubmit={this.signIn}
+            onSubmit={this.signUp}
+          />
+        </FormLabel>
+
+        <FormLabel>
+          <FormInput
+            setRef={this.setInputRef}
+            name="confirm"
+            type="password"
+            placeholder="Confirm Password"
+            disabled={disabled}
+            onSubmit={this.signUp}
           />
         </FormLabel>
         <div className="flex items-center mt3">
           {this.makeButton()}
-          {this.makeRecover()}
           {this.makeLoader()}
         </div>
       </Form>
@@ -251,4 +222,4 @@ export default connect(
       tokenSet: (token) => { dispatch(tokenSet(token)); },
     };
   }
-)(FormSignIn);
+)(FormSignUp);

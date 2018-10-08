@@ -4,11 +4,17 @@ import {
   SMTP_USER,
   SMTP_PASS,
   SMTP_SERVICE,
+  DEV_MODE
 } from 'data/config.private';
 
 export default function (mail) {
+  if (DEV_MODE) {
+    return new Promise((resolve, reject) => {
+      resolve(true);
+    });
+  }
   mail.from = SMTP_FROM;
-
+  
   const smtpTransport = mailer.createTransport({
     service: SMTP_SERVICE,
     port: 465,
@@ -18,7 +24,6 @@ export default function (mail) {
       pass: SMTP_PASS,
     },
   });
-
   return new Promise((resolve, reject) => {
     smtpTransport.sendMail(mail, (error, response) => {
       if (error) {
