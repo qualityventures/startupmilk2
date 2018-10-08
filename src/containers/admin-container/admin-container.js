@@ -63,6 +63,7 @@ class AdminContainer extends React.PureComponent {
 export default withRouter(connect(
   (state, props) => {
     return {
+      user: state.user,
       role: state.user.role,
       logged_in: state.user.logged_in,
       pathname: props.location.pathname,

@@ -2927,6 +2927,43 @@ input.search-input-button:hover {
   color: #382828;
 }
 
+.profile-button {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  right: 160px;
+  cursor: pointer;
+  @media (max-width: 1199px) {
+    right: 140px;
+  }
+
+  @media (max-width: 991px) {
+    right: 180px;
+  }
+}
+
+.profile-root {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #fff;
+  width: 200px;
+  z-index: 999;/* Rectangle: */
+  background: #FFFFFF;
+  box-shadow: 0 15px 20px 0 rgba(34,28,158,0.12);
+  border-radius: 4px;
+  .profile {
+    width: 40px;
+    height: 40px;
+  }
+  .profile-container {
+    border-bottom: 1px solid #F3F3F3;
+  }
+  a {
+    color: #000;
+  }
+}
+
 .menu-primary {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -3572,6 +3609,7 @@ a.button-add.button-dark:before, a.button-add:hover:before {
 .drop {
   margin-top: -5px;
   position: relative;
+  cursor: pointer;
 }
 
 .drop.active .drop-block {
@@ -4017,7 +4055,7 @@ a.button-add.button-dark:before, a.button-add:hover:before {
 
 .navigation {
   @media (max-width: 1199px ) and(min-width: 991px) {
-    padding-right: 130px;
+    padding-right: 190px;
   }
 }
 

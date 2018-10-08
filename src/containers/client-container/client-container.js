@@ -10,6 +10,7 @@ import routes from 'routes/client';
 
 class ClientContainer extends React.PureComponent {
   static propTypes = {
+    user: PropTypes.object.isRequired,
     role: PropTypes.string.isRequired,
     logged_in: PropTypes.bool.isRequired,
     cartItems: PropTypes.number.isRequired,
@@ -56,6 +57,7 @@ class ClientContainer extends React.PureComponent {
         toggleCart={this.toggleCart}
         cartItems={this.props.cartItems}
         showCart={this.props.show_cart}
+        user={this.props.user}
       >
         <Switch>
           {routes.map(route => (
@@ -70,6 +72,7 @@ class ClientContainer extends React.PureComponent {
 export default withRouter(connect(
   (state, props) => {
     return {
+      user: state.user,
       cartItems: state.cart.products_amount,
       role: state.user.role,
       logged_in: state.user.logged_in,

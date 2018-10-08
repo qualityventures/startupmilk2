@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { userSignOut } from 'actions/user';
+import { tokenClean } from 'actions/token';
+import { truncate } from 'voca';
 import './container.scss';
 
 class Container extends React.PureComponent {
@@ -13,6 +17,9 @@ class Container extends React.PureComponent {
     cartItems: PropTypes.number,
     showCart: PropTypes.bool,
     location: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    userSignOut: PropTypes.func.isRequired,
+    tokenClean: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -21,6 +28,10 @@ class Container extends React.PureComponent {
     toggleCart: null,
     cartItems: null,
     showCart: false,
+  }
+
+  state = {
+    profileOpen: false,
   }
 
   makeCart() {
@@ -77,6 +88,7 @@ class Container extends React.PureComponent {
   }
 
   render() {
+    const { user } = this.props;
     const path = this.props.location.pathname;
     let Component = Link;
     let logo_link = '/';
@@ -85,7 +97,6 @@ class Container extends React.PureComponent {
       Component = 'a';
       logo_link = '/admin/';
     }
-
     return (
       <div className="main">
         <div className="header-global-top" />
@@ -97,6 +108,64 @@ class Container extends React.PureComponent {
                   <Link className="logo" to={logo_link}>matte.design</Link>
                 </div>
                 {this.makeNavigation()}
+                <div
+                  className="profile-button"
+                  onClick={
+                    () => {
+                      this.setState({
+                        profileOpen: !this.state.profileOpen,
+                      });
+                    }
+                  }
+                >
+                  <img
+                    src={'/assets/profile.png'}
+                  />
+                  { this.state.profileOpen &&
+                    <div className="profile-root">
+                      {user.logged_in ?
+                        <div>
+                          <div className="flex p1 pl2 items-center profile-container">
+                            <img
+                              className="profile"
+                              src={'/assets/profile_black.png'}
+                            />
+                            <div className="ml2">{truncate(user.data.email, 14)}</div>
+                          </div>
+                          <Link to={'/dashboard'} href={'/dashboard'}> 
+                            <div className="p2">
+                              My Purchases
+                            </div>
+                          </Link>
+                          <div
+                            className="p2"
+                            onClick={() => {
+                              this.props.userSignOut();
+                              this.props.tokenClean();
+                            }}
+                          >
+                            Sign Out
+                          </div>
+                        </div>
+                        : <div>
+                          <div className="flex p1 pl2 items-center profile-container">
+                            <img
+                              className="profile"
+                              src={'/assets/profile_white.png'}
+                            />
+                            <div className="ml2">Guest</div>
+                          </div>
+                          <Link to={'/login'} href={'/login'}> 
+                            <div className="p2">
+                              Sign In / Sign Up
+                            </div>
+                          </Link>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+                
                 {this.makeCart()}
               </div>
             </div>
@@ -144,4 +213,11 @@ class Container extends React.PureComponent {
   }
 }
 
-export default withRouter(Container);
+export default withRouter(connect(
+  null, (dispatch) => {
+    return {
+      userSignOut: () => { dispatch(userSignOut()); },
+      tokenClean: () => { dispatch(tokenClean()); },
+    };
+  }
+)(Container));
