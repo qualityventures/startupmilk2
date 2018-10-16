@@ -12,6 +12,7 @@ class AdminContainer extends React.PureComponent {
   static propTypes = {
     role: PropTypes.string.isRequired,
     logged_in: PropTypes.bool.isRequired,
+    user: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -52,7 +53,7 @@ class AdminContainer extends React.PureComponent {
 
   render() {
     return (
-      <Container navigation={this.makeNavigation()}>
+      <Container user={this.props.user} navigation={this.makeNavigation()}>
         <Modals />
         {this.makeContent()}
       </Container>

@@ -91,8 +91,13 @@ class RouteAdminExport extends React.PureComponent {
         <div className="mt2">
           {emails.map((e) => {
             return (
-              <div className="customer">
-                <div className="email">{e.email}</div>
+              <div className="customer flex">
+                <div className="email col-3">{e.email}</div>
+                <div className="flex labels col-9">
+                  { e.have_paid
+                    ? <div className="user-label paid">Paid User</div>
+                    : <div className="user-label free">Free User</div>}
+                </div>
               </div>
             );
           })}

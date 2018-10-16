@@ -54,6 +54,7 @@ export function authRegister(req, res) {
   User.create({
     email,
     role: 'customer',
+    have_paid: false,
     hashed_password,
   })
     .then((user) => {
@@ -123,7 +124,6 @@ export function authLogin(req, res) {
         throwError(res, 'Internal server error');
         return;
       }
-
       const data = user.toClientJSON();
       const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
 

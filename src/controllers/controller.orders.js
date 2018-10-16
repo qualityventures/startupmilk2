@@ -167,6 +167,7 @@ export function createNewOrder(req, res) {
       return User.create({
         email,
         role: 'customer',
+        have_paid: false,
         hashed_password,
       })
         .then((user) => {
@@ -207,6 +208,10 @@ export function createNewOrder(req, res) {
         source: stripe_token.id,
       })
         .then((result) => {
+          User.update({ _id: globals.user._id }, { $set: { have_paid: true } })
+            .then((user) => {
+              globals.user.have_paid = true;
+            });
           if (!DEV_MODE && !result.livemode) {
             throw 'Livemode required';
           }

@@ -21,6 +21,10 @@ const UserSchema = new Schema({
     trim: true,
     required: true,
   },
+  have_paid: {
+    type: Boolean,
+    default: false,
+  },
   created: {
     type: Date,
     default: Date.now,
@@ -32,6 +36,7 @@ UserSchema.methods.toClientJSON = function() {
     email: this.email,
     role: this.role,
     _id: this._id,
+    have_paid: this.have_paid,
   };
 };
 

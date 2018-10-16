@@ -5,6 +5,17 @@
     background-color: #F5F6F8;
     cursor: pointer;
   }
+  .user-label {
+    border-radius: 30px;
+    padding: 6px 20px;
+    color: #fff;
+    &.free {
+      background-color: #4A90E2;
+    }
+    &.paid {
+      background-color: #99D958;
+    }
+  }
 }
 .pagination {
   text-align: center;

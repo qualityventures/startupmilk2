@@ -23,7 +23,7 @@ export function getUserEmailCount(req, res) {
 export function getUserEmails(req, res) {
   User.find({})
     .limit(20)
-    .skip((req.query.page || 0) * 20)
+    .skip(((req.query.page || 0) * 19))
     .then((data, err) => {
       if (err) {
         log(err);
