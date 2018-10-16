@@ -1,0 +1,19 @@
+.customer {
+  padding: 1em;
+  border-bottom: 1px solid #F3F3F3;
+  &:hover {
+    background-color: #F5F6F8;
+    cursor: pointer;
+  }
+}
+.pagination {
+  text-align: center;
+  align-items: center;
+  >div {
+    cursor: pointer;
+    margin-right: 5px;
+    &.active {
+      font-weight: bold;
+    }
+  }
+}
