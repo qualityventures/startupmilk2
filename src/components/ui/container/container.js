@@ -119,7 +119,7 @@ class Container extends React.PureComponent {
                   }
                 >
                   <img
-                    src={'/assets/profile.png'}
+                    src={'/static/images/profile.png'}
                   />
                   { this.state.profileOpen &&
                     <div className="profile-root">
@@ -128,7 +128,7 @@ class Container extends React.PureComponent {
                           <div className="flex p1 pl2 items-center profile-container">
                             <img
                               className="profile"
-                              src={'/assets/profile_black.png'}
+                              src={'/static/images/profile_black.png'}
                             />
                             <div className="ml2">{truncate(user.data.email, 14)}</div>
                           </div>
@@ -151,7 +151,7 @@ class Container extends React.PureComponent {
                           <div className="flex p1 pl2 items-center profile-container">
                             <img
                               className="profile"
-                              src={'/assets/profile_white.png'}
+                              src={'/static/images/profile_white.png'}
                             />
                             <div className="ml2">Guest</div>
                           </div>

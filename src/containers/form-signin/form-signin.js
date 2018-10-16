@@ -173,7 +173,7 @@ class FormSignIn extends React.PureComponent {
 
     return (
       <FormButton onClick={this.signIn}>
-        <img className="mr1" src="/assets/signin.svg" />
+        <img className="mr1" src="/static/images/signin.svg" />
         Sign In
       </FormButton>
     );

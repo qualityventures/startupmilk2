@@ -154,7 +154,7 @@ class FormSignUp extends React.PureComponent {
     return (
       <FormLabel>
         <FormButton onClick={this.signUp}>
-          <img className="mr1" src="/assets/signin.svg" />
+          <img className="mr1" src="/static/images/signin.svg" />
           Sign Up
         </FormButton>
       </FormLabel>
