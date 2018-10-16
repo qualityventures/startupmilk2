@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import { userSignOut } from 'actions/user';
 import { tokenClean } from 'actions/token';
 import { truncate } from 'voca';
+import ClickOutside from 'react-click-outside';
 import './container.scss';
 
 class Container extends React.PureComponent {
@@ -121,49 +122,59 @@ class Container extends React.PureComponent {
                   <img
                     src={'/static/images/profile.png'}
                   />
-                  { this.state.profileOpen &&
-                    <div className="profile-root">
-                      {user.logged_in ?
-                        <div>
-                          <div className="flex p1 pl2 items-center profile-container">
-                            <img
-                              className="profile"
-                              src={'/static/images/profile_black.png'}
-                            />
-                            <div className="ml2">{truncate(user.data.email, 14)}</div>
-                          </div>
-                          <Link to={'/dashboard'} href={'/dashboard'}> 
-                            <div className="p2">
-                              My Purchases
-                            </div>
-                          </Link>
-                          <div
-                            className="p2"
-                            onClick={() => {
-                              this.props.userSignOut();
-                              this.props.tokenClean();
-                            }}
-                          >
-                            Sign Out
-                          </div>
-                        </div>
-                        : <div>
-                          <div className="flex p1 pl2 items-center profile-container">
-                            <img
-                              className="profile"
-                              src={'/static/images/profile_white.png'}
-                            />
-                            <div className="ml2">Guest</div>
-                          </div>
-                          <Link to={'/login'} href={'/login'}> 
-                            <div className="p2">
-                              Sign In / Sign Up
-                            </div>
-                          </Link>
-                        </div>
+                  <ClickOutside 
+                    onClickOutside={
+                      () => {
+                        this.setState({ profileOpen: false });
                       }
-                    </div>
-                  }
+                    }
+                  >
+                    { this.state.profileOpen
+                      && <div
+                        className="profile-root"
+                      >
+                        {user.logged_in ?
+                          <div>
+                            <div className="flex p1 pl2 items-center profile-container">
+                              <img
+                                className="profile"
+                                src={'/static/images/profile_black.png'}
+                              />
+                              <div className="ml2">{truncate(user.data.email, 14)}</div>
+                            </div>
+                            <Link to={'/dashboard'} href={'/dashboard'}> 
+                              <div className="p2">
+                                My Purchases
+                              </div>
+                            </Link>
+                            <div
+                              className="p2"
+                              onClick={() => {
+                                this.props.userSignOut();
+                                this.props.tokenClean();
+                              }}
+                            >
+                              Sign Out
+                            </div>
+                          </div>
+                          : <div>
+                            <div className="flex p1 pl2 items-center profile-container">
+                              <img
+                                className="profile"
+                                src={'/static/images/profile_white.png'}
+                              />
+                              <div className="ml2">Guest</div>
+                            </div>
+                            <Link to={'/login'} href={'/login'}> 
+                              <div className="p2">
+                                Sign In / Sign Up
+                              </div>
+                            </Link>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </ClickOutside>
                 </div>
                 
                 {this.makeCart()}

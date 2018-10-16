@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import Modals from 'containers/modals';
 import Navigation from 'containers/navigation';
 import FormSignIn from 'containers/form-signin';
-import FormSignUp from 'containers/form-signup';
 import routes from 'routes/admin';
 
 class AdminContainer extends React.PureComponent {
