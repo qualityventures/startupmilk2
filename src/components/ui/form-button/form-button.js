@@ -18,6 +18,7 @@ class FormButton extends React.PureComponent {
     to: null,
     href: null,
     type: 'submit',
+    className: '',
   }
 
   render() {
