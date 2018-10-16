@@ -21,6 +21,22 @@
     }
   }
 }
+.filters {
+  >div {
+    cursor: pointer;
+    user-select: none;
+    border-radius: 30px;
+    padding: 6px 20px;
+    margin-right: 8px;
+    background: #F5F6F8;
+    color: #828286;
+    &.active {
+      background: #000000;
+      color: #fff;
+    }
+
+  }
+}
 .pagination {
   text-align: center;
   align-items: center;

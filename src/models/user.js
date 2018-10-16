@@ -35,7 +35,7 @@ const UserSchema = new Schema({
   },
 }, { collection: 'users', strict: true });
 
-UserSchema.methods.toClientJSON = function() {
+UserSchema.methods.toClientJSON = function () {
   return {
     email: this.email,
     role: this.role,

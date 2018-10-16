@@ -26,23 +26,24 @@ class RouteAdminExport extends React.PureComponent {
     emails: [],
     emailCount: 0,
     page: 0,
+    filter: 'all',
   }
 
   componentDidMount() {
-    this.getUserEmails();
-    this.getUserEmailCount();
+    this.getUserEmails('all', 0);
   }
-  getUserEmailCount() {
-    fetch('/api/user/users-count').then((response) => {
+  getUserEmailCount(filter) {
+    fetch(`/api/user/users-count?filter=${filter}`).then((response) => {
       response.json().then((json) => {
         this.setState({ emailCount: json });
       });
     }).catch((e) => {
-      this.setState({ emailCount: [] });
+      this.setState({ emailCount: 0 });
     });
   }
-  getUserEmails(page) {
-    fetch(`/api/user/users?page=${page || 0}`)
+  getUserEmails(filter, page) {
+    this.getUserEmailCount(filter);
+    fetch(`/api/user/users?page=${page || 0}&filter=${filter}`)
       .then((response) => {
         response.json().then((json) => {
           this.setState({ emails: json });
@@ -58,7 +59,7 @@ class RouteAdminExport extends React.PureComponent {
   }
 
   renderPagination() {
-    const { emailCount, page } = this.state;
+    const { emailCount, page, filter } = this.state;
     const children = [];
     for (let i = 0; i <= emailCount / 20; i++) {
       children.push(
@@ -68,7 +69,7 @@ class RouteAdminExport extends React.PureComponent {
             this.setState({
               page: i,
             });
-            this.getUserEmails(i); 
+            this.getUserEmails(filter, i); 
           }}
         >
           {i + 1}
@@ -79,13 +80,43 @@ class RouteAdminExport extends React.PureComponent {
   }
   
   render() {
-    const { emails } = this.state;
-    console.log(emails);
+    const { emails, filter } = this.state;
     return (
       <Content className="admin-exports">
         <div className="top-bar flex items-center">
           <FormTitle>Export CSV</FormTitle>
-          <FormButton className="ml-auto" onClick={this.handleDownloadCSVEmails}>
+          <div className="filters mx-auto flex items-center">
+            <div
+              className={`${filter === 'all' ? 'active' : ''}`}
+              onClick={() => {
+                this.getUserEmails('all', 0);
+                this.setState({ filter: 'all', page: 0 });
+              }}
+            >All
+            </div>
+            <div
+              className={`${filter === 'paid' ? 'active' : ''}`}
+              onClick={() => {
+                this.getUserEmails('paid', 0);
+                this.setState({ filter: 'paid', page: 0 });
+              }}
+            >Paid</div>
+            <div
+              className={`${filter === 'free' ? 'active' : ''}`}
+              onClick={() => {
+                this.getUserEmails('free', 0);
+                this.setState({ filter: 'free', page: 0 });
+              }}
+            >Free</div>
+            <div
+              className={`${filter === 'newsletter' ? 'active' : ''}`}
+              onClick={() => {
+                this.getUserEmails('newsletter', 0);
+                this.setState({ filter: 'newsletter', page: 0 });
+              }}
+            >Newsletter Subscriber</div>
+          </div>
+          <FormButton onClick={this.handleDownloadCSVEmails}>
             Export
           </FormButton>
         </div>
@@ -93,8 +124,8 @@ class RouteAdminExport extends React.PureComponent {
           {emails.map((e) => {
             return (
               <div className="customer flex items-center">
-                <div className="email col-3">{e.email}</div>
-                <div className="flex labels col-9">
+                <div className="email col-6 col-lg-3">{e.email}</div>
+                <div className="flex labels col-6 col-lg-9">
                   { e.have_paid
                     ? <div className="user-label paid">Paid User</div>
                     : <div className="user-label free">Free User</div>}

@@ -10,8 +10,23 @@ export function userGetInfo(req, res) {
   throwError(res, 'get user info');
 }
 
+function getQuery(filter) {
+  switch (filter) {
+    case 'free':
+      return { have_paid: { $ne: true } };
+    case 'paid':
+      return { have_paid: true };
+    case 'newsletter':
+      return { subscribe: true };
+    default:
+    case 'all':
+      return {};
+  }
+}
+
 export function getUserEmailCount(req, res) {
-  User.count().then((data, err) => {
+  const query = getQuery(req.query.filter);
+  User.count(query).then((data, err) => {
     if (err) {
       log(err);
       throwError(res, 'Error while getting userEmails');
@@ -21,7 +36,8 @@ export function getUserEmailCount(req, res) {
 }
 
 export function getUserEmails(req, res) {
-  User.find({})
+  const query = getQuery(req.query.filter);
+  User.find(query)
     .limit(20)
     .skip(((req.query.page || 0) * 19))
     .then((data, err) => {
