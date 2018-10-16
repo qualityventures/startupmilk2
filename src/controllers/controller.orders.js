@@ -81,6 +81,7 @@ function checkEmail(req, email) {
 export function createNewOrder(req, res) {
   const email = req.body.email || '';
   const validation = validateEmail(email);
+  const subscribe = req.body.subscribe || false;
   let stripe_token = false;
 
   if (validation !== true) {
@@ -156,6 +157,11 @@ export function createNewOrder(req, res) {
 
       // if user exists - skip
       if (globals.user) {
+        if (subscribe) {
+          return User.update({ _id: globals.user._id }, { $set: { subscribe: true } }).then(() => {
+            return true;
+          });
+        }
         return true;
       }
 
@@ -169,6 +175,7 @@ export function createNewOrder(req, res) {
         role: 'customer',
         have_paid: false,
         hashed_password,
+        subscribe,
       })
         .then((user) => {
           const data = { email: user.email, role: user.role };

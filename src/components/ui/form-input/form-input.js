@@ -12,6 +12,7 @@ class FormInput extends React.PureComponent {
       PropTypes.string,
       PropTypes.number,
     ]),
+    label: PropTypes.string,
     placeholder: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
@@ -26,6 +27,7 @@ class FormInput extends React.PureComponent {
     defaultValue: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
+      PropTypes.bool,
     ]),
   }
 
@@ -39,6 +41,7 @@ class FormInput extends React.PureComponent {
     name: null,
     placeholder: null,
     id: null,
+    lable: null,
     multiline: false,
     defaultValue: null,
   }
@@ -52,8 +55,10 @@ class FormInput extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.defaultValue !== this.props.defaultValue) {
-      this.input_ref.value = this.props.defaultValue !== null ? this.props.defaultValue : '';
+    if (!this.props.label) {
+      if (prevProps.defaultValue !== this.props.defaultValue) {
+        this.input_ref.value = this.props.defaultValue !== null ? this.props.defaultValue : '';
+      }
     }
   }
 
@@ -91,6 +96,20 @@ class FormInput extends React.PureComponent {
       onKeyUp: this.props.onKeyUp,
       ref: this.setRef,
     };
+
+    if (this.props.label) {
+      props.defaultChecked = true;
+      props.className = 'form_checkbox';
+      props.id = this.props.name;
+      return (
+        <div className="flex">
+          <input {...props} />
+          <label htmlFor={this.props.name}>
+            {this.props.label}
+          </label>
+        </div>
+      );
+    }
 
     if (this.props.defaultValue !== null) {
       props.defaultValue = this.props.defaultValue;

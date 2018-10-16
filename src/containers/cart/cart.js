@@ -180,6 +180,10 @@ class Cart extends React.PureComponent {
       }
     });
 
+    if (this.inputRefs.newsletter) {
+      values.newsletter = this.inputRefs.newsletter.checked;
+    }
+
     if (error) {
       this.setState({ error });
       return;
@@ -217,13 +221,13 @@ class Cart extends React.PureComponent {
     }
     
     this.setState({ loading: true, error: false });
-
     apiFetch('api/orders/', {
       method: 'POST',
       payload: {
         email: values.email,
         password: values.password || null,
         stripe_token: this.state.stripe_token,
+        subscribe: values.newsletter,
       },
     }).then((response) => {
       if (response.redirect) {
@@ -355,6 +359,14 @@ class Cart extends React.PureComponent {
             onSubmit={this.handleSubmit}
             setRef={this.setInputRef}
           />
+          <FormMisc>
+            <FormInput
+              name="newsletter"
+              type="checkbox"
+              setRef={this.setInputRef}
+              label={'I agree to subscribe to matt.design newsletter'}
+            />
+          </FormMisc>
         </FormLabel>
         {this.makePassword()}
         <FormLabel>

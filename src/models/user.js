@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  subscribe: {
+    type: Boolean,
+    default: false,
+  },
   created: {
     type: Date,
     default: Date.now,
@@ -37,6 +41,7 @@ UserSchema.methods.toClientJSON = function() {
     role: this.role,
     _id: this._id,
     have_paid: this.have_paid,
+    subscribe: this.subscribe,
   };
 };
 

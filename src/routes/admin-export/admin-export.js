@@ -80,6 +80,7 @@ class RouteAdminExport extends React.PureComponent {
   
   render() {
     const { emails } = this.state;
+    console.log(emails);
     return (
       <Content className="admin-exports">
         <div className="top-bar flex items-center">
@@ -91,12 +92,14 @@ class RouteAdminExport extends React.PureComponent {
         <div className="mt2">
           {emails.map((e) => {
             return (
-              <div className="customer flex">
+              <div className="customer flex items-center">
                 <div className="email col-3">{e.email}</div>
                 <div className="flex labels col-9">
                   { e.have_paid
                     ? <div className="user-label paid">Paid User</div>
                     : <div className="user-label free">Free User</div>}
+                  { e.subscribe ?
+                    <div className="user-label sub">Newsletter Subscriber</div> : null}
                 </div>
               </div>
             );
