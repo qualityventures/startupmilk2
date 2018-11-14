@@ -80,7 +80,8 @@ class FilesManager extends React.PureComponent {
         data: formData,
         responseType: 'json',
         onUploadProgress: (p) => {
-          this.setState({ progress: Math.round(p.loaded / p.total) });
+          console.log(p.loaded / p.total);
+          this.setState({ progress: Math.round((p.loaded / p.total) * 100) });
         },
       })
       .then((response) => {
@@ -88,6 +89,7 @@ class FilesManager extends React.PureComponent {
         this.setState({ loading: false, files: [...files] });
       })
       .catch((err) => {
+        console.log(err);
         const error = err && err.toString ? err.toString() : 'Bad response from server';
         this.setState({ error, loading: false });
       });
