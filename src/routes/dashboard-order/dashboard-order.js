@@ -9,11 +9,9 @@ import './dashboard-order.scss';
 class RouteDashboardOrder extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object.isRequired,
-  }
+  };
 
-  static defaultProps = {
-
-  }
+  static defaultProps = {};
 
   constructor(props) {
     super(props);
@@ -90,7 +88,7 @@ class RouteDashboardOrder extends React.PureComponent {
             key={download.file_id}
             files={download.types}
             bigButton={
-              <a href={`/api/download/${product.id}/${download.file_id}/${order.id}`} style={style} target="_blank">
+              <a href={`/api/download/${product.id}/${download.file_id}/${order.id}`} style={style} target="_blank" rel="noopener noreferrer">
                 Download {download.name}
               </a>
             }
@@ -101,21 +99,15 @@ class RouteDashboardOrder extends React.PureComponent {
       products.push(
         <div className="order-details__product" key={product.id}>
           <div>{product.name}</div>
-          <Catalog>
-            {downloads}
-          </Catalog>
+          <Catalog>{downloads}</Catalog>
         </div>
       );
     });
 
     return (
       <div className="order-details__wrapper">
-        <div className="order-details__title">
-          Order #{order.numeric_id}
-        </div>
-        <div className="order-details__price">
-          {order.price ? `$${order.price}` : 'Free!'}
-        </div>
+        <div className="order-details__title">Order #{order.numeric_id}</div>
+        <div className="order-details__price">{order.price ? `$${order.price}` : 'Free!'}</div>
         {products}
       </div>
     );

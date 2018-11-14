@@ -4,6 +4,7 @@ import { Loader, Alert, Catalog, CatalogItem } from 'components/ui';
 import FORMATS_LIST from 'data/files';
 import { openModal } from 'actions/modals';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import './files-manager.scss';
 
 class FilesManager extends React.PureComponent {
@@ -11,11 +12,11 @@ class FilesManager extends React.PureComponent {
     productId: PropTypes.string.isRequired,
     files: PropTypes.array,
     openModal: PropTypes.func.isRequired,
-  }
+  };
 
   static defaultProps = {
     files: [],
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -24,6 +25,7 @@ class FilesManager extends React.PureComponent {
       loading: false,
       error: false,
       files: props.files,
+      progress: 0,
     };
 
     this.ref_input = false;
@@ -68,23 +70,21 @@ class FilesManager extends React.PureComponent {
     formData.append('upload', file);
     formData.append('productId', this.props.productId);
 
-    this.setState({ loading: true, error: false });
+    this.setState({ loading: true, error: false, progress: 0 });
 
-    fetch(`/api/products/${this.props.productId}/files/`, {
-      credentials: 'include',
-      mode: 'cors',
-      method: 'POST',
-      body: formData,
-    })
+    axios
+      .request(`/api/products/${this.props.productId}/files/`, {
+        credentials: 'include',
+        mode: 'cors',
+        method: 'POST',
+        data: formData,
+        responseType: 'json',
+        onUploadProgress: (p) => {
+          this.setState({ progress: Math.round(p.loaded / p.total) });
+        },
+      })
       .then((response) => {
-        return response.json().then(json => ({ json, response }));
-      })
-      .then(({ json, response }) => {
-        if (json.error) return Promise.reject(json.error);
-        if (response.status !== 200) return Promise.reject('invalid server response');
-        return json;
-      })
-      .then((files) => {
+        const files = response.data;
         this.setState({ loading: false, files: [...files] });
       })
       .catch((err) => {
@@ -170,7 +170,7 @@ class FilesManager extends React.PureComponent {
 
   makeFiles() {
     const { productId } = this.props;
-    
+
     return this.state.files.map((file, index) => {
       const style = {};
 
@@ -193,7 +193,7 @@ class FilesManager extends React.PureComponent {
           smallButtons={buttons}
           files={file.types}
           bigButton={
-            <a href={`/api/download/${productId}/${file.file_id}`} style={style} target="_blank">
+            <a href={`/api/download/${productId}/${file.file_id}`} style={style} target="_blank" rel="noopener noreferrer">
               Download {file.name}
             </a>
           }
@@ -209,25 +209,32 @@ class FilesManager extends React.PureComponent {
       return null;
     }
 
-    return <div><Alert type="danger">{error}</Alert></div>;
+    return (
+      <div>
+        <Alert type="danger">{error}</Alert>
+      </div>
+    );
   }
 
   render() {
     return (
       <div>
         {this.makeError()}
-        <input 
-          type="file"
-          className="files-manager__input"
-          encType="multipart/form-data"
-          ref={this.setRefInput}
-          onChange={this.onUpload}
-        />
+        <input type="file" className="files-manager__input" encType="multipart/form-data" ref={this.setRefInput} onChange={this.onUpload} />
         <Catalog>
           {this.makeFiles()}
 
           <CatalogItem
-            bigButton={this.state.loading ? <Loader /> : <span>+</span>}
+            bigButton={
+              this.state.loading ? (
+                <div>
+                  {' '}
+                  <Loader /> <div>{this.state.progress} %</div>
+                </div>
+              ) : (
+                <span>+</span>
+              )
+            }
             onBigButtonClick={this.toggleUpload}
           />
         </Catalog>
@@ -238,13 +245,13 @@ class FilesManager extends React.PureComponent {
 
 export default connect(
   (state, props) => {
-    return {
-
-    };
+    return {};
   },
   (dispatch) => {
     return {
-      openModal: (data) => { return dispatch(openModal(data)); },
+      openModal: (data) => {
+        return dispatch(openModal(data));
+      },
     };
   }
 )(FilesManager);
