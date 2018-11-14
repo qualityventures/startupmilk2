@@ -50,6 +50,7 @@ const app = new Express();
 
 app.disable('x-powered-by');
 app.timeout = 600000;
+app.keepAliveTimeout = 1000;
 
 const staticOptions = {
   expires: '1M',
