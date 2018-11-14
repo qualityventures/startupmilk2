@@ -33,16 +33,23 @@ const debug = require('debug')('matte.design:ssr');
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-mongoose.connect(MONGO.url, MONGO.options).then(() => {
-  debug('Connected to MongoDB');
-}).catch((err) => {
-  console.error('Please check your MongoDB connection parameters');
-  process.exit(1);
-});
+mongoose
+  .connect(
+    MONGO.url,
+    MONGO.options
+  )
+  .then(() => {
+    debug('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Please check your MongoDB connection parameters');
+    process.exit(1);
+  });
 
 const app = new Express();
 
 app.disable('x-powered-by');
+app.timeout = 600000;
 
 const staticOptions = {
   expires: '1M',
@@ -56,18 +63,15 @@ if (NODE_ENV === 'dev') {
   app.use(logger('dev'));
 }
 
-app.use(cors({
-  origin: [
-    'http://localhost:3020',
-    'http://localhost:3019',
-    'https://matte.design/',
-    'https://js.stripe.com',
-  ],
-  optionsSuccessStatus: 200,
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ['http://localhost:3020', 'http://localhost:3019', 'https://matte.design/', 'https://js.stripe.com'],
+    optionsSuccessStatus: 200,
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
 app.use(compression());
 app.use(busboy({ immediate: false, limits: { fileSize: 1024 * 1024 * 1024 } }));
 app.use(bodyParser.json());
