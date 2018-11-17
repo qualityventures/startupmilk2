@@ -130,11 +130,13 @@ class Container extends React.PureComponent {
                             <img className="profile" src={'/static/images/profile_black.png'} />
                             <div className="ml2">{truncate(user.data.email, 14)}</div>
                           </div>
-                          <Link to={'/dashboard'} href={'/dashboard'}>
-                            <div className="p2">My Purchases</div>
-                          </Link>
+                          <div className="listitem">
+                            <Link to={'/dashboard'} href={'/dashboard'}>
+                              <div className="p1 px2">My Purchases</div>
+                            </Link>
+                          </div>
                           <div
-                            className="p2"
+                            className="p1 px2 listitem"
                             onClick={() => {
                               this.props.userSignOut();
                               this.props.tokenClean();
@@ -149,9 +151,11 @@ class Container extends React.PureComponent {
                             <img className="profile" src={'/static/images/profile_white.png'} />
                             <div className="ml2">Guest</div>
                           </div>
-                          <Link to={'/login'} href={'/login'}>
-                            <div className="p2">Sign In / Sign Up</div>
-                          </Link>
+                          <div className="listitem">
+                            <Link to={'/login'} href={'/login'}>
+                              <div className="p1 px2">Sign In / Sign Up</div>
+                            </Link>
+                          </div>
                         </div>
                       )}
                     </div>

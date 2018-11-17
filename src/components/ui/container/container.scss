@@ -2864,6 +2864,17 @@ input.search-input-button:hover {
     a {
       color: #000;
     }
+    .profile-block > .listitem {
+      margin: 5px;
+      border-radius: 5px;
+      &:hover {
+        color: #fff;
+        background: #000;
+        a {
+          color: #fff;
+        }
+      }
+    }
   }
   &.active {
     .profile-root {
