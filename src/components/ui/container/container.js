@@ -21,7 +21,7 @@ class Container extends React.PureComponent {
     user: PropTypes.object.isRequired,
     userSignOut: PropTypes.func.isRequired,
     tokenClean: PropTypes.func.isRequired,
-  }
+  };
 
   static defaultProps = {
     navigation: null,
@@ -29,11 +29,11 @@ class Container extends React.PureComponent {
     toggleCart: null,
     cartItems: null,
     showCart: false,
-  }
+  };
 
   state = {
     profileOpen: false,
-  }
+  };
 
   makeCart() {
     const { cartItems, toggleCart, showCart, cart } = this.props;
@@ -57,10 +57,7 @@ class Container extends React.PureComponent {
         CART
         <span>{cartItems || '-'}</span>
       </a>,
-      <div
-        key="shadow"
-        className={`cart_shadow cart_shadow--${showCart ? 'visible' : 'hidden'}`}
-      />,
+      <div key="shadow" className={`cart_shadow cart_shadow--${showCart ? 'visible' : 'hidden'}`} />,
       <div key="cart_container" className={`cart_container cart_container--${showCart ? 'visible' : 'hidden'}`}>
         {cart}
       </div>,
@@ -76,12 +73,12 @@ class Container extends React.PureComponent {
 
     return (
       <div className="col-2 col-lg-9 col-xl-8">
-        <a className="navigation-toggle"><span className="navigation-toggle-icon" /></a>
+        <a className="navigation-toggle">
+          <span className="navigation-toggle-icon" />
+        </a>
         <div className="navigation">
           <nav>
-            <ul className="menu-primary">
-              {navigation}
-            </ul>
+            <ul className="menu-primary">{navigation}</ul>
           </nav>
         </div>
       </div>
@@ -106,77 +103,61 @@ class Container extends React.PureComponent {
             <div className="container-wrapper">
               <div className="row align-items-lg-center">
                 <div className="col-10 col-lg-3 col-xl-2">
-                  <Link className="logo" to={logo_link}>matte.design</Link>
+                  <Link className="logo" to={logo_link}>
+                    matte.design
+                  </Link>
                 </div>
                 {this.makeNavigation()}
                 <div
                   className="profile-button"
-                  onClick={
-                    () => {
-                      this.setState({
-                        profileOpen: !this.state.profileOpen,
-                      });
-                    }
-                  }
+                  onClick={() => {
+                    this.setState({
+                      profileOpen: !this.state.profileOpen,
+                    });
+                  }}
                 >
-                  <img
-                    src={'/static/images/profile.png'}
-                  />
-                  <ClickOutside 
-                    onClickOutside={
-                      () => {
-                        this.setState({ profileOpen: false });
-                      }
-                    }
+                  <img src={'/static/images/profile.png'} />
+                  <ClickOutside
+                    className={`clickContainer ${this.state.profileOpen ? 'active' : ''}`}
+                    onClickOutside={() => {
+                      this.setState({ profileOpen: false });
+                    }}
                   >
-                    { this.state.profileOpen
-                      && <div
-                        className="profile-root"
-                      >
-                        {user.logged_in ?
-                          <div>
-                            <div className="flex p1 pl2 items-center profile-container">
-                              <img
-                                className="profile"
-                                src={'/static/images/profile_black.png'}
-                              />
-                              <div className="ml2">{truncate(user.data.email, 14)}</div>
-                            </div>
-                            <Link to={'/dashboard'} href={'/dashboard'}> 
-                              <div className="p2">
-                                My Purchases
-                              </div>
-                            </Link>
-                            <div
-                              className="p2"
-                              onClick={() => {
-                                this.props.userSignOut();
-                                this.props.tokenClean();
-                              }}
-                            >
-                              Sign Out
-                            </div>
+                    <div className={'profile-root'}>
+                      {user.logged_in ? (
+                        <div className="profile-block">
+                          <div className="flex p1 pl2 items-center profile-container">
+                            <img className="profile" src={'/static/images/profile_black.png'} />
+                            <div className="ml2">{truncate(user.data.email, 14)}</div>
                           </div>
-                          : <div>
-                            <div className="flex p1 pl2 items-center profile-container">
-                              <img
-                                className="profile"
-                                src={'/static/images/profile_white.png'}
-                              />
-                              <div className="ml2">Guest</div>
-                            </div>
-                            <Link to={'/login'} href={'/login'}> 
-                              <div className="p2">
-                                Sign In / Sign Up
-                              </div>
-                            </Link>
+                          <Link to={'/dashboard'} href={'/dashboard'}>
+                            <div className="p2">My Purchases</div>
+                          </Link>
+                          <div
+                            className="p2"
+                            onClick={() => {
+                              this.props.userSignOut();
+                              this.props.tokenClean();
+                            }}
+                          >
+                            Sign Out
                           </div>
-                        }
-                      </div>
-                    }
+                        </div>
+                      ) : (
+                        <div className="profile-block">
+                          <div className="flex p1 pl2 items-center profile-container">
+                            <img className="profile" src={'/static/images/profile_white.png'} />
+                            <div className="ml2">Guest</div>
+                          </div>
+                          <Link to={'/login'} href={'/login'}>
+                            <div className="p2">Sign In / Sign Up</div>
+                          </Link>
+                        </div>
+                      )}
+                    </div>
                   </ClickOutside>
                 </div>
-                
+
                 {this.makeCart()}
               </div>
             </div>
@@ -184,9 +165,7 @@ class Container extends React.PureComponent {
         </header>
 
         <div className="header-global-bottom" />
-        <div className="spanning">
-          {this.props.children}
-        </div>
+        <div className="spanning">{this.props.children}</div>
 
         <footer className="footer-global">
           <div className="container">
@@ -195,8 +174,16 @@ class Container extends React.PureComponent {
                 <div className="footer-sub-navigation">
                   <nav>
                     <ul className="menu-tertiary">
-                      <li><Component to="/license" href="/license">License</Component></li>
-                      <li><Component to="/contact" href="/contact">Contact</Component></li>
+                      <li>
+                        <Component to="/license" href="/license">
+                          License
+                        </Component>
+                      </li>
+                      <li>
+                        <Component to="/contact" href="/contact">
+                          Contact
+                        </Component>
+                      </li>
                     </ul>
                   </nav>
                 </div>
@@ -213,7 +200,9 @@ class Container extends React.PureComponent {
               </div>
               <div className="col-6 col-lg-6">
                 <div className="scroll-top-block">
-                  <a className="scroll-top scroll-link" href="#top">Go to Top</a>
+                  <a className="scroll-top scroll-link" href="#top">
+                    Go to Top
+                  </a>
                 </div>
               </div>
             </div>
@@ -224,11 +213,18 @@ class Container extends React.PureComponent {
   }
 }
 
-export default withRouter(connect(
-  null, (dispatch) => {
-    return {
-      userSignOut: () => { dispatch(userSignOut()); },
-      tokenClean: () => { dispatch(tokenClean()); },
-    };
-  }
-)(Container));
+export default withRouter(
+  connect(
+    null,
+    (dispatch) => {
+      return {
+        userSignOut: () => {
+          dispatch(userSignOut());
+        },
+        tokenClean: () => {
+          dispatch(tokenClean());
+        },
+      };
+    }
+  )(Container)
+);
