@@ -176,7 +176,7 @@ class Cart extends React.PureComponent {
 
       if (result !== true) {
         if (result === 'The password cannot be empty') {
-          error = 'Seems like you have an account with us! Log in with your password!';
+          error = 'Seems like you have an account!\nLog in with your password!';
         } else {
           error = result;
         }
