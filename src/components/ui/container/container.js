@@ -99,7 +99,7 @@ class Container extends React.PureComponent {
       <div className="main">
         <div className="header-global-top" />
         <header className="header-global">
-          <div className="container">
+          <div className="container noPadding">
             <div className="container-wrapper">
               <div className="row align-items-lg-center">
                 <div className="col-10 col-lg-3 col-xl-2">
