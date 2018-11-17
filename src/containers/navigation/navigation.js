@@ -78,15 +78,6 @@ class Navigation extends React.PureComponent {
           content="My orders"
         />
       );
-    } else {
-      list.push(
-        <NavigationLink
-          key="signin"
-          to="/login"
-          selected={!!pathname.match(/^\/login/)}
-          content="Sign In"
-        />
-      );
     }
 
     if (role === 'admin') {
