@@ -175,7 +175,11 @@ class Cart extends React.PureComponent {
       const result = validators[field](values[field]);
 
       if (result !== true) {
-        error = result;
+        if (result === 'The password cannot be empty') {
+          error = 'Seems like you have an account with us! Log in with your password!';
+        } else {
+          error = result;
+        }
         e.focus();
       }
     });
