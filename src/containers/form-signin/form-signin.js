@@ -186,14 +186,14 @@ class FormSignIn extends React.PureComponent {
     
     if (!this.state.password_recovered) {
       return (
-        <div className="ml2 signin__recover" onClick={this.handleRecover}>
+        <div className="ml2 signin __recover" onClick={this.handleRecover}>
           Forgot Password?
         </div>
       );
     }
 
     return (
-      <div className="signin__recovered">
+      <div className="signin __recovered">
         New password was sent to your email
       </div>
     );
