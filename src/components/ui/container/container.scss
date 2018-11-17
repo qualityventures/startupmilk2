@@ -348,7 +348,7 @@ html {
   margin-left: auto;
 }
 
-.container.noPadding {
+.header-global.header-fixed .container.noPadding {
   padding-left: 0;
   padding-right: 0;
 }
@@ -2822,7 +2822,7 @@ input.search-input-button:hover {
   position: absolute;
   width: 40px;
   height: 40px;
-  right: 160px;
+  right: 140px;
   cursor: pointer;
   @media (max-width: 1199px) {
     right: 140px;
@@ -2835,7 +2835,7 @@ input.search-input-button:hover {
 
 .header-fixed {
   .profile-button {
-    margin-right: 40px;
+    margin-right: 0px;
   }
 }
 
@@ -2944,7 +2944,7 @@ input.search-input-button:hover {
   display: none;
   position: absolute;
   right: -3px;
-  top: -10px;
+  top: 0px;
   width: 60px;
   height: 60px;
   z-index: 5050;
@@ -3769,7 +3769,11 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     display: block;
   }
   .logo {
-    padding-top: 6px;
+    padding-top: 3px;
+    padding-left: 15px;
+  }
+  .header-global.header-fixed .logo {
+    padding-left: 5px;
   }
   .navigation {
     position: absolute;
@@ -4003,7 +4007,7 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   border: 2px solid transparent;
   cursor: pointer;
   position: absolute;
-  right: 40px;
+  right: 10px;
   z-index: 99999;
   opacity: 1;
   visibility: visible;
@@ -4043,7 +4047,7 @@ a.button-add.button-dark:before, a.button-add:hover:before {
     margin-right: 40px;
 
     @media (max-width: 991px) {
-      margin-right: 40px;
+      margin-right: 0px;
     }
 
     @media (max-width: 767px) {
