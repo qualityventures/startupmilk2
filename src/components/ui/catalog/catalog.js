@@ -15,7 +15,6 @@ class Catalog extends React.PureComponent {
     sortLink: null,
     sortValue: null,
   }
-
   componentDidMount() {
     // drop
     /* global $ */
@@ -31,12 +30,13 @@ class Catalog extends React.PureComponent {
         activePop = null;
       });
 
-      $(document.body).click(function () {
-        dropClass.each((i) => {
-          if ($(this).hasClass('active') && i !== activePop) {
-            $(this).removeClass('active');
+      $(document.body).click(() => {
+        const activeDrops = document.getElementsByClassName('drop active');
+        for (let i = 0; i < activeDrops.length; i++) {
+          if (i !== activePop) {
+            activeDrops[i].classList.remove('active');
           }
-        });
+        }
       });
 
       $('.drop-toggle').on('click', function (event) {
