@@ -198,6 +198,7 @@ class ProductsSelect extends React.PureComponent {
           hoverAnimation={product.animation}
           price={product.price}
           name={product.name}
+          category={product.category}
           bigButton={
             <span className={`products-select__button products-select__button--${selected[product.id] ? 'remove' : 'add'}`}>
               {selected[product.id] ? 'Remove' : 'Add'}

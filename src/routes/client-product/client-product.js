@@ -165,6 +165,7 @@ class RouteClientProduct extends React.PureComponent {
           hoverAnimation={product.animation}
           price={product.price}
           name={product.name}
+          category={product.category}
           showAddToCart
         />
       );

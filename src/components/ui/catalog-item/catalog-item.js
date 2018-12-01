@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import FORMATS_LIST from 'data/files';
+import CATEGORIES_LIST from 'data/categories';
 import CartButton from 'containers/cart-button';
 import './catalog-item.scss';
 
@@ -16,6 +16,7 @@ class CatalogItem extends React.PureComponent {
     price: PropTypes.number,
     name: PropTypes.string,
     files: PropTypes.array,
+    category: PropTypes.string,
     to: PropTypes.string,
     showAddToCart: PropTypes.bool,
   }
@@ -30,6 +31,7 @@ class CatalogItem extends React.PureComponent {
     price: null,
     name: null,
     files: null,
+    category: null,
     to: null,
     showAddToCart: false,
   }
@@ -173,44 +175,40 @@ class CatalogItem extends React.PureComponent {
   }
 
   makeMeta() {
-    const files = this.makeFiles();
+    const category = this.makeCategory();
     const cart = this.makeAddToCart();
 
-    if (!files && !cart) {
+    if (!category && !cart) {
       return null;
     }
 
     return (
       <div className="catalog-item-panel">
-        {files}
+        {category}
         {cart}
       </div>
     );
   }
 
-  makeFiles() {
-    const { files } = this.props;
+  makeCategory() {
+    const { category } = this.props;
+    const style = {};
 
-    if (!files || !files.length) {
+    if (!category) {
       return null;
     }
+    if (CATEGORIES_LIST[category]) {
+      style.backgroundColor = CATEGORIES_LIST[category].color;
+    }
 
-    const ret = files.map((file_type) => {
-      const style = {};
-
-      if (FORMATS_LIST[file_type]) {
-        style.backgroundColor = FORMATS_LIST[file_type].color;
-      }
-
-      return (
-        <li key={file_type}>
+    return (<div className="catalog-item-panel-meta">
+      <ul>
+        <li key={category}>
           <span className="catalog-item-panel-meta-dot" style={style} />
-          {file_type}
+          {category}
         </li>
-      );
-    });
-
-    return <div className="catalog-item-panel-meta"><ul>{ret}</ul></div>;
+      </ul>
+    </div>);
   }
 
   makeAddToCart() {

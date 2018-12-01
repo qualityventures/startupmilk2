@@ -57,7 +57,7 @@ class Navigation extends React.PureComponent {
     ];
 
     Object.keys(CATEGORIES_LIST).forEach((key) => {
-      const title = CATEGORIES_LIST[key];
+      const title = CATEGORIES_LIST[key].text;
 
       list.push(
         <NavigationLink
@@ -68,17 +68,6 @@ class Navigation extends React.PureComponent {
         />
       );
     });
-
-    if (logged_in) {
-      list.push(
-        <NavigationLink
-          key="dashboard"
-          to="/dashboard"
-          selected={!!pathname.match(/^\/dashboard/)}
-          content="My orders"
-        />
-      );
-    }
 
     if (role === 'admin') {
       list.push(

@@ -47,7 +47,7 @@ class RouteAdminProducts extends React.PureComponent {
       error: false,
       search: false,
       selectValues: Object.keys(CATEGORIES_LIST).map((key) => {
-        return { value: key, title: CATEGORIES_LIST[key] };
+        return { value: key, title: CATEGORIES_LIST[key].text };
       }),
     };
 
@@ -186,6 +186,7 @@ class RouteAdminProducts extends React.PureComponent {
           hoverAnimation={product.animation}
           price={product.price}
           name={product.name}
+          category={product.category}
         />
       );
     });

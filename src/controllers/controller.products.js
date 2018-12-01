@@ -413,7 +413,7 @@ export function addProductFile(req, res) {
     throwError(res, 'Internal server error');
     return;
   }
-  req.setTimeout(600000)
+  req.setTimeout(600000);
 
   const public_path = `${ROOT_PATH}/../uploads/`;
   const image_dir = `${String(req.productData._id).substr(0, 2)}`;

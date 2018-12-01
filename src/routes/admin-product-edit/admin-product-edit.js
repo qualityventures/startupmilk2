@@ -51,7 +51,7 @@ class RouteAdminProductEdit extends React.PureComponent {
       data: {},
       error: false,
       categoriesValues: Object.keys(CATEGORIES_LIST).map((key) => {
-        return { value: key, title: CATEGORIES_LIST[key] };
+        return { value: key, title: CATEGORIES_LIST[key].text };
       }),
       displayValues: Object.keys(DISPLAY_LIST).map((key) => {
         return { value: key, title: DISPLAY_LIST[key] };
@@ -377,6 +377,7 @@ class RouteAdminProductEdit extends React.PureComponent {
           hoverAnimation={animation}
           price={product.price}
           name={product.name}
+          category={product.category}
           to={`/admin/product/${product._id}`}
         />
       );

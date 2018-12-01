@@ -43,7 +43,7 @@ class RouteAdminProductCreate extends React.PureComponent {
       error: false,
       auto_url_enabled: true,
       categoriesValues: Object.keys(CATEGORIES_LIST).map((key) => {
-        return { value: key, title: CATEGORIES_LIST[key] };
+        return { value: key, title: CATEGORIES_LIST[key].text };
       }),
       displayValues: Object.keys(DISPLAY_LIST).map((key) => {
         return { value: key, title: DISPLAY_LIST[key] };

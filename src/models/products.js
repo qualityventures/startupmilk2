@@ -113,6 +113,7 @@ ProductsSchema.methods.toClientJSON = function() {
     id: String(this._id),
     image,
     animation,
+    category: this.category,
     images: this.images,
     url: this.url,
     name: this.name,
