@@ -4044,14 +4044,14 @@ a.button-add.button-dark:before, a.button-add:hover:before {
   }
 
   .header-fixed & {
-    margin-right: 40px;
+    margin-right: 5px;
 
     @media (max-width: 991px) {
       margin-right: 0px;
     }
 
     @media (max-width: 767px) {
-      margin-right: 20px;
+      margin-right: 0px;
     }
   }
 }
