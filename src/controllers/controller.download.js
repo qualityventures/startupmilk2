@@ -55,7 +55,7 @@ export function downloadFile(req, res) {
   }
 
   const path = `${ROOT_PATH}/../uploads/${fileData.path}`;
-  const match = fileData.name.match(/\.([0-9a-z_-]{1,12})$/i);
+  const match = fileData.name.match(/\.(\w+)$/i);
   let mimeType = 'application';
 
   if (match) {
