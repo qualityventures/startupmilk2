@@ -71,7 +71,7 @@ export function downloadFile(req, res) {
 
   res.writeHead(200, {
     'Content-Type': mimeType,
-    'Content-Disposition': `attachment; filename="${fileData.name}"`,
+    'Content-Disposition': `attachment; filename="${fileData.name.replace(/[^a-z0-9]/gi, '_')}"`,
     'Content-Length': stats.size,
   });
 
