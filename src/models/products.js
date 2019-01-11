@@ -91,6 +91,7 @@ ProductsSchema.methods.toClientJSON = function() {
       name: file.name,
       file_id: file.file_id,
       types: file.types,
+      size: file.size,
     });
 
     file.types.forEach((type) => {

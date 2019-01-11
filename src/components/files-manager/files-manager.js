@@ -196,7 +196,8 @@ class FilesManager extends React.PureComponent {
           files={file.types}
           bigButton={
             <a href={`/api/download/${productId}/${file.file_id}`} style={style} target="_blank" rel="noopener noreferrer">
-              Download {file.name}
+              <img src={'/static/images/download.svg'} />
+              <div className="black">{file.name}</div>
             </a>
           }
         />

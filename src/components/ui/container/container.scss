@@ -3176,13 +3176,9 @@ input.search-input-button:hover {
   flex-grow: 1;
 }
 
-.catalog-item:hover .catalog-item-wrapper:after {
-  opacity: 1;
-}
-
-.catalog-item:hover .catalog-item-thumb {
-  -webkit-transform: translate3d(0, -6px, 0);
-  transform: translate3d(0, -6px, 0);
+.catalog-item:hover .catalog-item-thumb img {
+  -webkit-transform: translate3d(0, 6px, 0);
+  transform: translate3d(0, 6px, 0);
 }
 
 .catalog-item:hover .catalog-item-panel {
@@ -3193,27 +3189,6 @@ input.search-input-button:hover {
 .catalog-item:hover .catalog-item-description {
   opacity: 0;
 }
-
-.catalog-item-wrapper {
-  position: relative;
-}
-
-.catalog-item-wrapper:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 2px;
-  -webkit-box-shadow: 0 2px 4px 0 rgba(32, 38, 49, 0.05);
-  box-shadow: 0 2px 4px 0 rgba(32, 38, 49, 0.05);
-  opacity: 0;
-  -webkit-transition: opacity 0.2s cubic-bezier(0.2, 0, 0.4, 1);
-  -o-transition: opacity 0.2s cubic-bezier(0.2, 0, 0.4, 1);
-  transition: opacity 0.2s cubic-bezier(0.2, 0, 0.4, 1);
-}
-
 .catalog-item-overflow {
   padding: 6px 5px 9px;
   overflow: hidden;
@@ -3222,16 +3197,18 @@ input.search-input-button:hover {
 }
 
 .catalog-item-thumb {
-  height: 0;
+  min-height: 230px;
   padding-top: 80.1369863014%;
-  background: #ecedf0 50% 50% no-repeat;
+  background: #F8F8FA 50% 50% no-repeat;
   background-size: cover;
   @include transition(background-image);
-  -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
-  transition: -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
-  -o-transition: transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
-  transition: transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
-  transition: transform 0.2s cubic-bezier(0.2, 0, 0.4, 1), -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+  img {
+    -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+    transition: -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+    -o-transition: transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0.4, 1), -webkit-transform 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+  }
 }
 
 .catalog-item-thumb a {

@@ -11,6 +11,17 @@
     left: -9999px;
     opacity: 0.01;
   }
+  .catalog-item__big-button {
+    a {
+      color: black;
+      > div {
+        margin-top: 20px;
+      }
+      img {
+        width: 55px
+      }
+    }
+  }
 
   &__big-button {
     cursor: pointer;

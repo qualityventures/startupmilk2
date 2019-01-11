@@ -82,14 +82,14 @@ class RouteDashboardOrder extends React.PureComponent {
         if (FORMATS_LIST[download.type]) {
           style.color = FORMATS_LIST[download.type].color;
         }
-
         downloads.push(
           <CatalogItem
             key={download.file_id}
             files={download.types}
             bigButton={
               <a href={`/api/download/${product.id}/${download.file_id}/${order.id}`} style={style} target="_blank" rel="noopener noreferrer">
-                Download {download.name}
+                <img src={'/static/images/download.svg'} />
+                <div className="black">{download.name}</div>
               </a>
             }
           />

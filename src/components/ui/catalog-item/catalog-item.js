@@ -251,7 +251,6 @@ class CatalogItem extends React.PureComponent {
           <div className="catalog-item-overflow">
             <div
               className="catalog-item-thumb"
-              style={this.getThumbBackground()}
               ref={this.setThumbRef}
             >
               {this.makeThumbContent()}
