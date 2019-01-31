@@ -241,10 +241,11 @@ class RouteClientProducts extends React.PureComponent {
             underlayStyle={{ paddingTop: '2em', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
             <div id="demo" className="email-signup-modal">
-              <div className="col col-5">
-                <img src={'/static/images/at_image.png'} />
-              </div>
-              <div className="col col-7 p2 pl3">
+              <div
+                className="col col-5 image-container"
+                style={{ backgroundImage: 'url("/static/images/at_image.png")' }}
+              />
+              <div className="col sm-col-7 col-12 p2 pl3">
                 <h2 className="mt1 pr3">{"Let's be friends. Get a freebie a month, delivered to your inbox"}
                 </h2>
                 <div className="email-field">
