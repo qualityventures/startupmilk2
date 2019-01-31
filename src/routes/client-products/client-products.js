@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import areEqual from 'helpers/are-equal';
 import { makeArgs, getArgs } from 'helpers/args';
 import { loadProducts } from 'actions/products';
+import AriaModal from 'react-aria-modal';
+
 import {
   Content,
   Loader,
@@ -15,6 +17,7 @@ import {
   CatalogItem,
   Paginator,
 } from 'components/ui';
+import './client-products.scss';
 
 const DEFAULT_SEARCH = {
   page: 1,
@@ -62,6 +65,12 @@ class RouteClientProducts extends React.PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = {
+      newletterSignUpVisible: true,
+    };
+    this.showNewsletterSignUp = this.showNewsletterSignUp.bind(this);
+    this.hideNewsletterSignUp = this.hideNewsletterSignUp.bind(this);
+    this.getApplicationNode = this.getApplicationNode.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
@@ -75,6 +84,17 @@ class RouteClientProducts extends React.PureComponent {
     const { location, match } = nextProps;
 
     fetchClientProducts(location, window.REDUX_STORE, match);
+  }
+  getApplicationNode = () => {
+    return document.getElementById('top');
+  };
+
+  showNewsletterSignUp() {
+    this.setState({ newletterSignUpVisible: true });
+  }
+
+  hideNewsletterSignUp() {
+    this.setState({ newletterSignUpVisible: false });
   }
 
   handleSearchChange(value) {
@@ -206,12 +226,50 @@ class RouteClientProducts extends React.PureComponent {
         </div>
 
         {this.makeSearch()}
-
+        
         <br />
         {this.makeError()}
         {this.makeProducts()}
         {this.makeLoader()}
         {this.makePaginator()}
+        { this.state.newletterSignUpVisible ? (
+          <AriaModal
+            titleText="demo one"
+            onExit={this.hideNewsletterSignUp}
+            initialFocus="#demo"
+            getApplicationNode={this.getApplicationNode}
+            underlayStyle={{ paddingTop: '2em', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <div id="demo" className="email-signup-modal">
+              <div className="col col-5">
+                <img src={'/static/images/at_image.png'} />
+              </div>
+              <div className="col col-7 p2 pl3">
+                <h2 className="mt1 pr3">{"Let's be friends. Get a freebie a month, delivered to your inbox"}
+                </h2>
+                <div className="email-field">
+                  <input
+                    className="email-input"
+                    type="email"
+                    placeholder="Your Email"
+                  />
+                  <input
+                    type="submit"
+                    className="submit-button"
+                    value="Search"
+                    onClick={this.doSearch}
+                  />
+                </div>
+              </div>
+              <div
+                className="close-button"
+                onClick={this.hideNewsletterSignUp}
+              >
+                <i className="fas fa-times" />  
+              </div>  
+            </div>
+          </AriaModal>
+        ) : null}
       </Content>
     );
   }

@@ -93,6 +93,7 @@ export function renderHTML(content, state = {}, type = 'client') {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <link rel="alternate" hreflang="x-default" href="//startupmilk.co/" />
         <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
+        <link href="/static/css/fontawesome.min.css" rel="stylesheet">
         <title>${title}</title>
         <meta name="format-detection" content="telephone=no">
         <meta name="format-detection" content="address=no">

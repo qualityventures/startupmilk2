@@ -1,0 +1,62 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+
+.email-signup-modal {
+  height: 100%;
+  width: 100%;
+  max-width: 800px;
+  background: #fff;
+  display: flex;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  position: relative;
+  .close-button {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+  }
+  .email-field {
+    position: relative;
+    margin-top: 50px;
+    width: 80%;
+    input.email-input {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid #D8D8D8;
+      border-radius: 0;
+      font-size: 16px;
+      height: 32px;
+      padding: 0 10px 10px 0px;
+      letter-spacing: .2px;
+      -webkit-transition: border-color .2s cubic-bezier(.4,0,.2,1);
+      -o-transition: border-color .2s cubic-bezier(.4,0,.2,1);
+      transition: border-color .2s cubic-bezier(.4,0,.2,1);
+      color: #1e1d25;
+      ::-webkit-input-placeholder {
+        color: #D8D8D8;
+      }
+    }
+
+    input.submit-button {
+      position: absolute;
+      right: 0;
+      top: -3px;
+      border: 0;
+      border-radius: 0;
+      text-indent: -9999px;
+      width: 40px;
+      height: 31px;
+      background: transparent 13px 7px no-repeat;
+      background-image: url("data:image/svg+xml,%0A%3Csvg width='5px' height='10px' viewBox='0 0 5 10' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='sub_popup' transform='translate(-1015.000000, -435.000000)' fill='%23828286'%3E%3Cg id='Group-3' transform='translate(368.000000, 272.000000)'%3E%3Cg id='Search-Copy-2' transform='translate(328.000000, 157.000000)'%3E%3Cg id='Group-5' transform='translate(312.000000, 2.000000)'%3E%3Cg id='Group-2' transform='translate(3.000000, 4.000000)'%3E%3Cpath d='M7.75735931,3 L7.75735931,8 L6.75735931,8 L6.75735931,3 L1.75735931,3 L1.75735931,2 L7.75735931,2 L7.75735931,3 Z' id='Combined-Shape' transform='translate(4.757359, 5.000000) rotate(-315.000000) translate(-4.757359, -5.000000) '%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");;
+      background-size: 16px 15px;
+      -webkit-transition: background 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+      -o-transition: background 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+      transition: background 0.2s cubic-bezier(0.2, 0, 0.4, 1);
+    }
+
+    input.submit-button:hover {
+      background-image: url("data:image/svg+xml,%0A%3Csvg width='5px' height='10px' viewBox='0 0 5 10' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='sub_popup' transform='translate(-1015.000000, -435.000000)' fill='%23414043'%3E%3Cg id='Group-3' transform='translate(368.000000, 272.000000)'%3E%3Cg id='Search-Copy-2' transform='translate(328.000000, 157.000000)'%3E%3Cg id='Group-5' transform='translate(312.000000, 2.000000)'%3E%3Cg id='Group-2' transform='translate(3.000000, 4.000000)'%3E%3Cpath d='M7.75735931,3 L7.75735931,8 L6.75735931,8 L6.75735931,3 L1.75735931,3 L1.75735931,2 L7.75735931,2 L7.75735931,3 Z' id='Combined-Shape' transform='translate(4.757359, 5.000000) rotate(-315.000000) translate(-4.757359, -5.000000) '%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+  }
+}

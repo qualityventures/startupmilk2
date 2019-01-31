@@ -5,6 +5,7 @@
       "plugins": [
         [
           "css-modules-transform", {
+            "devMode": true,
             "preprocessCss": "./helpers/sass-loader.js",
             "extensions": [".scss"]
           }
