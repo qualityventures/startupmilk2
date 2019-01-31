@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import './catalog.scss';
 
 class Catalog extends React.PureComponent {
   static propTypes = {
@@ -121,13 +122,44 @@ class Catalog extends React.PureComponent {
     );
   }
 
+  renderNewsletterSignup() {
+    return (
+      <div className="col col-12 newsletter-signup flex items-center flex-wrap">
+        <div
+          className="col col-3 sm-col-5 md-col-4 lg-col-3 image-container"
+          style={{ backgroundImage: 'url("/static/images/at_image2.png")' }}
+        />
+        <div className="col sm-col-7 md-col-8 col-12 flex flex-wrap items-center pl3">
+          <h2 className="pr3">{"Let's be friends. Get a freebie a month, delivered to your inbox"}
+          </h2>
+          <div className="email-field">
+            <input
+              className="email-input"
+              type="email"
+              placeholder="Your Email"
+            />
+            <input
+              type="submit"
+              className="submit-button"
+              value="Search"
+              onClick={this.doSearch}
+            />
+          </div>
+        </div>
+        
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="catalog">
         {this.makeInfoblock()}
 
         <div className="catalog-list">
-          {this.props.children}
+          {this.props.children.slice(0, 4)}
+          {this.renderNewsletterSignup()}
+          {this.props.children.length > 4 && this.props.children.slice(4)}
         </div>
       </div>
     );

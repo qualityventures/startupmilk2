@@ -265,7 +265,7 @@ class RouteClientProducts extends React.PureComponent {
                 className="close-button"
                 onClick={this.hideNewsletterSignUp}
               >
-                <i className="fas fa-times" />  
+                <i className="fal fa-times" />  
               </div>  
             </div>
           </AriaModal>
