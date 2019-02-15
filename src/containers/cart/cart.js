@@ -363,6 +363,24 @@ class Cart extends React.PureComponent {
             onSubmit={this.handleSubmit}
             setRef={this.setInputRef}
           />
+          <FormLabel>
+            <FormMisc>
+              We will send goods to this email
+            </FormMisc>
+          </FormLabel>
+          
+        </FormLabel>
+        {this.makePassword()}
+      </div>
+    );
+  }
+
+  makeSubscription() {
+    return (<div className="flex flex-column border subscription">
+      <div className="col col-12 newsletter-signup flex">
+        <div className="col col-9 pr1 my3">
+          <h3>{"Let's be friends. Get a freebie a month, delivered to your inbox"}
+          </h3>
           <FormMisc>
             <FormInput
               name="newsletter"
@@ -371,14 +389,13 @@ class Cart extends React.PureComponent {
               label={'I agree to subscribe to matt.design newsletter'}
             />
           </FormMisc>
-        </FormLabel>
-        {this.makePassword()}
-        <FormLabel>
-          <FormMisc>
-            We will send goods to this email
-          </FormMisc>
-        </FormLabel>
+        </div>
+        <div
+          className="col col-3 image-container"
+          style={{ backgroundImage: 'url("/static/images/at_image3.png")' }}
+        />
       </div>
+    </div>
     );
   }
 
@@ -533,6 +550,7 @@ class Cart extends React.PureComponent {
         this.makeProductsList(),
         this.makeCardInput(),
         this.makeEmail(),
+        this.makeSubscription(),
         <div key="spring" className="cart-popup__spring" />,
         <div key="bottom_separator" className="cart-popup__separator" />,
         this.makeCheckout(),

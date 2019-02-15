@@ -299,6 +299,22 @@ $padding_y: 40px;
     width: 100%;
     margin-bottom: 10px;
   }
+  .subscription {
+    margin: 30px -40px;
+    border: solid 1px #ecedf0;
+    .newsletter-signup {
+      padding-left: 40px;
+      .image-container {
+        @media (max-width: 40em) {
+          display: none;
+        }
+        height: 155px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: left;
+      }
+    }
+  }
 
   &__card {
     width: 100%;
