@@ -6,6 +6,7 @@ import areEqual from 'helpers/are-equal';
 import { makeArgs, getArgs } from 'helpers/args';
 import { loadProducts } from 'actions/products';
 import AriaModal from 'react-aria-modal';
+import apiFetch from 'helpers/api-fetch';
 
 import {
   Content,
@@ -217,6 +218,21 @@ class RouteClientProducts extends React.PureComponent {
     );
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    apiFetch('api/orders/subscribe', {
+      method: 'POST',
+      payload: {
+        email: formData.get('email'),
+      },
+    }).then((response) => {
+      this.hideNewsletterSignUp();
+    }).catch((error) => {
+      this.setState({ loading: false, error: error || 'Something went wrong' });
+    });
+  }
+  
   render() {
     return (
       <Content>
@@ -245,12 +261,13 @@ class RouteClientProducts extends React.PureComponent {
                 className="col col-5 image-container"
                 style={{ backgroundImage: 'url("/static/images/at_image.png")' }}
               />
-              <div className="col sm-col-7 col-12 p2 pl3">
+              <form id="in-page-email-form" className="col sm-col-7 col-12 p2 pl3" onSubmit={(e) => { this.handleSubmit(e); }} >
                 <h2 className="mt1 pr3">{"Let's be friends. Get a freebie a month, delivered to your inbox"}
                 </h2>
                 <div className="email-field">
                   <input
                     className="email-input"
+                    name="email"
                     type="email"
                     placeholder="Your Email"
                   />
@@ -258,10 +275,9 @@ class RouteClientProducts extends React.PureComponent {
                     type="submit"
                     className="submit-button"
                     value="Search"
-                    onClick={this.doSearch}
                   />
                 </div>
-              </div>
+              </form>
               <div
                 className="close-button"
                 onClick={this.hideNewsletterSignUp}

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import apiFetch from 'helpers/api-fetch';
 import './catalog.scss';
 
 class Catalog extends React.PureComponent {
@@ -121,6 +122,20 @@ class Catalog extends React.PureComponent {
       </div>
     );
   }
+  handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    apiFetch('api/orders/subscribe', {
+      method: 'POST',
+      payload: {
+        email: formData.get('email'),
+      },
+    }).then((response) => {
+      this.hideNewsletterSignUp();
+    }).catch((error) => {
+      this.setState({ loading: false, error: error || 'Something went wrong' });
+    });
+  }
 
   renderNewsletterSignup() {
     return (
@@ -129,7 +144,12 @@ class Catalog extends React.PureComponent {
           className="col col-3 sm-col-5 md-col-4 lg-col-3 image-container"
           style={{ backgroundImage: 'url("/static/images/at_image2.png")' }}
         />
-        <div className="col sm-col-7 md-col-8 col-12 flex flex-wrap items-center pl3">
+        <form
+          className="col sm-col-7 md-col-8 col-12 flex flex-wrap items-center pl3"
+          onSubmit={(e) => {
+            this.handleSubmit(e);
+          }}
+        >
           <h2 className="pr3">{"Let's be friends. Get a freebie a month, delivered to your inbox"}
           </h2>
           <div className="email-field">
@@ -142,10 +162,9 @@ class Catalog extends React.PureComponent {
               type="submit"
               className="submit-button"
               value="Search"
-              onClick={this.doSearch}
             />
           </div>
-        </div>
+        </form>
         
       </div>
     );

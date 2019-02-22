@@ -24,7 +24,9 @@ const TEMPLATE_ORDER_ITEM = fs.readFileSync(path.join(__dirname, '..', 'email.te
 
 function checkEmail(req, email) {
   return new Promise((resolve, reject) => {
-    if (req.userData.email) {
+    // console.log('Checking Email');
+    // console.log(req.userData.email);
+    /* if (req.userData.email) {
       if (req.userData.email !== email) {
         reject('Invalid email');
       } else {
@@ -32,9 +34,10 @@ function checkEmail(req, email) {
       }
 
       return;
-    }
+    } */
 
     User.findOne({ email }, (err, user) => {
+      console.log(err);
       if (err) {
         log(err);
         reject('Invalid username or password');
@@ -76,6 +79,92 @@ function checkEmail(req, email) {
       resolve({ auth: { data, token }, user });
     });
   });
+}
+
+export function subscribeEmail(req, res) {
+  const email = req.body.email || '';
+  const validation = validateEmail(email);
+  if (validation !== true) {
+    throwError(res, validation);
+    return;
+  }
+  const globals = {};
+
+  new Promise((resolve, reject) => {
+    User.findOne({ email }, (err, user) => {
+      if (err) {
+        log(err);
+        resolve();
+        return;
+      }
+      if (user === null) {
+        resolve();
+        return;
+      }
+
+      const data = user.toClientJSON();
+      const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
+
+      resolve({ auth: { data, token }, user });
+    });
+  })
+    .then((data = null) => {
+      // if user exists - store it
+      if (data !== null) {
+        if (data.auth) globals.auth = data.auth;
+        if (data.user) globals.user = data.user;
+      }
+    })
+    .then(() => {
+      // if user exists - skip
+      if (globals.user) {
+        return User.update({ _id: globals.user._id }, { $set: { subscribe: true } }).then(() => {
+          return true;
+        });
+      }
+
+      // if user doesn't exists - create and send email
+      const password = crypto.randomBytes(8).toString('hex');
+      const hashed_password = bcrypt.hashSync(password, 8);
+
+      // TODO: replace this email with welcome subscription
+      const html = TEMPLATE_NEW_USER.replace(/%password%/gi, password).replace(/%email%/gi, email);
+      return User.create({
+        email,
+        role: 'customer',
+        have_paid: false,
+        have_downloaded: false,
+        subscribe: true,
+        hashed_password,
+      })
+        .then((user) => {
+          const data = { email: user.email, role: user.role };
+          const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 * 30 });
+
+          globals.user = user;
+          globals.auth = { data, token };
+          
+          return sendmail({
+            to: email,
+            subject: 'Your account details',
+            html,
+          }); 
+        });
+    })
+    .then(() => {
+      returnObjectAsJSON(res, {
+        success: true,
+        auth: globals.auth || null,
+      });
+    })
+    .catch((e) => {
+      log(e);
+      returnObjectAsJSON(res, {
+        success: false,
+        auth: globals.auth || null,
+        err_msg: typeof e === 'string' ? e : 'Error while subscribing',
+      });
+    });
 }
 
 export function createNewOrder(req, res) {

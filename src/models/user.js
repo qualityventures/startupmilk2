@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  have_downloaded: {
+    type: Boolean,
+    default: true,
+  },
   subscribe: {
     type: Boolean,
     default: false,
@@ -41,11 +45,12 @@ UserSchema.methods.toClientJSON = function () {
     role: this.role,
     _id: this._id,
     have_paid: this.have_paid,
+    have_downloaded: this.have_downloaded,
     subscribe: this.subscribe,
   };
 };
 
-UserSchema.methods.comparePassword = function(password) {
+UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.hashed_password);
 };
 
