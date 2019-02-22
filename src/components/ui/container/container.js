@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import { userSignOut } from 'actions/user';
 import { tokenClean } from 'actions/token';
 import { truncate } from 'voca';
-import ClickOutside from 'react-click-outside';
+import ProfileMenu from './profile-menu';
 import './container.scss';
 
 class Container extends React.PureComponent {
@@ -19,8 +19,6 @@ class Container extends React.PureComponent {
     showCart: PropTypes.bool,
     location: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    userSignOut: PropTypes.func.isRequired,
-    tokenClean: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -117,49 +115,17 @@ class Container extends React.PureComponent {
                   }}
                 >
                   <img src={'/static/images/profile.png'} />
-                  <ClickOutside
-                    className={`clickContainer ${this.state.profileOpen ? 'active' : ''}`}
-                    onClickOutside={() => {
-                      this.setState({ profileOpen: false });
+                  <ProfileMenu
+                    user={user}
+                    userSignOut={userSignOut} 
+                    tokenClean={tokenClean}
+                    isOpened={this.state.profileOpen}
+                    handleClickOutside={() => {
+                      this.setState({
+                        profileOpen: !this.state.profileOpen,
+                      });
                     }}
-                  >
-                    <div className={'profile-root'}>
-                      {user.logged_in ? (
-                        <div className="profile-block">
-                          <div className="flex p1 pl2 items-center profile-container">
-                            <img className="profile" src={'/static/images/profile_black.png'} />
-                            <div className="ml2">{truncate(user.data.email, 14)}</div>
-                          </div>
-                          <div className="listitem">
-                            <Link to={'/dashboard'} href={'/dashboard'}>
-                              <div className="p1 px2">My Purchases</div>
-                            </Link>
-                          </div>
-                          <div
-                            className="p1 px2 listitem"
-                            onClick={() => {
-                              this.props.userSignOut();
-                              this.props.tokenClean();
-                            }}
-                          >
-                            Sign Out
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="profile-block">
-                          <div className="flex p1 pl2 items-center profile-container">
-                            <img className="profile" src={'/static/images/profile_white.png'} />
-                            <div className="ml2">Guest</div>
-                          </div>
-                          <div className="listitem">
-                            <Link to={'/login'} href={'/login'}>
-                              <div className="p1 px2">Sign In / Sign Up</div>
-                            </Link>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </ClickOutside>
+                  />
                 </div>
 
                 {this.makeCart()}
