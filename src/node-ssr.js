@@ -66,7 +66,7 @@ if (NODE_ENV === 'dev') {
 
 app.use(
   cors({
-    origin: ['http://localhost:3020', 'http://localhost:3019', 'https://matte.design/', 'https://js.stripe.com'],
+    origin: ['http://localhost:3020', 'http://localhost:3019', 'https://startupmilk.com/', 'https://js.stripe.com'],
     optionsSuccessStatus: 200,
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization'],

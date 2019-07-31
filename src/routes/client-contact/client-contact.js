@@ -17,7 +17,7 @@ class RouteClientContact extends React.PureComponent {
         <TitleUpdater title="Contacts" />
         <Heading>Contacts</Heading>
         <FormLabel>
-          <a href="mailto:support@matte.design">support@matte.design</a>
+          <a href="mailto:support@startupmilk.com">support@startupmilk.com</a>
         </FormLabel>
       </Content>
     );

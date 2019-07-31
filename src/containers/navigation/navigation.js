@@ -36,7 +36,7 @@ class Navigation extends React.PureComponent {
         key="landing"
         href="/"
         selected={false}
-        content="Back to matte.design"
+        content="Back to startupmilk.com"
       />,
     ];
 

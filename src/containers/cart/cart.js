@@ -9,26 +9,26 @@ import apiFetch from 'helpers/api-fetch';
 import { userSignIn } from 'actions/user';
 import { tokenSet } from 'actions/token';
 import { hideCart } from 'actions/app';
-import { STRIPE_PUBLISHED_KEY } from 'data/config.public';
+import { STRIPE_PUBLISHED_KEY, API_HOST } from 'data/config.public';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import PaymentsForm from './components/payments-form';
 import './cart.scss';
 
 const STRIPE_FONTS = [
   {
-    src: 'url("https://matte.design/static/fonts/SuisseBPIntl-Regular.eot?#iefix") format("embedded-opentype"), url("https://matte.design/static/fonts/SuisseBPIntl-Regular.woff2") format("woff2"), url("https://matte.design/static/fonts/SuisseBPIntl-Regular.woff") format("woff"), url("https://matte.design/static/fonts/SuisseBPIntl-Regular.ttf") format("truetype"), url("https://matte.design/static/fonts/SuisseBPIntl-Regular.svg#SuisseBPIntl-Regular") format("svg")',
+    src: `url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.eot?#iefix") format("embedded-opentype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.woff2") format("woff2"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.woff") format("woff"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.ttf") format("truetype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.svg#SuisseBPIntl-Regular") format("svg")`,
     family: 'SuisseBPIntl',
     weight: 'normal',
     style: 'normal',
   },
   {
-    src: 'url("https://matte.design/static/fonts/SuisseBPIntl-Light.eot?#iefix") format("embedded-opentype"), url("https://matte.design/static/fonts/SuisseBPIntl-Light.woff2") format("woff2"), url("https://matte.design/static/fonts/SuisseBPIntl-Light.woff") format("woff"), url("https://matte.design/static/fonts/SuisseBPIntl-Light.ttf") format("truetype"), url("https://matte.design/static/fonts/SuisseBPIntl-Light.svg#SuisseBPIntl-Light") format("svg")',
+    src: `url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.eot?#iefix") format("embedded-opentype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.woff2") format("woff2"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.woff") format("woff"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.ttf") format("truetype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.svg#SuisseBPIntl-Light") format("svg")`,
     family: 'SuisseBPIntl',
     weight: 'light',
     style: 'normal',
   },
   {
-    src: 'url("https://matte.design/static/fonts/SuisseIntl-Bold.eot?#iefix") format("embedded-opentype"), url("https://matte.design/static/fonts/SuisseIntl-Bold.woff2") format("woff2"), url("https://matte.design/static/fonts/SuisseIntl-Bold.woff") format("woff"), url("https://matte.design/static/fonts/SuisseIntl-Bold.ttf") format("truetype"), url("https://matte.design/static/fonts/SuisseIntl-Bold.svg#SuisseIntl-Bold") format("svg")',
+    src: `url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.eot?#iefix") format("embedded-opentype"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.woff2") format("woff2"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.woff") format("woff"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.ttf") format("truetype"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.svg#SuisseIntl-Bold") format("svg")`,
     family: 'SuisseBPIntl',
     weight: 'bold',
     style: 'normal',

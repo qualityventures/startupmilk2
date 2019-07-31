@@ -1,4 +1,5 @@
 /* global DEBUG_PREFIX */
+import { API_HOST } from 'data/config.public';
 
 import { throwError, returnObjectAsJSON } from 'helpers/response';
 import debug from 'debug';
@@ -248,7 +249,7 @@ export function createNewOrder(req, res) {
         .replace(/%order_numeric_id%/gi, globals.order.order_numeric_id)
         .replace(/%items%/gi, items)
         .replace(/%total%/gi, price ? `$${price}` : 'Free')
-        .replace(/%link%/gi, `https://matte.design/dashboard/order/${order._id}`);
+        .replace(/%link%/gi, `https://{API_HOST}/dashboard/order/${order._id}`);
 
       sendmail({ to: email, subject: 'Your order details', html });
 
