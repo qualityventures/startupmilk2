@@ -16,19 +16,19 @@ import './cart.scss';
 
 const STRIPE_FONTS = [
   {
-    src: `url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.eot?#iefix") format("embedded-opentype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.woff2") format("woff2"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.woff") format("woff"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.ttf") format("truetype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Regular.svg#SuisseBPIntl-Regular") format("svg")`,
+    src: `url("${API_HOST}/static/fonts/SuisseBPIntl-Regular.eot?#iefix") format("embedded-opentype"), url("${API_HOST}/static/fonts/SuisseBPIntl-Regular.woff2") format("woff2"), url("${API_HOST}/static/fonts/SuisseBPIntl-Regular.woff") format("woff"), url("${API_HOST}/static/fonts/SuisseBPIntl-Regular.ttf") format("truetype"), url("${API_HOST}/static/fonts/SuisseBPIntl-Regular.svg#SuisseBPIntl-Regular") format("svg")`,
     family: 'SuisseBPIntl',
     weight: 'normal',
     style: 'normal',
   },
   {
-    src: `url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.eot?#iefix") format("embedded-opentype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.woff2") format("woff2"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.woff") format("woff"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.ttf") format("truetype"), url("https://${API_HOST}/static/fonts/SuisseBPIntl-Light.svg#SuisseBPIntl-Light") format("svg")`,
+    src: `url("${API_HOST}/static/fonts/SuisseBPIntl-Light.eot?#iefix") format("embedded-opentype"), url("${API_HOST}/static/fonts/SuisseBPIntl-Light.woff2") format("woff2"), url("${API_HOST}/static/fonts/SuisseBPIntl-Light.woff") format("woff"), url("${API_HOST}/static/fonts/SuisseBPIntl-Light.ttf") format("truetype"), url("${API_HOST}/static/fonts/SuisseBPIntl-Light.svg#SuisseBPIntl-Light") format("svg")`,
     family: 'SuisseBPIntl',
     weight: 'light',
     style: 'normal',
   },
   {
-    src: `url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.eot?#iefix") format("embedded-opentype"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.woff2") format("woff2"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.woff") format("woff"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.ttf") format("truetype"), url("https://${API_HOST}/static/fonts/SuisseIntl-Bold.svg#SuisseIntl-Bold") format("svg")`,
+    src: `url("${API_HOST}/static/fonts/SuisseIntl-Bold.eot?#iefix") format("embedded-opentype"), url("${API_HOST}/static/fonts/SuisseIntl-Bold.woff2") format("woff2"), url("${API_HOST}/static/fonts/SuisseIntl-Bold.woff") format("woff"), url("${API_HOST}/static/fonts/SuisseIntl-Bold.ttf") format("truetype"), url("${API_HOST}/static/fonts/SuisseIntl-Bold.svg#SuisseIntl-Bold") format("svg")`,
     family: 'SuisseBPIntl',
     weight: 'bold',
     style: 'normal',
