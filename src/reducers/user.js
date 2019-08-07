@@ -20,8 +20,9 @@ export default function (state = initialState, action) {
     case USER_SIGN_OUT: {
       const newState = { ...initialState };
       newState.data = { ...initialState.data };
-
-      return initialState;
+      newState.role = 'guest';
+      newState.logged_in = false;
+      return newState;
     }
 
     default: {

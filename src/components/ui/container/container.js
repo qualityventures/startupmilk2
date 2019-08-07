@@ -15,6 +15,8 @@ class Container extends React.PureComponent {
     navigation: PropTypes.node,
     cart: PropTypes.node,
     toggleCart: PropTypes.func,
+    userSignOut: PropTypes.func.isRequired,
+    tokenClean: PropTypes.func.isRequired,
     cartItems: PropTypes.number,
     showCart: PropTypes.bool,
     location: PropTypes.object.isRequired,
@@ -55,8 +57,18 @@ class Container extends React.PureComponent {
         CART
         <span>{cartItems || '-'}</span>
       </a>,
-      <div key="shadow" className={`cart_shadow cart_shadow--${showCart ? 'visible' : 'hidden'}`} />,
-      <div key="cart_container" className={`cart_container cart_container--${showCart ? 'visible' : 'hidden'}`}>
+      <div
+        key="shadow"
+        className={`cart_shadow cart_shadow--${
+          showCart ? 'visible' : 'hidden'
+        }`}
+      />,
+      <div
+        key="cart_container"
+        className={`cart_container cart_container--${
+          showCart ? 'visible' : 'hidden'
+        }`}
+      >
         {cart}
       </div>,
     ];
@@ -117,8 +129,8 @@ class Container extends React.PureComponent {
                   <img src={'/static/images/profile.png'} />
                   <ProfileMenu
                     user={user}
-                    userSignOut={userSignOut} 
-                    tokenClean={tokenClean}
+                    userSignOut={this.props.userSignOut}
+                    tokenClean={this.props.tokenClean}
                     isOpened={this.state.profileOpen}
                     handleClickOutside={() => {
                       this.setState({
