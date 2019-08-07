@@ -19,7 +19,7 @@ class CatalogItem extends React.PureComponent {
     category: PropTypes.string,
     to: PropTypes.string,
     showAddToCart: PropTypes.bool,
-  }
+  };
 
   static defaultProps = {
     id: null,
@@ -34,7 +34,7 @@ class CatalogItem extends React.PureComponent {
     category: null,
     to: null,
     showAddToCart: false,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -71,7 +71,6 @@ class CatalogItem extends React.PureComponent {
     const style = {
       backgroundColor: '#FFF',
     };
-
     if (hoverAnimation && this.state.animation) {
       style.backgroundImage = `url('${hoverAnimation}')`;
     } else if (backgroundImage) {
@@ -79,7 +78,6 @@ class CatalogItem extends React.PureComponent {
     } else {
       style.backgroundColor = '#ecedf0';
     }
-
     return style;
   }
 
@@ -126,7 +124,11 @@ class CatalogItem extends React.PureComponent {
 
     if (bigButton) {
       ret.push(
-        <div key="big" className="catalog-item__big-button" onClick={this.handleBigButtonClick}>
+        <div
+          key="big"
+          className="catalog-item__big-button"
+          onClick={this.handleBigButtonClick}
+        >
           {bigButton}
         </div>
       );
@@ -201,14 +203,16 @@ class CatalogItem extends React.PureComponent {
       style.backgroundColor = CATEGORIES_LIST[category].color;
     }
 
-    return (<div className="catalog-item-panel-meta">
-      <ul>
-        <li key={category}>
-          <span className="catalog-item-panel-meta-dot" style={style} />
-          {category}
-        </li>
-      </ul>
-    </div>);
+    return (
+      <div className="catalog-item-panel-meta">
+        <ul>
+          <li key={category}>
+            <span className="catalog-item-panel-meta-dot" style={style} />
+            {category}
+          </li>
+        </ul>
+      </div>
+    );
   }
 
   makeAddToCart() {
@@ -220,11 +224,7 @@ class CatalogItem extends React.PureComponent {
 
     return (
       <div className="catalog-item-panel-navigation">
-        <CartButton
-          productId={id}
-          price={price}
-          color="white"
-        />
+        <CartButton productId={id} price={price} color="white" />
       </div>
     );
   }
@@ -237,21 +237,23 @@ class CatalogItem extends React.PureComponent {
     }
 
     return (
-      <img
-        src={hoverAnimation}
-        className="catalog-item__animation-loader"
-      />
+      <img src={hoverAnimation} className="catalog-item__animation-loader" />
     );
   }
 
   render() {
     return (
-      <div className="catalog-item" onMouseOver={this.startAnimation} onMouseOut={this.stopAnimation}>
+      <div
+        className="catalog-item"
+        onMouseOver={this.startAnimation}
+        onMouseOut={this.stopAnimation}
+      >
         <div className="catalog-item-wrapper">
           <div className="catalog-item-overflow">
             <div
               className="catalog-item-thumb"
               ref={this.setThumbRef}
+              style={this.getThumbBackground()}
             >
               {this.makeThumbContent()}
             </div>

@@ -7,11 +7,11 @@ class ImagesManager extends React.PureComponent {
   static propTypes = {
     productId: PropTypes.string.isRequired,
     images: PropTypes.array,
-  }
+  };
 
   static defaultProps = {
     images: [],
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -76,14 +76,17 @@ class ImagesManager extends React.PureComponent {
       })
       .then(({ json, response }) => {
         if (json.error) return Promise.reject(json.error);
-        if (response.status !== 200) return Promise.reject('invalid server response');
+        if (response.status !== 200) {
+          return Promise.reject('invalid server response');
+        }
         return json;
       })
       .then((images) => {
         this.setState({ loading: false, images: [...images] });
       })
       .catch((err) => {
-        const error = err && err.toString ? err.toString() : 'Bad response from server';
+        const error =
+          err && err.toString ? err.toString() : 'Bad response from server';
         this.setState({ error, loading: false });
       });
   }
@@ -122,14 +125,17 @@ class ImagesManager extends React.PureComponent {
       })
       .then(({ json, response }) => {
         if (json.error) return Promise.reject(json.error);
-        if (response.status !== 200) return Promise.reject('invalid server response');
+        if (response.status !== 200) {
+          return Promise.reject('invalid server response');
+        }
         return json;
       })
       .then((images) => {
         this.setState({ loading: false, images: [...images] });
       })
       .catch((err) => {
-        const error = err && err.toString ? err.toString() : 'Bad response from server';
+        const error =
+          err && err.toString ? err.toString() : 'Bad response from server';
         this.setState({ error, loading: false });
       });
   }
@@ -157,14 +163,17 @@ class ImagesManager extends React.PureComponent {
       })
       .then(({ json, response }) => {
         if (json.error) return Promise.reject(json.error);
-        if (response.status !== 200) return Promise.reject('invalid server response');
+        if (response.status !== 200) {
+          return Promise.reject('invalid server response');
+        }
         return json;
       })
       .then((images) => {
         this.setState({ loading: false, images: [...images] });
       })
       .catch((err) => {
-        const error = err && err.toString ? err.toString() : 'Bad response from server';
+        const error =
+          err && err.toString ? err.toString() : 'Bad response from server';
         this.setState({ error, loading: false });
       });
   }
@@ -172,25 +181,41 @@ class ImagesManager extends React.PureComponent {
   makeImages() {
     return this.state.images.map((image, index) => {
       const buttons = [];
-
       if (index > 0) {
         buttons.push(
-          <span key="up" image={image.full} direction="up" onClick={this.moveImage} className="images-manager__small-button">
+          <span
+            key="up"
+            image={image.full}
+            direction="up"
+            onClick={this.moveImage}
+            className="images-manager__small-button"
+          >
             &lt;
           </span>
         );
       }
 
-      if (index < (this.state.images.length - 1)) {
+      if (index < this.state.images.length - 1) {
         buttons.push(
-          <span key="down" image={image.full} direction="down" onClick={this.moveImage} className="images-manager__small-button">
+          <span
+            key="down"
+            image={image.full}
+            direction="down"
+            onClick={this.moveImage}
+            className="images-manager__small-button"
+          >
             &gt;
           </span>
         );
       }
 
       buttons.push(
-        <span key="delete" image={image.full} onClick={this.deleteImage} className="images-manager__small-button">
+        <span
+          key="delete"
+          image={image.full}
+          onClick={this.deleteImage}
+          className="images-manager__small-button"
+        >
           x
         </span>
       );
@@ -212,14 +237,18 @@ class ImagesManager extends React.PureComponent {
       return null;
     }
 
-    return <div><Alert type="danger">{error}</Alert></div>;
+    return (
+      <div>
+        <Alert type="danger">{error}</Alert>
+      </div>
+    );
   }
 
   render() {
     return (
       <div>
         {this.makeError()}
-        <input 
+        <input
           type="file"
           className="images-manager__input"
           encType="multipart/form-data"
