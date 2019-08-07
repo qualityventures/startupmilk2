@@ -10,7 +10,7 @@ import {
   validateProductDesc,
   validateProductPrice,
   validateProductDisplay,
-  validateProductYoutube,
+  validateProductYoutube
 } from 'helpers/validators';
 import Products from 'models/products';
 import debug from 'debug';
@@ -79,7 +79,10 @@ export function getProducts(req, res) {
   }
 
   if (search) {
-    search = search.replace(/[^0-9a-z ]/gi, '').trim().replace(/\s+/g, '|');
+    search = search
+      .replace(/[^0-9a-z ]/gi, '')
+      .trim()
+      .replace(/\s+/g, '|');
 
     if (search) {
       query.name = { $regex: search, $options: 'i' };
@@ -105,7 +108,7 @@ export function getProducts(req, res) {
       total = data || 0;
 
       pages = Math.max(Math.floor(total / per_page), 1);
-      if ((pages * per_page) < total) {
+      if (pages * per_page < total) {
         ++pages;
       }
 
@@ -134,7 +137,8 @@ export function getProducts(req, res) {
       });
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while creating product';
+      const error =
+        err && err.toString ? err.toString() : 'Error while creating product';
       log(error);
       throwError(res, error);
     });
@@ -158,7 +162,8 @@ export function getProductByUrl(req, res) {
       returnObjectAsJSON(res, product.toClientJSON());
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Internal server error';
+      const error =
+        err && err.toString ? err.toString() : 'Internal server error';
       log(error);
       throwError(res, error);
     });
@@ -208,7 +213,8 @@ export function updateProduct(req, res) {
       returnObjectAsJSON(res, product);
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while creating product';
+      const error =
+        err && err.toString ? err.toString() : 'Error while creating product';
       log(error);
       throwError(res, error);
     });
@@ -241,7 +247,8 @@ export function createNewProduct(req, res) {
       returnObjectAsJSON(res, createdProduct);
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while creating product';
+      const error =
+        err && err.toString ? err.toString() : 'Error while creating product';
       log(error);
       throwError(res, error);
     });
@@ -281,7 +288,7 @@ export function addProductImage(req, res) {
     }
 
     const file_path = `${public_path}/${image_path}`;
-    const fstream = fs.createWriteStream(file_path); 
+    const fstream = fs.createWriteStream(file_path);
 
     file.pipe(fstream);
 
@@ -292,34 +299,42 @@ export function addProductImage(req, res) {
         return;
       }
 
-      makePreview(`${public_path}/${resize_path}`, `${public_path}/${preview_path}`, (err) => {
-        if (err) {
-          fs.unlinkSync(file_path);
-          throwError(res, err);
-          return;
-        }
-
-        req.productData.images.push({
-          animated,
-          full: image_path,
-          preview: preview_path,
-        });
-
-        req.productData.save()
-          .then((product) => {
-            product.updateVisibility();
-            return product.save();
-          })
-          .then((product) => {
-            returnObjectAsJSON(res, product.images);
-          })
-          .catch((save_err) => {
-            const error = save_err && save_err.toString ? save_err.toString() : 'Error while saving image';
-            log(save_err);
+      makePreview(
+        `${public_path}/${resize_path}`,
+        `${public_path}/${preview_path}`,
+        (err) => {
+          if (err) {
             fs.unlinkSync(file_path);
-            throwError(res, error);
+            throwError(res, err);
+            return;
+          }
+
+          req.productData.images.push({
+            animated,
+            full: image_path,
+            preview: preview_path,
           });
-      });
+
+          req.productData
+            .save()
+            .then((product) => {
+              product.updateVisibility();
+              return product.save();
+            })
+            .then((product) => {
+              returnObjectAsJSON(res, product.images);
+            })
+            .catch((save_err) => {
+              const error =
+                save_err && save_err.toString
+                  ? save_err.toString()
+                  : 'Error while saving image';
+              log(save_err);
+              fs.unlinkSync(file_path);
+              throwError(res, error);
+            });
+        }
+      );
     });
   });
 
@@ -348,7 +363,7 @@ export function moveProductImage(req, res) {
     const swap = images[index - 1];
     images[index - 1] = images[index];
     images[index] = swap;
-  } else if (direction === 'down' && index < (images.length - 1)) {
+  } else if (direction === 'down' && index < images.length - 1) {
     const swap = images[index + 1];
     images[index + 1] = images[index];
     images[index] = swap;
@@ -358,12 +373,14 @@ export function moveProductImage(req, res) {
   }
 
   req.productData.images = images;
-  req.productData.save()
+  req.productData
+    .save()
     .then((savedProduct) => {
       returnObjectAsJSON(res, savedProduct.images);
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while moving image';
+      const error =
+        err && err.toString ? err.toString() : 'Error while moving image';
       log(error);
       throwError(res, error);
     });
@@ -386,14 +403,18 @@ export function deleteProductImage(req, res) {
     throwError(res, 'Incorrect image');
     return;
   }
-
-  fs.unlinkSync(`${ROOT_PATH}/../public/${images[index].full}`);
-  fs.unlinkSync(`${ROOT_PATH}/../public/${images[index].preview}`);
+  try {
+    fs.unlinkSync(`${ROOT_PATH}/../public/${images[index].full}`);
+    fs.unlinkSync(`${ROOT_PATH}/../public/${images[index].preview}`);
+  } catch (e) {
+    console.error(e);
+  }
 
   images.splice(index, 1);
 
   req.productData.images = images;
-  req.productData.save()
+  req.productData
+    .save()
     .then((product) => {
       product.updateVisibility();
       return product.save();
@@ -402,7 +423,8 @@ export function deleteProductImage(req, res) {
       returnObjectAsJSON(res, product.images);
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while deleting image';
+      const error =
+        err && err.toString ? err.toString() : 'Error while deleting image';
       log(error);
       throwError(res, error);
     });
@@ -437,7 +459,7 @@ export function addProductFile(req, res) {
     }
 
     const absolute_path = `${public_path}/${file_path}`;
-    const fstream = fs.createWriteStream(absolute_path); 
+    const fstream = fs.createWriteStream(absolute_path);
 
     file.pipe(fstream);
 
@@ -454,7 +476,8 @@ export function addProductFile(req, res) {
         path: file_path,
         name: filename,
       });
-      req.productData.save()
+      req.productData
+        .save()
         .then((product) => {
           product.updateVisibility();
           return product.save();
@@ -463,7 +486,8 @@ export function addProductFile(req, res) {
           returnObjectAsJSON(res, product.files);
         })
         .catch((err) => {
-          const error = err && err.toString ? err.toString() : 'Error while saving file';
+          const error =
+            err && err.toString ? err.toString() : 'Error while saving file';
           log(error);
           fs.unlinkSync(absolute_path);
           throwError(res, error);
@@ -493,11 +517,16 @@ export function deleteProductFile(req, res) {
     return;
   }
 
-  fs.unlinkSync(`${ROOT_PATH}/../uploads/${files[index].path}`);
+  try {
+    fs.unlinkSync(`${ROOT_PATH}/../uploads/${files[index].path}`);
+  } catch (e) {
+    console.error(e);
+  }
   files.splice(index, 1);
 
   req.productData.files = files;
-  req.productData.save()
+  req.productData
+    .save()
     .then((product) => {
       product.updateVisibility();
       return product.save();
@@ -506,7 +535,8 @@ export function deleteProductFile(req, res) {
       returnObjectAsJSON(res, product.files);
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while deleting file';
+      const error =
+        err && err.toString ? err.toString() : 'Error while deleting file';
       log(error);
       throwError(res, error);
     });
@@ -547,7 +577,8 @@ export function updateProductFile(req, res) {
   }
 
   req.productData.files = files;
-  req.productData.save()
+  req.productData
+    .save()
     .then((product) => {
       product.updateVisibility();
       return product.save();
@@ -556,7 +587,8 @@ export function updateProductFile(req, res) {
       returnObjectAsJSON(res, product.files);
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while deleting file';
+      const error =
+        err && err.toString ? err.toString() : 'Error while deleting file';
       log(error);
       throwError(res, error);
     });
@@ -572,12 +604,14 @@ export function updateProductRelated(req, res) {
 
   if (!related.length) {
     req.productData.related = [];
-    req.productData.save()
+    req.productData
+      .save()
       .then((product) => {
         returnObjectAsJSON(res, product);
       })
       .catch((err) => {
-        const error = err && err.toString ? err.toString() : 'Error while updating related';
+        const error =
+          err && err.toString ? err.toString() : 'Error while updating related';
         log(error);
         throwError(res, error);
       });
@@ -613,7 +647,8 @@ export function updateProductRelated(req, res) {
       returnObjectAsJSON(res, product);
     })
     .catch((err) => {
-      const error = err && err.toString ? err.toString() : 'Error while updating related';
+      const error =
+        err && err.toString ? err.toString() : 'Error while updating related';
       log(error);
       throwError(res, error);
     });
